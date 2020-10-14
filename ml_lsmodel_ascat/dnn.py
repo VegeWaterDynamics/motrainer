@@ -3,7 +3,8 @@ import keras
 import sklearn
 import skopt
 import numpy as np
-
+import pickle
+from pathlib import Path
 from skopt.space import Real, Categorical, Integer 
 
 
@@ -20,7 +21,8 @@ class DNNTrain(object):
         self.test_output = test_output
         self.vali_input = vali_input
         self.vali_output = vali_output
-        self.resultpath = resultpath
+        self.resultpath = Path(resultpath)
+        self.resultpath.mkdir(parents=True, exist_ok=True)
         self.dimensions = {'learning_rate': Real(low=5e-4, high=1e-2, prior='log-uniform',name='learning_rate'), 
                       'num_dense_layers': Integer(low=1, high=2, name='num_dense_layers'),
                       'num_input_nodes': Integer(low=2, high=6, name='num_input_nodes'),
@@ -29,7 +31,7 @@ class DNNTrain(object):
                       'batch_size': Integer(low=7, high=365, name='batch_size')
                 }
 
-    def update_paras(self, **kwrags):
+    def update_space(self, **kwrags):
         for key, value in kwrags.items():
             if key in ['learning_rate']:
                 self.dimensions[key] = Real(low=value[0], high=value[1], prior='log-uniform', name=key)
@@ -73,7 +75,6 @@ class DNNTrain(object):
             model.add(keras.layers.Dense(units = self.train_output.shape[1]))
             adam = keras.optimizers.Adam(lr=dimensions['learning_rate'])
             model.compile(optimizer=adam, loss= keras.losses.mean_squared_error, metrics=['mae', 'acc'])
-            
             # Fit model
             blackbox = model.fit(x=self.train_input,
                                 y=self.train_output,
@@ -81,7 +82,7 @@ class DNNTrain(object):
                                 callbacks=[earlystop],
                                 verbose=0
                                 )
-            
+            # Get loss
             loss = blackbox.history['loss'][-1]
             if loss < self.best_loss:
                 self.model = model
@@ -98,6 +99,10 @@ class DNNTrain(object):
                                     kappa = kappa,
                                     x0=x0)
 
-
+    def export(self, suffix=''):
+        path_model = self.resultpath / 'model'
+        self.model.save('{}/model/optimized_model_{}'.format(path_model.as_posix(), suffix))
+        with open('{}/model/Hyperparameter_space_{}'.format(path_model.as_posix(), suffix), 'wb') as f:
+            pickle.dump([sorted(zip(self.gp_result.func_vals, gp_result.x_iters))], f)
     
     

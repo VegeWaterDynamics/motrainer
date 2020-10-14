@@ -23,18 +23,29 @@ if __name__ == "__main__":
     vali_input =  gpi_input[gpi_input.index.year>2017].values
     vali_output = gpi_output[gpi_output.index.year>2017].values
 
-    # Execute tranning
-    tranning = DNNTrain(train_input, train_output,
+    # Execute training
+    training = DNNTrain(train_input, train_output,
                         test_input, test_output,
                         vali_input, vali_output,
                         out_path)
 
-    tranning.update_paras(learning_rate = [5e-4, 1e-2],
+    # Normalize data
+    training.normalize()
+
+    # Set searching space
+    training.update_space(learning_rate = [5e-4, 1e-2],
                           activation = ['relu'])
 
-    tranning.normalize()
+    # Optimization
+    training.optimize(best_loss=5,
+                     n_calls=15,
+                     noise= 0.01,
+                     n_jobs=-1,
+                     kappa = 5,
+                     x0=[1e-3, 1 , 4, 13, 'relu', 64])
 
-    tranning.optimize(best_loss=5)
+    # Export results
+    training.export(suffix='gpi5')
 
     
     pass
