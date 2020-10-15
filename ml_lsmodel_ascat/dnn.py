@@ -1,3 +1,7 @@
+import sys
+#sys.path.insert(0,'../ml_lsmodel_ascat') 
+
+import shap
 import logging
 import keras
 import sklearn
@@ -6,6 +10,8 @@ import numpy as np
 import pickle
 from pathlib import Path
 from skopt.space import Real, Categorical, Integer 
+from model import keras_dnn
+from keras.models import load_model
 
 
 logger = logging.getLogger(__name__)
@@ -13,8 +19,9 @@ logger = logging.getLogger(__name__)
 
 class DNNTrain(object):
     def __init__(self, train_input, train_output, 
-                 test_input, test_output,
-                 vali_input, vali_output, resultpath='.'):
+#                 test_input, test_output,
+#                 vali_input, vali_output, 
+                 resultpath='.'):
         self.train_input = train_input
         self.train_output = train_output
         self.test_input = test_input
@@ -55,6 +62,7 @@ class DNNTrain(object):
                  noise= 0.01,
                  n_jobs=-1,
                  kappa = 5,
+                 validation_method = 0.2,
                  x0=[1e-3, 1 , 4, 13, 'relu', 64]):
         self.best_loss = best_loss
 
@@ -62,25 +70,17 @@ class DNNTrain(object):
         def lossfunc(**dimensions):
             # setup model
             earlystop = keras.callbacks.EarlyStopping(monitor='loss', mode='min', verbose=0, patience=30)
-            model = keras.models.Sequential()
-            model.add(keras.layers.Dense(dimensions['num_input_nodes'], 
-                    input_shape=(self.train_input.shape[1],), 
-                    activation=dimensions['activation']))
-
-            for i in range(dimensions['num_dense_layers']):
-                name = 'layer_dense_{0}'.format(i+1)
-                model.add(keras.layers.Dense(dimensions['num_input_nodes'],
-                        activation=dimensions['activation'],
-                        name=name))
-            model.add(keras.layers.Dense(units = self.train_output.shape[1]))
-            adam = keras.optimizers.Adam(lr=dimensions['learning_rate'])
-            model.compile(optimizer=adam, loss= keras.losses.mean_squared_error, metrics=['mae', 'acc'])
+            
+            model = keras_dnn(dimensions, 
+                              self.train_input.shape[1], 
+                              self.train_output.shape[1])
             # Fit model
             blackbox = model.fit(x=self.train_input,
                                 y=self.train_output,
                                 batch_size=dimensions['batch_size'],
                                 callbacks=[earlystop],
-                                verbose=0
+                                verbose=0,
+                                validation_data=validation_method
                                 )
             # Get loss
             loss = blackbox.history['loss'][-1]
@@ -98,11 +98,38 @@ class DNNTrain(object):
                                     n_jobs=n_jobs,
                                     kappa = kappa,
                                     x0=x0)
-
-    def export(self, suffix=''):
-        path_model = self.resultpath / 'model'
-        self.model.save('{}/model/optimized_model_{}'.format(path_model.as_posix(), suffix))
-        with open('{}/model/Hyperparameter_space_{}'.format(path_model.as_posix(), suffix), 'wb') as f:
-            pickle.dump([sorted(zip(self.gp_result.func_vals, gp_result.x_iters))], f)
+    #=====================================================#
+    # test/predict using new data
+    def predict(self, model, input_data):
+#        self.test_output = self.model.predict(self.test)
+        output_data = self.model.predict(input_data)
+        return output_data
     
+    #=====================================================#
+    def export_model(self, suffix_gpi='', suffix_year=''):
+        path_model = self.resultpath# / 'model'
+        self.model.save('{}/{}/optimized_model_{}'.format(path_model.as_posix(), suffix_gpi, suffix_year))
+        with open('{}/{}/Hyperparameter_space_{}'.format(path_model.as_posix(), suffix_gpi, suffix_year), 'wb') as f:
+            pickle.dump([sorted(zip(self.gp_result.func_vals, self.gp_result.x_iters))], f)
     
+    def get_model(self, suffix_gpi='', suffix_year=''):
+        path_model = self.resultpath# / 'model'
+        model = load_model('{}/{}/optimized_model_{}'.format(path_model.as_posix(), suffix_gpi, suffix_year))
+        return model
+    
+    #===============shap values calculation==================#
+    def get_shap_values(self, model, input_whole):
+        background = input_whole[np.random.choice(input_whole.shape[0], 1000, replace=False)]
+        
+        shap.initjs()
+        e = shap.DeepExplainer(model, background)
+        self.shap_values = e.shap_values(input_whole)
+        
+        #return shap_values
+    
+    def export_shap_values(self, suffix_gpi='',suffix_year=''):
+        path_model = self.resultpath# / 'shap_values'
+        with open('{}/{}/Shap_values_{}'.format(path_model.as_posix(), suffix_gpi, suffix_year), 'wb') as f:
+            pickle.dump([zip(self.shap_values[0][:,0], self.shap_values[0][:,1], self.shap_values[0][:,2], self.shap_values[0][:,3], 
+                             self.shap_values[1][:,0],self.shap_values[1][:,1],self.shap_values[1][:,2], self.shap_values[1][:,3], 
+                             self.shap_values[2][:,0],self.shap_values[2][:,1],self.shap_values[2][:,2], self.shap_values[2][:,3],)], f)
