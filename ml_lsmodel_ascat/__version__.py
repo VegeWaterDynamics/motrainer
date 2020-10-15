@@ -2,7 +2,8 @@ import os
 import sys
 
 # To update the package version number, edit CITATION.cff
-citationfile = os.path.join(sys.exec_prefix, 'citation/ml_lsmodel_ascat', 'CITATION.cff')
+here = os.path.abspath(os.path.dirname(__file__))
+citationfile = os.path.join(here, '..', 'CITATION.cff')
 with open(citationfile, 'r') as cff:
     for line in cff:
         if 'version:' in line:
