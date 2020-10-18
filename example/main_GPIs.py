@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Oct 15 22:42:11 2020
-
-@author: xushan
-"""
 import pickle
 from ml_lsmodel_ascat.dnn import DNNTrain
 from ml_lsmodel_ascat.gpi_jackknife import JackknifeGPI
@@ -13,8 +6,8 @@ if __name__ == "__main__":
     # Manual input
     val_split_year = 2017
     out_path = './results/'
-    file_data = '/mnt/c/Users/OuKu/Developments/Global_vegetation/data/SURFEX/input_SURFEX_label_ASCAT_9GPI_2007_2019'
-    list_gpi = [5]
+    file_data = './example_data/input_SURFEX_label_ASCAT_3GPI_2007_2019'
+    list_gpi = [3]
     output_list = ['sig', 'slop', 'curv']
     input_list = [
         'TG1', 'TG2', 'TG3', 'WG1', 'WG2', 'WG3', 'BIOMA1', 'BIOMA2',
@@ -35,13 +28,13 @@ if __name__ == "__main__":
     # read the whole data
     with open(file_data, 'rb') as f:
         clusters = pickle.load(f)
-    df_all_gpi = clusters  #.iloc[gpi_num].data
+    df_all_gpi = clusters
 
     # Loop all gpi
     for gpi_num in list_gpi:
         gpi_data = df_all_gpi.iloc[gpi_num]['data']
         gpi_data = gpi_data.dropna()
-
+        gpi_data = gpi_data[::5]
         if len(df_all_gpi) > 0:
             gpi = JackknifeGPI(gpi_data,
                                val_split_year,
