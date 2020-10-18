@@ -1,5 +1,5 @@
 import logging
-import keras
+import tensorflow.keras
 import sklearn
 import skopt
 import numpy as np
@@ -9,7 +9,6 @@ from skopt.space import Real, Categorical, Integer
 from scipy.stats.stats import pearsonr, spearmanr
 from tensorflow.keras.models import load_model
 from ml_lsmodel_ascat.model import keras_dnn
-
 
 logger = logging.getLogger(__name__)
 
@@ -85,7 +84,7 @@ class DNNTrain(object):
         @skopt.utils.use_named_args(dimensions=list(self.dimensions.values()))
         def lossfunc(**dimensions):
             # setup model
-            earlystop = keras.callbacks.EarlyStopping(monitor='loss',
+            earlystop = tensorflow.keras.callbacks.EarlyStopping(monitor='loss',
                                                       mode='min',
                                                       verbose=0,
                                                       patience=30)
@@ -106,7 +105,7 @@ class DNNTrain(object):
                 self.best_loss = loss
                 self.hehe = 1
             del model
-            keras.backend.clear_session()
+            tensorflow.keras.backend.clear_session()
             return loss
 
         self.gp_result = skopt.gp_minimize(func=lossfunc,

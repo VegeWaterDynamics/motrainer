@@ -6,20 +6,23 @@ from sklearn.model_selection import LeaveOneOut
 from ml_lsmodel_ascat.dnn import DNNTrain
 from ml_lsmodel_ascat.util import shap_values
 
-class single_gpi(object):
+
+class JackknifeGPI(object):
     def __init__(self,
                  gpi_data,
-                 gpi_num,
                  val_split_year,
                  input_list,
-                 output_list):
+                 output_list,
+                 export_all_years=True,
+                 outpath='./jackknife_results'):
         self.gpi_data = gpi_data.dropna()
-        self.gpi_num = gpi_num
         self.input_list = input_list
         self.output_list = output_list
         self.gpi_input = gpi_data[input_list].dropna()
         self.gpi_output = gpi_data[output_list].dropna()
         self.val_split_year = val_split_year
+        self.export_all_years = export_all_years
+        self.outpath = outpath
 
     def normalize(self, norm_method):
         # prenormalization for output (or label)
@@ -44,28 +47,27 @@ class single_gpi(object):
                    optimize_space,
                    performance_method='rmse',
                    val_split_year=2017):
-
+                           
         df_all_gpi_norm = self.gpi_data.dropna()
 
         jackknife_all = df_all_gpi_norm[
             df_all_gpi_norm.index.year < self.val_split_year]
-        # self.vali_all = df_all_gpi_norm[
-        #     df_all_gpi_norm.index.year >= self.val_split_year]
 
         year_list = jackknife_all.copy().resample('Y').mean().index.year
 
-        # self.jackknife_metrics = np.zeros(
-        #     [len(self.output_list), len(year_list)])
-
         loo = LeaveOneOut()
 
-        min_rmse = None
+        best_performance = None
         for train_index, test_index in loo.split(year_list):
+            this_year = test_index[0] + year_list[0]
 
-            train_all = jackknife_all[(jackknife_all.index.year !=
-                                       test_index[0] + year_list[0])]
-            test_all = jackknife_all[(
-                jackknife_all.index.year == test_index[0] + year_list[0])]
+                    
+            print('=====================================')
+            print('jackknife on '+str(this_year))
+            print('=====================================')
+
+            train_all = jackknife_all[(jackknife_all.index.year != this_year)]
+            test_all = jackknife_all[(jackknife_all.index.year == this_year)]
             train_input, train_output = train_all[
                 self.input_list].values, train_all[self.output_list].values
             test_input, test_output = test_all[
@@ -95,22 +97,50 @@ class single_gpi(object):
             training.get_performance(self.scaler_output, 'rmse')
 
             # find minimum rmse
+            # TODO: mae, pearson, spearman
             rmse = np.nansum(training.performance)
-            if min_rmse is None:
-                min_rmse = rmse
-            elif rmse < min_rmse:
-                self.min_rmse = rmse
+            if best_performance is None:
+                best_performance = rmse
+            elif rmse < best_performance:
+                self.best_performance = rmse
                 self.best_train = training
-                self.rmse_min_year = test_index[0] + year_list[0]
-                self.shap_values = shap_values(self.best_train.model, self.gpi_input.values)
+                self.best_year = this_year
+                self.shap_values = shap_values(self.best_train.model,
+                                               self.gpi_input.values)
 
-    def export_best(self, 
-                    path_shap=None, 
-                    **kwargs):
-                
-        self.best_train.export(**kwargs)
+            if self.export_all_years:
+                path_model = '{}/all_years/optimized_model_{}'.format(
+                    self.outpath, this_year)
+                path_hyperparameters = '{}/all_years/hyperparameters_{}'.format(
+                    self.outpath, this_year)
+                training.export(
+                    path_model=path_model,
+                    path_hyperparameters=path_hyperparameters)
 
-        if path_shap is not None:
+    def export_best(
+            self,
+            output_options=['model', 'hyperparameters', 'performance',
+                            'shap']):
+
+        if 'model' in output_options:
+            path_model = '{}/best_optimized_model_{}'.format(
+                self.outpath, self.best_year)
+
+        if 'hyperparameters' in output_options:
+            path_hyperparameters = '{}/best_hyperparameters_{}'.format(
+                self.outpath, self.best_year)
+
+        if 'performance' in output_options:
+            path_performance = '{}/best_performance_{}'.format(
+                self.outpath, self.best_year)
+
+        self.best_train.export(path_model=path_model,
+                               path_hyperparameters=path_hyperparameters,
+                               path_performance=path_performance)
+
+        if 'shap' in output_options:
+            path_shap = '{}/shap_values_{}'.format(self.outpath,
+                                                   self.best_year)
             Path(path_shap).parent.mkdir(parents=True, exist_ok=True)
             with open(path_shap, 'wb') as f:
                 pickle.dump([
@@ -129,4 +159,3 @@ class single_gpi(object):
                         self.shap_values[2][:, 3],
                     )
                 ], f)
-         
