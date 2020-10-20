@@ -1,6 +1,6 @@
 import pickle
 from ml_lsmodel_ascat.dnn import NNTrain
-from ml_lsmodel_ascat.gpi_jackknife import JackknifeGPI
+from ml_lsmodel_ascat.jackknife import JackknifeGPI
 from ml_lsmodel_ascat.util import shap_values
 
 if __name__ == "__main__":
@@ -33,9 +33,10 @@ if __name__ == "__main__":
 
     # Loop all gpi
     for gpi_num in list_gpi:
+        
         gpi_data = df_all_gpi.iloc[gpi_num]['data']
         gpi_data = gpi_data.dropna()
-        gpi_data = gpi_data[::5]
+
         if len(df_all_gpi) > 0:
             gpi = JackknifeGPI(gpi_data,
                                val_split_year,
