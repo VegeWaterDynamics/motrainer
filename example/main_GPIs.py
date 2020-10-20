@@ -1,5 +1,5 @@
 import pickle
-from ml_lsmodel_ascat.dnn import DNNTrain
+from ml_lsmodel_ascat.dnn import NNTrain
 from ml_lsmodel_ascat.gpi_jackknife import JackknifeGPI
 
 if __name__ == "__main__":

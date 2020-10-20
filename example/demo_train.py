@@ -1,4 +1,4 @@
-from ml_lsmodel_ascat.dnn import DNNTrain
+from ml_lsmodel_ascat.dnn import NNTrain
 import pickle
 import sys
 
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     vali_output = gpi_output[gpi_output.index.year>2017].values
 
     # Execute training
-    training = DNNTrain(train_input, train_output,
+    training = NNTrain(train_input, train_output,
                         test_input, test_output,
                         vali_input, vali_output,
                         out_path)
