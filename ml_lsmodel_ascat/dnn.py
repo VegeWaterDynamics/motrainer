@@ -12,7 +12,7 @@ from ml_lsmodel_ascat.model import keras_dnn
 logger = logging.getLogger(__name__)
 
 
-class DNNTrain(object):
+class NNTrain(object):
     def __init__(self, train_input, train_output):
         self.train_input = train_input
         self.train_output = train_output
@@ -50,16 +50,6 @@ class DNNTrain(object):
                                                name=key)
             elif key in ['activation']:
                 self.dimensions[key] = Categorical(categories=value, name=key)
-
-    def normalize(self):
-        # prenormalization for output (or label)
-        self.scaler_train_output = sklearn.preprocessing.StandardScaler()
-        self.train_output = self.scaler_train_output.fit_transform(
-            self.train_output)
-
-        self.scaler_train_input = sklearn.preprocessing.StandardScaler()
-        self.train_input = self.scaler_train_input.fit_transform(
-            self.train_input)
 
     def optimize(self,
                  best_loss=1,

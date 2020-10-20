@@ -1,10 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Created on Wed Oct 14 17:53:41 2020
-
-@author: xushan, x.shan-2@tudelft.nl
-
 This script is for the implementation of different types of neural network,
 including different structures, different loss functions
 """

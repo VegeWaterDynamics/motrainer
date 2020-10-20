@@ -1,6 +1,7 @@
 import pickle
 from ml_lsmodel_ascat.dnn import NNTrain
 from ml_lsmodel_ascat.gpi_jackknife import JackknifeGPI
+from ml_lsmodel_ascat.util import shap_values
 
 if __name__ == "__main__":
     # Manual input
@@ -42,12 +43,46 @@ if __name__ == "__main__":
                                output_list,
                                outpath='{}/gpi{}'.format(out_path, gpi_num))
 
-            gpi.normalize(norm_method='standard')
-
-            gpi.train_test(searching_space, optimize_space, 'rmse',
-                           val_split_year)
+            gpi.train(searching_space, optimize_space, 'standard', 'rmse',
+                      val_split_year)
 
             gpi.export_best()
+
+            # Compute shap
+            shap_values = shap_values(gpi.best_train.model,
+                                      gpi.gpi_input.values)
+
+            # Export apriori performance
+            path_apriori_performance = '{}/apriori_performance_{}'.format(
+                gpi.outpath, gpi.best_year)
+            with open(path_apriori_performance, 'wb') as f:
+                pickle.dump(gpi.apr_perf, f)
+
+            # Export postpriori performance
+            path_postpriori_performance = '{}/postpriori_performance_{}'.format(
+                gpi.outpath, gpi.best_year)
+            with open(path_postpriori_performance, 'wb') as f:
+                pickle.dump(gpi.post_perf, f)
+
+            # Export shap
+            path_shap = '{}/shap_values_{}'.format(gpi.outpath, gpi.best_year)
+            with open(path_shap, 'wb') as f:
+                pickle.dump([
+                    zip(
+                        shap_values[0][:, 0],
+                        shap_values[0][:, 1],
+                        shap_values[0][:, 2],
+                        shap_values[0][:, 3],
+                        shap_values[1][:, 0],
+                        shap_values[1][:, 1],
+                        shap_values[1][:, 2],
+                        shap_values[1][:, 3],
+                        shap_values[2][:, 0],
+                        shap_values[2][:, 1],
+                        shap_values[2][:, 2],
+                        shap_values[2][:, 3],
+                    )
+                ], f)
 
             print("=========================================")
             print("       GPI " + str(gpi_num) + " done")
