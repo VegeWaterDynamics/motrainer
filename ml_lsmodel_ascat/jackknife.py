@@ -32,6 +32,7 @@ class JackknifeGPI(object):
               searching_space,
               optimize_space,
               normalize_method='standard',
+              training_method='dnn',
               performance_method='rmse',
               val_split_year=2017):
 
@@ -85,7 +86,8 @@ class JackknifeGPI(object):
                 n_jobs=optimize_space['n_jobs'],
                 kappa=optimize_space['kappa'],
                 validation_split=optimize_space['validation_split'],
-                x0=optimize_space['x0'])
+                x0=optimize_space['x0'],
+                training_method='dnn')
 
             if self.export_all_years:
                 path_model = '{}/all_years/optimized_model_{}'.format(
@@ -102,7 +104,11 @@ class JackknifeGPI(object):
             perf_sum = np.nansum(apr_perf)
             if best_perf_sum is None:
                 best_perf_sum = perf_sum
+<<<<<<< Updated upstream
             elif perf_sum <= best_perf_sum:
+=======
+            if perf_sum <= best_perf_sum:
+>>>>>>> Stashed changes
                 self.apr_perf = apr_perf
                 self.post_perf = performance(vali_input, vali_output,
                                              training.model,

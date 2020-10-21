@@ -8,7 +8,7 @@ if __name__ == "__main__":
     val_split_year = 2017
     out_path = './results/'
     file_data = './example_data/input_SURFEX_label_ASCAT_3GPI_2007_2019'
-    list_gpi = [3]
+    list_gpi = [1, 2, 3]
     output_list = ['sig', 'slop', 'curv']
     input_list = [
         'TG1', 'TG2', 'TG3', 'WG1', 'WG2', 'WG3', 'BIOMA1', 'BIOMA2',
@@ -33,25 +33,29 @@ if __name__ == "__main__":
 
     # Loop all gpi
     for gpi_num in list_gpi:
-        
+
         gpi_data = df_all_gpi.iloc[gpi_num]['data']
         gpi_data = gpi_data.dropna()
+        gpi_data = gpi_data[::5]
 
         if len(df_all_gpi) > 0:
             gpi = JackknifeGPI(gpi_data,
                                val_split_year,
                                input_list,
                                output_list,
-                               outpath='{}/gpi{}'.format(out_path, gpi_num))
+                               outpath='{}/gpi{}'.format(out_path, gpi_num)) 
 
-            gpi.train(searching_space, optimize_space, 'standard', 'rmse',
-                      val_split_year)
+            gpi.train(searching_space = searching_space, 
+                      optimize_space = optimize_space, 
+                      normalize_method = 'standard', 
+                      training_method='dnn',
+                      performance_method='rmse',
+                      val_split_year=val_split_year) 
 
             gpi.export_best()
 
             # Compute shap
-            shap_values = shap_values(gpi.best_train.model,
-                                      gpi.gpi_input.values)
+            shaps = shap_values(gpi.best_train.model, gpi.gpi_input.values)
 
             # Export apriori performance
             path_apriori_performance = '{}/apriori_performance_{}'.format(
@@ -70,18 +74,18 @@ if __name__ == "__main__":
             with open(path_shap, 'wb') as f:
                 pickle.dump([
                     zip(
-                        shap_values[0][:, 0],
-                        shap_values[0][:, 1],
-                        shap_values[0][:, 2],
-                        shap_values[0][:, 3],
-                        shap_values[1][:, 0],
-                        shap_values[1][:, 1],
-                        shap_values[1][:, 2],
-                        shap_values[1][:, 3],
-                        shap_values[2][:, 0],
-                        shap_values[2][:, 1],
-                        shap_values[2][:, 2],
-                        shap_values[2][:, 3],
+                        shaps[0][:, 0],
+                        shaps[0][:, 1],
+                        shaps[0][:, 2],
+                        shaps[0][:, 3],
+                        shaps[1][:, 0],
+                        shaps[1][:, 1],
+                        shaps[1][:, 2],
+                        shaps[1][:, 3],
+                        shaps[2][:, 0],
+                        shaps[2][:, 1],
+                        shaps[2][:, 2],
+                        shaps[2][:, 3],
                     )
                 ], f)
 

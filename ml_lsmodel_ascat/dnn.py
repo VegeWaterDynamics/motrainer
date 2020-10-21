@@ -58,7 +58,8 @@ class NNTrain(object):
                  n_jobs=-1,
                  kappa=5,
                  validation_split=0.2,
-                 x0=[1e-3, 1, 4, 13, 'relu', 64]):
+                 x0=[1e-3, 1, 4, 13, 'relu', 64],
+                 training_method='dnn'):
         self.best_loss = best_loss
 
         @skopt.utils.use_named_args(dimensions=list(self.dimensions.values()))
@@ -67,8 +68,9 @@ class NNTrain(object):
             earlystop = tensorflow.keras.callbacks.EarlyStopping(
                 monitor='loss', mode='min', verbose=0, patience=30)
 
-            model = keras_dnn(dimensions, self.train_input.shape[1],
-                              self.train_output.shape[1])
+            if training_method == 'dnn':
+                model = keras_dnn(dimensions, self.train_input.shape[1],
+                                  self.train_output.shape[1])
             # Fit model
             blackbox = model.fit(x=self.train_input,
                                  y=self.train_output,
@@ -83,7 +85,6 @@ class NNTrain(object):
                 model.save('/tmp/tmp_model')
                 self.model = load_model('/tmp/tmp_model')
                 self.best_loss = loss
-                self.hehe = 1
             del model
             tensorflow.keras.backend.clear_session()
             return loss
