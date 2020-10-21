@@ -33,10 +33,8 @@ if __name__ == "__main__":
 
     # Loop all gpi
     for gpi_num in list_gpi:
-
         gpi_data = df_all_gpi.iloc[gpi_num]['data']
         gpi_data = gpi_data.dropna()
-        gpi_data = gpi_data[::5]
 
         if len(df_all_gpi) > 0:
             gpi = JackknifeGPI(gpi_data,
