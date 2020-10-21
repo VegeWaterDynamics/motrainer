@@ -104,11 +104,7 @@ class JackknifeGPI(object):
             perf_sum = np.nansum(apr_perf)
             if best_perf_sum is None:
                 best_perf_sum = perf_sum
-<<<<<<< Updated upstream
-            elif perf_sum <= best_perf_sum:
-=======
             if perf_sum <= best_perf_sum:
->>>>>>> Stashed changes
                 self.apr_perf = apr_perf
                 self.post_perf = performance(vali_input, vali_output,
                                              training.model,
