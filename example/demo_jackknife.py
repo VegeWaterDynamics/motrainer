@@ -36,7 +36,7 @@ if __name__ == "__main__":
         gpi_data = df_all_gpi.iloc[gpi_num]['data']
         gpi_data = gpi_data.dropna()
 
-        if len(df_all_gpi) > 0:
+        if len(gpi_data) > 0:
             gpi = JackknifeGPI(gpi_data,
                                val_split_year,
                                input_list,
