@@ -21,7 +21,7 @@ setup(
     description="Machine Learning module to train a surrogate module using Land-surface model dtput",
     long_description=readme + '\n\n',
     author="Netherlands eScience Center, TUDelft",
-    author_email='o.ku@esciencecenter.nl',
+    author_email='team-atlas@esciencecenter.nl',
     url='https://github.com/VegeWaterDynamics/ml_lsmodel_ascat',
     packages=[
         'ml_lsmodel_ascat',
@@ -59,8 +59,5 @@ setup(
         'pytest-cov',
         'pycodestyle',
     ],
-    extras_require={
-        'dev':  ['prospector[with_pyroma]', 'yapf', 'isort'],
-    },
     data_files=[('citation/ml_lsmodel_ascat', ['CITATION.cff'])]
 )
