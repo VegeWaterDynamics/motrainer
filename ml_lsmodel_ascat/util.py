@@ -23,7 +23,7 @@ def performance(data_input, data_label, model, method, scaler_output=None):
     model.save(tmp_path)
     model = load_model(tmp_path)
     predicted = model.predict(data_input)
-    
+
     # Scale back if the data was normalized
     if scaler_output is not None:
         re_predicted = scaler_output.inverse_transform(predicted, 'f')
