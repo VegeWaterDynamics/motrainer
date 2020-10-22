@@ -3,7 +3,7 @@ This script is for the implementation of different types of neural network,
 including different structures, different loss functions
 """
 
-import keras
+from  tensorflow import keras
 import numpy as np
 from pathlib import Path
 from skopt.space import Real, Categorical, Integer
