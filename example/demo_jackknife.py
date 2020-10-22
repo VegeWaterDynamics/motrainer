@@ -6,7 +6,7 @@ from ml_lsmodel_ascat.util import shap_values
 if __name__ == "__main__":
     # Manual input
     val_split_year = 2017
-    out_path = './results/'
+    out_path = './results'
     file_data = './example_data/input_SURFEX_label_ASCAT_3GPI_2007_2019'
     list_gpi = [1, 2, 3]
     output_list = ['sig', 'slop', 'curv']

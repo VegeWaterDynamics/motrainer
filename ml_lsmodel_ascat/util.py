@@ -1,7 +1,9 @@
 import numpy as np
 import shap
 import sklearn
+import random
 from scipy.stats.stats import pearsonr, spearmanr
+from tensorflow.keras.models import load_model
 
 
 def shap_values(model, input_whole):
@@ -17,8 +19,13 @@ def shap_values(model, input_whole):
 
 
 def performance(data_input, data_label, model, method, scaler_output=None):
+    # Temporally SL the model because of TF graph execution issue
+    # TODO: fix the model prediction issue
+    tmp_path = '/tmp/tmp_model{}'.format(random.getrandbits(64))
+    model.save(tmp_path)
+    model = load_model(tmp_path)
     predicted = model.predict(data_input)
-
+    
     # Scale back if the data was normalized
     if scaler_output is not None:
         re_predicted = scaler_output.inverse_transform(predicted, 'f')

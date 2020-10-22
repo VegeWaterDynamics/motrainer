@@ -6,7 +6,6 @@ import numpy as np
 import pickle
 from pathlib import Path
 from skopt.space import Real, Categorical, Integer
-from tensorflow.keras.models import load_model
 from ml_lsmodel_ascat.model import keras_dnn
 
 logger = logging.getLogger(__name__)
@@ -81,9 +80,7 @@ class NNTrain(object):
             # Get loss
             loss = blackbox.history['val_loss'][-1]
             if loss < self.best_loss:
-                # Temporally SL the model because of TF graph execution issue
-                model.save('/tmp/tmp_model')
-                self.model = load_model('/tmp/tmp_model')
+                self.model = model
                 self.best_loss = loss
             del model
             tensorflow.keras.backend.clear_session()
