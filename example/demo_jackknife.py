@@ -6,16 +6,22 @@ from ml_lsmodel_ascat.util import shap_values
 if __name__ == "__main__":
     # Manual input
     val_split_year = 2017
-    out_path = './results/'
-    file_data = './example_data/input_SURFEX_label_ASCAT_3GPI_2007_2019'
-    list_gpi = [3]
+    out_path = './results/test/'
+    file_data = './example_data/input_SURFEX_label_ASCAT_9GPI_2007_2019'
+#    list_gpi = [3]
+    list_gpi = range(9)
     output_list = ['sig', 'slop', 'curv']
     input_list = [
         'TG1', 'TG2', 'TG3', 'WG1', 'WG2', 'WG3', 'BIOMA1', 'BIOMA2',
         'RN_ISBA', 'H_ISBA', 'LE_ISBA', 'GFLUX_ISBA', 'EVAP_ISBA', 'GPP_ISBA',
         'R_ECO_ISBA', 'LAI_ISBA', 'XRS_ISBA'
     ]
-    searching_space = {'learning_rate': [5e-4, 1e-2], 'activation': ['relu']}
+    searching_space = {
+            'num_dense_layers': [1, 10],
+            'num_input_nodes': [1, 6],
+            'num_dense_nodes': [1, 128],
+            'learning_rate': [5e-4, 1e-2], 
+                       'activation': ['relu']}
     optimize_space = {
         'best_loss': 1,
         'n_calls': 15,
@@ -30,7 +36,8 @@ if __name__ == "__main__":
     with open(file_data, 'rb') as f:
         clusters = pickle.load(f)
     df_all_gpi = clusters
-
+    
+    aprior, post = [], []
     # Loop all gpi
     for gpi_num in list_gpi:
         
@@ -50,7 +57,7 @@ if __name__ == "__main__":
             gpi.export_best()
 
             # Compute shap
-            shap_values = shap_values(gpi.best_train.model,
+            shaps = shap_values(gpi.best_train.model,
                                       gpi.gpi_input.values)
 
             # Export apriori performance
@@ -70,23 +77,21 @@ if __name__ == "__main__":
             with open(path_shap, 'wb') as f:
                 pickle.dump([
                     zip(
-                        shap_values[0][:, 0],
-                        shap_values[0][:, 1],
-                        shap_values[0][:, 2],
-                        shap_values[0][:, 3],
-                        shap_values[1][:, 0],
-                        shap_values[1][:, 1],
-                        shap_values[1][:, 2],
-                        shap_values[1][:, 3],
-                        shap_values[2][:, 0],
-                        shap_values[2][:, 1],
-                        shap_values[2][:, 2],
-                        shap_values[2][:, 3],
+                        shaps[0],
+                        shaps[1],
+                        shaps[2]
                     )
                 ], f)
-
+            
+            aprior.append(gpi.apr_perf)
+            post.append(gpi.post_perf)
             print("=========================================")
             print("       GPI " + str(gpi_num) + " done")
+            print("       aprior performance(RMSE): ")
+            print(gpi.apr_perf)
+            print("=========================================")
+            print("       post performance(RMSE): ")
+            print(gpi.post_perf)
             print("=========================================")
         else:
             print("=========================================")

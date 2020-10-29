@@ -11,9 +11,9 @@ def shap_values(model, input_whole):
 
     shap.initjs()
     e = shap.DeepExplainer(model, background)
-    shap_values = e.shap_values(input_whole)
+    shaps = e.shap_values(input_whole)
 
-    return shap_values
+    return shaps
 
 
 def performance(data_input, data_label, model, method, scaler_output=None):
