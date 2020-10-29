@@ -1,4 +1,5 @@
 import pickle
+import pandas as pd
 from ml_lsmodel_ascat.dnn import NNTrain
 from ml_lsmodel_ascat.jackknife import JackknifeGPI
 from ml_lsmodel_ascat.util import shap_values
@@ -74,14 +75,10 @@ if __name__ == "__main__":
 
             # Export shap
             path_shap = '{}/shap_values_{}'.format(gpi.outpath, gpi.best_year)
+            df_shap = pd.DataFrame()
+            df_shap['shaps'] = shaps
             with open(path_shap, 'wb') as f:
-                pickle.dump([
-                    zip(
-                        shaps[0],
-                        shaps[1],
-                        shaps[2]
-                    )
-                ], f)
+                pickle.dump(shaps, f)
             
             aprior.append(gpi.apr_perf)
             post.append(gpi.post_perf)
