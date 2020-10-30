@@ -92,7 +92,7 @@ class JackknifeGPI(object):
             # TODO: Add warning if no model selected for the year
             if training.model is None:
                 continue
-            
+
             if self.export_all_years:
                 path_model = '{}/all_years/optimized_model_{}'.format(
                     self.outpath, this_year)
