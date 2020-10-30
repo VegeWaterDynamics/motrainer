@@ -32,6 +32,7 @@ class NNTrain(object):
             'batch_size':
             Integer(low=7, high=365, name='batch_size')
         }
+        self.model = None
 
     def update_space(self, **kwrags):
         for key, value in kwrags.items():
