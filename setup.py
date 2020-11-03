@@ -45,7 +45,8 @@ setup(
         'numpy',
         'scipy',
         'keras',
-        'sklearn'],  
+        'sklearn',
+        'cartopy'],  
     setup_requires=[
         # dependency for `python setup.py test`
         'pytest-runner',
