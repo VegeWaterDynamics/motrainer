@@ -171,10 +171,7 @@ def plot_gsdata(data,
 
 def _lambert_xticks(ax, ticks, tick_location, tickfontsize):
     """Draw ticks on the bottom x-axis of a Lambert Conformal projection."""
-    te = lambda xy: xy[0]
-    lc = lambda t, n, b: np.vstack(
-        (np.zeros(n) + t, np.linspace(b[2], b[3], n))).T
-    xticks, xticklabels = _lambert_ticks(ax, ticks, tick_location, lc, te)
+    xticks, xticklabels = _lambert_ticks(ax, ticks, tick_location)
     ax.xaxis.tick_bottom()
     ax.set_xticks(xticks)
     ax.set_xticklabels(
@@ -185,10 +182,7 @@ def _lambert_xticks(ax, ticks, tick_location, tickfontsize):
 
 def _lambert_yticks(ax, ticks, tick_location, tickfontsize):
     """Draw ricks on the left y-axis of a Lamber Conformal projection."""
-    te = lambda xy: xy[1]
-    lc = lambda t, n, b: np.vstack(
-        (np.linspace(b[0], b[1], n), np.zeros(n) + t)).T
-    yticks, yticklabels = _lambert_ticks(ax, ticks, tick_location, lc, te)
+    yticks, yticklabels = _lambert_ticks(ax, ticks, tick_location)
     ax.yaxis.tick_left()
     ax.set_yticks(yticks)
     ax.set_yticklabels(
@@ -197,7 +191,7 @@ def _lambert_yticks(ax, ticks, tick_location, tickfontsize):
         tick.label1.set_fontsize(tickfontsize)
 
 
-def _lambert_ticks(ax, ticks, tick_location, line_constructor, tick_extractor):
+def _lambert_ticks(ax, ticks, tick_location):
     """Get the tick locations and labels
     for an axis of a Lambert Conformal projection."""
     xb = ax.get_xbound()
@@ -209,7 +203,12 @@ def _lambert_ticks(ax, ticks, tick_location, line_constructor, tick_extractor):
     n_steps = 30
     _ticks = []
     for t in ticks:
-        xy = line_constructor(t, n_steps, extent)
+        if tick_location == 'left':
+            xy = np.vstack((np.linspace(extent[0], extent[1],
+                                        n_steps), np.zeros(n_steps) + t)).T
+        elif tick_location == 'bottom':
+            xy = np.vstack((np.zeros(n_steps) + t,
+                            np.linspace(extent[2], extent[3], n_steps))).T
         proj_xyz = ax.projection.transform_points(cartopy.crs.Geodetic(),
                                                   xy[:, 0], xy[:, 1])
         xyt = proj_xyz[..., :2]
@@ -218,7 +217,10 @@ def _lambert_ticks(ax, ticks, tick_location, line_constructor, tick_extractor):
         if not locs:
             tick = [None]
         else:
-            tick = tick_extractor(locs.xy)
+            if tick_location == 'left':
+                tick = locs.xy[1]
+            elif tick_location == 'bottom':
+                tick = locs.xy[0]
         _ticks.append(tick[0])
     # Remove ticks that aren't visible:
     ticklabels = copy(ticks)
