@@ -17,12 +17,12 @@ def plot_gsdata(data,
                 fontsize=8,
                 colormap='YlGnBu',
                 cbar_mode='plot',
-                cbar_label=None
-               ):
+                cbar_label=None):
     """Plot geo-spratial data on a basmap
 
-    :param data: Input data for plotting. First two columns should be ['lat', 'lon']. 
-        Each other column will be plotted orderly as a subplot.
+    :param data: Input data for plotting. First two columns
+        should be ['lat', 'lon']. Each other column will be
+        plotted orderly as a subplot.
     :type data: pandas.DataFrame
     :param nrowcol: number of (row, cloumn) of the subplots.
     :type nrowcol: tuple
@@ -31,26 +31,33 @@ def plot_gsdata(data,
     :param rowlabels: row labels, defaults to None
     :type rowlabels: list, optional
     :param kw_padding: Keyword arguement for pyplot.tight_layout().
-        Adjust subplot padding. E.g. {'pad': 5, 'h_pad': 5, 'w_pad': 3}. defaults to None.
+        Adjust subplot padding.
+        E.g. {'pad': 5, 'h_pad': 5, 'w_pad': 3}. defaults to None.
     :type kw_padding: dict, optional
-    :param buffer_percentage: The fraction of the extra basemap extent to the data 
-        extent. when >0, the basemap will be larger than the data coverage., defaults to 0.05
+    :param buffer_percentage: The fraction of the extra basemap
+        extent to the data extent. when >0, the basemap will be
+        larger than the data coverage., defaults to 0.05
     :type buffer_percentage: float, optional
-    :param basemap_scale: Scale of the basemap elements, defaults to '50m'
+    :param basemap_scale: Scale of the basemap elements,
+        defaults to '50m'
     :type basemap_scale: str, optional
-    :param basemap_extent: Mannual basemap extent setting, defaults to 'auto', 
-        which means the extent will be determined based on the data coverage, and the `buffer_percentage`
+    :param basemap_extent: Mannual basemap extent setting,
+        defaults to 'auto', which means the extent will be
+        determined based on the data coverage, and the `buffer_percentage`
     :type basemap_extent: list, optional
     :param marksize: scatter plot maker size, defaults to 5
     :type marksize: int, optional
-    :param fontsize: fontsize of tick, title and labels, defaults to 8. For colorbar the tick labe size will be halved.
+    :param fontsize: fontsize of tick, title and labels,
+        defaults to 8. For colorbar the tick labe size will be halved.
     :type fontsize: int, optional
     :param colormap: Mannual color scale setting, defaults to 'YlGnBu'
     :type colormap: str, optional
-    :param cbar_mode: Modes of colorbar. Choose from 'plot' (colorbar per plot), 
-        'row' (colorbar per row) or 'fig' (one colorbar for the entire figure), defaults to 'plot'
+    :param cbar_mode: Modes of colorbar. Choose from 'plot'
+        (colorbar per plot), 'row' (colorbar per row) or
+        'fig' (one colorbar for the entire figure), defaults to 'plot'
     :type cbar_mode: str, optional
-    :param cbar_label: Labels for colorvar. Only active when cbar_mode is 'fig'. defaults to None
+    :param cbar_label: Labels for colorvar. Only active when cbar_mode
+        is 'fig'. defaults to None
     :type cbar_label: str, optional
     """
 
@@ -121,14 +128,14 @@ def plot_gsdata(data,
         if cbar_mode == 'plot':
             axpos = ax.get_position()
             cbar_ax = fig.add_axes([axpos.x1, axpos.y0, 0.0075,
-                                    axpos.height])  #l, b, w, h
+                                    axpos.height])  # l, b, w, h
             cbar = fig.colorbar(sc, cax=cbar_ax)
             cbar.ax.tick_params(labelsize=fontsize / 2)
         elif cbar_mode == 'row':
             if feature_id % nrowcol[1] == nrowcol[1] - 1:
                 axpos = ax.get_position()
                 cbar_ax = fig.add_axes(
-                    [axpos.x1, axpos.y0, 0.01, axpos.height])  #l, b, w, h
+                    [axpos.x1, axpos.y0, 0.01, axpos.height])  # l, b, w, h
                 cbar = fig.colorbar(sc, cax=cbar_ax)
                 cbar.ax.tick_params(labelsize=fontsize / 2)
 
@@ -191,7 +198,8 @@ def _lambert_yticks(ax, ticks, tick_location, tickfontsize):
 
 
 def _lambert_ticks(ax, ticks, tick_location, line_constructor, tick_extractor):
-    """Get the tick locations and labels for an axis of a Lambert Conformal projection."""
+    """Get the tick locations and labels
+    for an axis of a Lambert Conformal projection."""
     xb = ax.get_xbound()
     yb = ax.get_ybound()
     outline_patch = sgeom.LineString([[xb[0], yb[0]], [xb[0], yb[1]],
@@ -228,7 +236,6 @@ def _find_side(ls, side):
     """
     Given a shapely LineString which is assumed to be rectangular, return the
     line corresponding to a given side of the rectangle.
-    
     """
     minx, miny, maxx, maxy = ls.bounds
     points = {
