@@ -76,7 +76,23 @@ class JackknifeGPI(object):
                 searching_space['learning_rate'][0],
                 searching_space['learning_rate'][1]
             ],
-                                  activation=searching_space['activation'])
+            num_dense_layers=[
+                    searching_space['num_dense_layers'][0],
+                    searching_space['num_dense_layers'][1]
+            ],
+            num_input_nodes=[
+                    searching_space['num_input_nodes'][0],
+                    searching_space['num_input_nodes'][1]
+            ],
+            num_dense_nodes=[
+                    searching_space['num_dense_nodes'][0],
+                    searching_space['num_dense_nodes'][1]
+            ],
+            batch_size=[
+                    searching_space['batch_size'][0],
+                    searching_space['batch_size'][1]
+            ],
+            activation=searching_space['activation'])
 
             # Optimization
             training.optimize(
