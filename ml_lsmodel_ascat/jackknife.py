@@ -72,27 +72,7 @@ class JackknifeGPI(object):
             training = NNTrain(train_input, train_output)
 
             # Set searching space
-            training.update_space(learning_rate=[
-                searching_space['learning_rate'][0],
-                searching_space['learning_rate'][1]
-            ],
-            num_dense_layers=[
-                    searching_space['num_dense_layers'][0],
-                    searching_space['num_dense_layers'][1]
-            ],
-            num_input_nodes=[
-                    searching_space['num_input_nodes'][0],
-                    searching_space['num_input_nodes'][1]
-            ],
-            num_dense_nodes=[
-                    searching_space['num_dense_nodes'][0],
-                    searching_space['num_dense_nodes'][1]
-            ],
-            batch_size=[
-                    searching_space['batch_size'][0],
-                    searching_space['batch_size'][1]
-            ],
-            activation=searching_space['activation'])
+            training.update_space(**searching_space)
 
             # Optimization
             training.optimize(

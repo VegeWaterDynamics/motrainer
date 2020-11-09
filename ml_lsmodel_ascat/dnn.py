@@ -36,20 +36,40 @@ class NNTrain(object):
 
     def update_space(self, **kwrags):
         for key, value in kwrags.items():
-            if key in ['learning_rate']:
+            # skopt.space instances
+            if isinstance(value, (Real, Categorical, Integer)):
+                self.dimensions[key] = value
+                self.dimensions[key].name = key 
+
+            # Float searching space, e.g. learning rates
+            elif any([isinstance(obj, float) for obj in value]): 
+                assert len(value)==2
+                if any([isinstance(obj, int) for obj in value]):
+                    logger.warning('Mixed fload/int type found in {}:{}. '\
+                        'The search space will be interpreted as float. '\
+                        'If this behavior is not desired, try to specify'\
+                        'all elements in {} with the same type.'.format(
+                        key, value, key))
                 self.dimensions[key] = Real(low=value[0],
                                             high=value[1],
                                             prior='log-uniform',
                                             name=key)
-            elif key in [
-                    'num_dense_layers', 'num_input_nodes', 'num_dense_nodes',
-                    'batch_size'
-            ]:
+            
+            # Integer searching space, e.g. num of input nodes
+            elif all([isinstance(obj, int) for obj in value]):
+                assert len(value)==2
                 self.dimensions[key] = Integer(low=value[0],
                                                high=value[1],
                                                name=key)
-            elif key in ['activation']:
+            
+            # Categorical searching space, e.g. activation
+            elif all([isinstance(obj, str) for obj in value]):
                 self.dimensions[key] = Categorical(categories=value, name=key)
+
+            else:
+                logger.error('Do not understand searching space: {}:{}.'.format(
+                    key, value))
+                raise NotImplementedError
 
     def optimize(self,
                  best_loss=1,

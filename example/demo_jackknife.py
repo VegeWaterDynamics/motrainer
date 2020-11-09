@@ -9,7 +9,6 @@ if __name__ == "__main__":
     val_split_year = 2017
     out_path = './results/test/'
     file_data = './example_data/input_SURFEX_label_ASCAT_9GPI_2007_2019'
-#    list_gpi = [3]
     list_gpi = range(9)
     output_list = ['sig', 'slop', 'curv']
     input_list = [
@@ -18,11 +17,13 @@ if __name__ == "__main__":
         'R_ECO_ISBA', 'LAI_ISBA', 'XRS_ISBA'
     ]
     searching_space = {
-            'num_dense_layers': [1, 10],
-            'num_input_nodes': [1, 6],
-            'num_dense_nodes': [1, 128],
-            'learning_rate': [5e-4, 1e-2], 
-                       'activation': ['relu']}
+        'num_dense_layers': [1, 10],
+        'num_input_nodes': [1, 6],
+        'num_dense_nodes': [1, 128],
+        'learning_rate': [5e-4, 1e-2],
+        'activation': ['relu']
+    }
+
     optimize_space = {
         'best_loss': 1,
         'n_calls': 15,
@@ -37,11 +38,11 @@ if __name__ == "__main__":
     with open(file_data, 'rb') as f:
         clusters = pickle.load(f)
     df_all_gpi = clusters
-    
+
     aprior, post = [], []
     # Loop all gpi
     for gpi_num in list_gpi:
-        
+
         gpi_data = df_all_gpi.iloc[gpi_num]['data']
         gpi_data = gpi_data.dropna()
 
@@ -59,7 +60,7 @@ if __name__ == "__main__":
 
             # Compute shap
             shaps = shap_values(gpi.best_train.model,
-                                      gpi.gpi_data[gpi.input_list].values)
+                                gpi.gpi_data[gpi.input_list].values)
 
             # Export apriori performance
             path_apriori_performance = '{}/apriori_performance_{}'.format(
@@ -79,7 +80,7 @@ if __name__ == "__main__":
             df_shap['shaps'] = shaps
             with open(path_shap, 'wb') as f:
                 pickle.dump(shaps, f)
-            
+
             aprior.append(gpi.apr_perf)
             post.append(gpi.post_perf)
             print("=========================================")
