@@ -91,7 +91,7 @@ class NNTrain(object):
         def lossfunc(**dimensions):
             # setup model
             earlystop = tensorflow.keras.callbacks.EarlyStopping(
-                monitor='loss',
+                monitor='val_loss',
                 mode='min',
                 verbose=self.keras_verbose,
                 patience=30)
