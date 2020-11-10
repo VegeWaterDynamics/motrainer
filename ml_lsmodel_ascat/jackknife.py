@@ -74,15 +74,7 @@ class JackknifeGPI(object):
             training.update_space(**searching_space)
 
             # Optimization
-            training.optimize(
-                best_loss=optimize_space['best_loss'],
-                n_calls=optimize_space['n_calls'],
-                noise=optimize_space['noise'],
-                n_jobs=optimize_space['n_jobs'],
-                kappa=optimize_space['kappa'],
-                validation_split=optimize_space['validation_split'],
-                x0=optimize_space['x0'],
-                training_method='dnn')
+            training.optimize(**optimize_space, training_method='dnn')
 
             # TODO: Add warning if no model selected for the year
             if training.model is None:

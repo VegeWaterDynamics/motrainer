@@ -27,6 +27,7 @@ if __name__ == "__main__":
     optimize_space = {
         'best_loss': 1,
         'n_calls': 15,
+        'epochs': 300,
         'noise': 0.01,
         'n_jobs': -1,
         'kappa': 5,

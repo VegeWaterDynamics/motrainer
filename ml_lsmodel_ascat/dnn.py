@@ -76,6 +76,7 @@ class NNTrain(object):
     def optimize(self,
                  best_loss=1,
                  n_calls=15,
+                 epochs=100,
                  noise=0.01,
                  n_jobs=-1,
                  kappa=5,
@@ -96,6 +97,7 @@ class NNTrain(object):
             # Fit model
             blackbox = model.fit(x=self.train_input,
                                  y=self.train_output,
+                                 epochs=epochs,
                                  batch_size=dimensions['batch_size'],
                                  callbacks=[earlystop],
                                  verbose=0,
