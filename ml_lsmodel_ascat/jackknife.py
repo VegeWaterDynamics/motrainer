@@ -33,8 +33,7 @@ class JackknifeGPI(object):
               optimize_space,
               normalize_method='standard',
               training_method='dnn',
-              performance_method='rmse',
-              val_split_year=2017):
+              performance_method='rmse'):
 
         # Data normalization
         self.gpi_data[self.input_list], scaler_input = normalize(
@@ -72,11 +71,7 @@ class JackknifeGPI(object):
             training = NNTrain(train_input, train_output)
 
             # Set searching space
-            training.update_space(learning_rate=[
-                searching_space['learning_rate'][0],
-                searching_space['learning_rate'][1]
-            ],
-                                  activation=searching_space['activation'])
+            training.update_space(**searching_space)
 
             # Optimization
             training.optimize(
