@@ -82,14 +82,19 @@ class NNTrain(object):
                  kappa=5,
                  validation_split=0.2,
                  x0=[1e-3, 1, 4, 13, 'relu', 64],
-                 training_method='dnn'):
+                 training_method='dnn',
+                 verbose=0):
         self.best_loss = best_loss
+        self.keras_verbose = verbose
 
         @skopt.utils.use_named_args(dimensions=list(self.dimensions.values()))
         def lossfunc(**dimensions):
             # setup model
             earlystop = tensorflow.keras.callbacks.EarlyStopping(
-                monitor='loss', mode='min', verbose=0, patience=30)
+                monitor='loss',
+                mode='min',
+                verbose=self.keras_verbose,
+                patience=30)
 
             if training_method == 'dnn':
                 model = keras_dnn(dimensions, self.train_input.shape[1],
@@ -100,7 +105,7 @@ class NNTrain(object):
                                  epochs=epochs,
                                  batch_size=dimensions['batch_size'],
                                  callbacks=[earlystop],
-                                 verbose=0,
+                                 verbose=self.keras_verbose,
                                  validation_split=validation_split)
             # Get loss
             loss = blackbox.history['val_loss'][-1]

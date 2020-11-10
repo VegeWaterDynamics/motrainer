@@ -58,7 +58,8 @@ if __name__ == "__main__":
                       optimize_space = optimize_space, 
                       normalize_method = 'standard', 
                       training_method='dnn',
-                      performance_method='rmse') 
+                      performance_method='rmse',
+                      verbose=2) 
 
             gpi.export_best()
 
