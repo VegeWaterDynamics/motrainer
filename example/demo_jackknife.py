@@ -53,8 +53,11 @@ if __name__ == "__main__":
                                output_list,
                                outpath='{}/gpi{}'.format(out_path, gpi_num))
 
-            gpi.train(searching_space, optimize_space, 'standard', 'rmse',
-                      val_split_year)
+            gpi.train(searching_space = searching_space, 
+                      optimize_space = optimize_space, 
+                      normalize_method = 'standard', 
+                      training_method='dnn',
+                      performance_method='rmse') 
 
             gpi.export_best()
 

@@ -33,8 +33,7 @@ class JackknifeGPI(object):
               optimize_space,
               normalize_method='standard',
               training_method='dnn',
-              performance_method='rmse',
-              val_split_year=2017):
+              performance_method='rmse'):
 
         # Data normalization
         self.gpi_data[self.input_list], scaler_input = normalize(
