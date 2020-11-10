@@ -27,6 +27,7 @@ if __name__ == "__main__":
     optimize_space = {
         'best_loss': 1,
         'n_calls': 15,
+        'epochs': 300,
         'noise': 0.01,
         'n_jobs': -1,
         'kappa': 5,
@@ -57,7 +58,8 @@ if __name__ == "__main__":
                       optimize_space = optimize_space, 
                       normalize_method = 'standard', 
                       training_method='dnn',
-                      performance_method='rmse') 
+                      performance_method='rmse',
+                      verbose=2) 
 
             gpi.export_best()
 
