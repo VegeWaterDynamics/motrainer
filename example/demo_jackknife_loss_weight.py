@@ -32,6 +32,7 @@ if __name__ == "__main__":
         'n_jobs': -1,
         'kappa': 5,
         'validation_split': 0.2,
+        'loss_weights': [1, 1, 0.5],
         'x0': [1e-3, 1, 4, 13, 'relu', 64]
     }
 
@@ -57,8 +58,8 @@ if __name__ == "__main__":
             gpi.train(searching_space=searching_space,
                       optimize_space=optimize_space,
                       normalize_method='standard',
-                      training_method='dnn',
                       performance_method='rmse',
+                      training_method='dnn_lossweights',
                       verbose=2)
 
             gpi.export_best()

@@ -6,7 +6,7 @@ import numpy as np
 import pickle
 from pathlib import Path
 from skopt.space import Real, Categorical, Integer
-from ml_lsmodel_ascat.model import keras_dnn
+from ml_lsmodel_ascat.model import keras_dnn, keras_dnn_lossweight
 
 logger = logging.getLogger(__name__)
 
@@ -83,12 +83,14 @@ class NNTrain(object):
                  validation_split=0.2,
                  x0=[1e-3, 1, 4, 13, 'relu', 64],
                  training_method='dnn',
+                 loss_weights=None,
                  verbose=0):
         self.best_loss = best_loss
         self.keras_verbose = verbose
+        self.loss_weights = loss_weights
 
         @skopt.utils.use_named_args(dimensions=list(self.dimensions.values()))
-        def lossfunc(**dimensions):
+        def func(**dimensions):
             # setup model
             earlystop = tensorflow.keras.callbacks.EarlyStopping(
                 monitor='val_loss',
@@ -99,14 +101,31 @@ class NNTrain(object):
             if training_method == 'dnn':
                 model = keras_dnn(dimensions, self.train_input.shape[1],
                                   self.train_output.shape[1])
+                train_output = self.train_output
+            elif training_method == 'dnn_lossweights':
+                if self.loss_weights is None:
+                    self.loss_weights = [1] * self.train_output.shape[1]
+                    logger.warning('loss_weights is None.'
+                                   'Using default weights {}'.format(
+                                       self.loss_weights))
+                model = keras_dnn_lossweight(dimensions,
+                                             self.train_input.shape[1],
+                                             self.train_output.shape[1],
+                                             self.loss_weights)
+                train_output = [
+                    self.train_output[:, i]
+                    for i in range(self.train_output.shape[1])
+                ]
+
             # Fit model
             blackbox = model.fit(x=self.train_input,
-                                 y=self.train_output,
+                                 y=train_output,
                                  epochs=epochs,
                                  batch_size=dimensions['batch_size'],
                                  callbacks=[earlystop],
                                  verbose=self.keras_verbose,
                                  validation_split=validation_split)
+
             # Get loss
             loss = blackbox.history['val_loss'][-1]
             if loss < self.best_loss:
@@ -116,7 +135,7 @@ class NNTrain(object):
             tensorflow.keras.backend.clear_session()
             return loss
 
-        self.gp_result = skopt.gp_minimize(func=lossfunc,
+        self.gp_result = skopt.gp_minimize(func=func,
                                            dimensions=list(
                                                self.dimensions.values()),
                                            n_calls=n_calls,
