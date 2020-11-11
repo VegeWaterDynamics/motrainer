@@ -3,12 +3,14 @@ This script is for the implementation of different types of neural network,
 including different structures, different loss functions
 """
 
-from tensorflow import keras
+import os
+import tensorflow as tf
 import numpy as np
+import logging
 from pathlib import Path
 from skopt.space import Real, Categorical, Integer
-from tensorflow.keras.layers import Input, Dense
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Force tensorflow debug logging off
 
 def keras_dnn(dimensions, input_shape, output_shape):
     """
@@ -20,22 +22,21 @@ def keras_dnn(dimensions, input_shape, output_shape):
     dimension['input_shape'] = train_input.shape[1]
     dimension['output_shape'] = train_output.shape[1]
     """
-    model = keras.models.Sequential()
-    model.add(
-        keras.layers.Dense(dimensions['num_input_nodes'],
-                           input_shape=(input_shape, ),
-                           activation=dimensions['activation']))
+    model = tf.keras.models.Sequential()
+    model.add(tf.keras.layers.Dense(dimensions['num_input_nodes'],
+                                    input_shape=(input_shape, ),
+                                    activation=dimensions['activation']))
 
     for i in range(dimensions['num_dense_layers']):
         name = 'layer_dense_{0}'.format(i + 1)
         model.add(
-            keras.layers.Dense(dimensions['num_input_nodes'],
-                               activation=dimensions['activation'],
-                               name=name))
-        model.add(keras.layers.Dense(units=output_shape))
-        adam = keras.optimizers.Adam(lr=dimensions['learning_rate'])
+            tf.keras.layers.Dense(dimensions['num_input_nodes'],
+                                  activation=dimensions['activation'],
+                                  name=name))
+        model.add(tf.keras.layers.Dense(units=output_shape))
+        adam = tf.keras.optimizers.Adam(lr=dimensions['learning_rate'])
     model.compile(optimizer=adam,
-                  loss=keras.losses.mean_squared_error,
+                  loss=tf.keras.losses.mean_squared_error,
                   metrics=['mae', 'acc'])
 
     return model
@@ -44,31 +45,31 @@ def keras_dnn(dimensions, input_shape, output_shape):
 def keras_dnn_lossweight(dimensions, input_shape, output_shape, loss_weights):
     """
     """
-    inputs = Input(shape=(input_shape, ))
+    inputs = tf.keras.Input(shape=(input_shape, ))
 
     for i in range(dimensions['num_dense_layers']):
         name = 'layer_dense_{0}'.format(i + 1)
         if i == 0:
-            hidden = Dense(dimensions['num_input_nodes'],
-                           activation=dimensions['activation'],
-                           name=name)(inputs)
+            hidden = tf.keras.Dense(dimensions['num_input_nodes'],
+                                    activation=dimensions['activation'],
+                                    name=name)(inputs)
             hidden_prev = hidden
         else:
-            hidden = Dense(dimensions['num_input_nodes'],
-                           activation=dimensions['activation'],
-                           name=name)(hidden_prev)
+            hidden = tf.keras.Dense(dimensions['num_input_nodes'],
+                                    activation=dimensions['activation'],
+                                    name=name)(hidden_prev)
             hidden_prev = hidden
 
     outputs = []
     for i in range(output_shape):
         name = 'out{}'.format(i + 1)
-        outputs.append(Dense(1, name=name)(hidden))
+        outputs.append(tf.keras.Dense(1, name=name)(hidden))
 
-    adam = keras.optimizers.Adam(lr=dimensions['learning_rate'])
+    adam = tf.keras.optimizers.Adam(lr=dimensions['learning_rate'])
 
-    model = keras.models.Model(inputs=inputs, outputs=outputs)
+    model = tf.keras.models.Model(inputs=inputs, outputs=outputs)
     model.compile(optimizer=adam,
-                  loss=keras.losses.mean_squared_error,
+                  loss=tf.keras.losses.mean_squared_error,
                   metrics=['mae', 'acc'],
                   loss_weights=loss_weights)
 

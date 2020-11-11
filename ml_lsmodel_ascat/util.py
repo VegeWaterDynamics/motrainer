@@ -1,10 +1,12 @@
 import numpy as np
+import tensorflow as tf
+import os
 import shap
 import sklearn
 import random
 from scipy.stats.stats import pearsonr, spearmanr
-from tensorflow.keras.models import load_model
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Force tensorflow debug logging off
 
 def shap_values(model, input_whole):
     background = input_whole[np.random.choice(input_whole.shape[0],
@@ -21,7 +23,7 @@ def performance(data_input, data_label, model, method, scaler_output=None):
     # TODO: fix the model prediction issue
     tmp_path = '/tmp/tmp_model{}'.format(random.getrandbits(64))
     model.save(tmp_path)
-    model = load_model(tmp_path)
+    model = tf.keras.models.load_model(tmp_path)
     predicted = model.predict(data_input)
 
     # Scale back if the data was normalized
