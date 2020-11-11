@@ -50,12 +50,12 @@ def keras_dnn_lossweight(dimensions, input_shape, output_shape, loss_weights):
     for i in range(dimensions['num_dense_layers']):
         name = 'layer_dense_{0}'.format(i + 1)
         if i == 0:
-            hidden = tf.keras.Dense(dimensions['num_input_nodes'],
+            hidden = tf.keras.layers.Dense(dimensions['num_input_nodes'],
                                     activation=dimensions['activation'],
                                     name=name)(inputs)
             hidden_prev = hidden
         else:
-            hidden = tf.keras.Dense(dimensions['num_input_nodes'],
+            hidden = tf.keras.layers.Dense(dimensions['num_input_nodes'],
                                     activation=dimensions['activation'],
                                     name=name)(hidden_prev)
             hidden_prev = hidden
@@ -63,7 +63,7 @@ def keras_dnn_lossweight(dimensions, input_shape, output_shape, loss_weights):
     outputs = []
     for i in range(output_shape):
         name = 'out{}'.format(i + 1)
-        outputs.append(tf.keras.Dense(1, name=name)(hidden))
+        outputs.append(tf.keras.layers.Dense(1, name=name)(hidden))
 
     adam = tf.keras.optimizers.Adam(lr=dimensions['learning_rate'])
 
