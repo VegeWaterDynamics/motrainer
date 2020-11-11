@@ -32,8 +32,8 @@ class JackknifeGPI(object):
               searching_space,
               optimize_space,
               normalize_method='standard',
-              training_method='dnn',
               performance_method='rmse',
+              training_method='dnn',
               verbose=0):
 
         # Data normalization
@@ -76,7 +76,7 @@ class JackknifeGPI(object):
 
             # Optimization
             training.optimize(**optimize_space,
-                              training_method='dnn',
+                              training_method=training_method,
                               verbose=verbose)
 
             # TODO: Add warning if no model selected for the year
