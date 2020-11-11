@@ -6,7 +6,8 @@ import sklearn
 import random
 from scipy.stats.stats import pearsonr, spearmanr
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Force tensorflow debug logging off
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Force tensorflow debug logging off
+
 
 def shap_values(model, input_whole):
     background = input_whole[np.random.choice(input_whole.shape[0],

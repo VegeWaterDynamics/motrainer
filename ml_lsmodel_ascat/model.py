@@ -10,7 +10,8 @@ import logging
 from pathlib import Path
 from skopt.space import Real, Categorical, Integer
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Force tensorflow debug logging off
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Force tensorflow debug logging off
+
 
 def keras_dnn(dimensions, input_shape, output_shape):
     """
@@ -23,9 +24,10 @@ def keras_dnn(dimensions, input_shape, output_shape):
     dimension['output_shape'] = train_output.shape[1]
     """
     model = tf.keras.models.Sequential()
-    model.add(tf.keras.layers.Dense(dimensions['num_input_nodes'],
-                                    input_shape=(input_shape, ),
-                                    activation=dimensions['activation']))
+    model.add(
+        tf.keras.layers.Dense(dimensions['num_input_nodes'],
+                              input_shape=(input_shape, ),
+                              activation=dimensions['activation']))
 
     for i in range(dimensions['num_dense_layers']):
         name = 'layer_dense_{0}'.format(i + 1)
@@ -51,13 +53,13 @@ def keras_dnn_lossweight(dimensions, input_shape, output_shape, loss_weights):
         name = 'layer_dense_{0}'.format(i + 1)
         if i == 0:
             hidden = tf.keras.layers.Dense(dimensions['num_input_nodes'],
-                                    activation=dimensions['activation'],
-                                    name=name)(inputs)
+                                           activation=dimensions['activation'],
+                                           name=name)(inputs)
             hidden_prev = hidden
         else:
             hidden = tf.keras.layers.Dense(dimensions['num_input_nodes'],
-                                    activation=dimensions['activation'],
-                                    name=name)(hidden_prev)
+                                           activation=dimensions['activation'],
+                                           name=name)(hidden_prev)
             hidden_prev = hidden
 
     outputs = []
