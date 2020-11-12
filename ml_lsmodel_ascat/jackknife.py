@@ -25,18 +25,18 @@ class JackknifeGPI(object):
                     'output_list: {}\n'.format(val_split_year, input_list,
                                                output_list))
 
+        assert not (
+            gpi_data.isnull().values.any()), 'Nan value(s) in gpi_data!'
+
         self.gpi_data = gpi_data
         self.input_list = input_list
         self.output_list = output_list
-        self.gpi_input = gpi_data[input_list]
-        self.gpi_output = gpi_data[output_list]
+        self.gpi_input = gpi_data[input_list].copy()
+        self.gpi_output = gpi_data[output_list].copy()
         self.val_split_year = val_split_year
         self.export_all_years = export_all_years
         self.outpath = outpath
         Path(self.outpath).parent.mkdir(parents=True, exist_ok=True)
-
-        assert not (
-            self.gpi_data.isnull().values.any()), 'Nan value(s) in gpi_data!'
 
     def train(self,
               searching_space,
@@ -49,22 +49,24 @@ class JackknifeGPI(object):
         # Data normalization
         logger.debug('Normalizing input/output data. Method: {}.'.format(
             normalize_method))
-        self.gpi_data[self.input_list], scaler_input = normalize(
-            self.gpi_data[self.input_list], normalize_method)
-        self.gpi_data[self.output_list], scaler_output = normalize(
-            self.gpi_data[self.output_list], normalize_method)
+        self.gpi_input[:], scaler_input = normalize(self.gpi_input,
+                                                    normalize_method)
+        self.gpi_output[:], scaler_output = normalize(self.gpi_output,
+                                                      normalize_method)
 
         # Data split
         logger.debug(
             'Spliting Trainning and validation data. Split year: {}.'.format(
                 self.val_split_year))
-        jackknife_all = self.gpi_data[
-            self.gpi_data.index.year < self.val_split_year]
-        year_list = jackknife_all.copy().resample('Y').mean().index.year
-        vali_all = self.gpi_data[
-            self.gpi_data.index.year >= self.val_split_year]
-        vali_input = vali_all[self.input_list].values
-        vali_output = vali_all[self.output_list].values
+        jackknife_input = self.gpi_input[
+            self.gpi_input.index.year < self.val_split_year]
+        jackknife_output = self.gpi_output[
+            self.gpi_output.index.year < self.val_split_year]
+        vali_input = self.gpi_input[
+            self.gpi_input.index.year >= self.val_split_year]
+        vali_output = self.gpi_output[
+            self.gpi_output.index.year >= self.val_split_year]
+        year_list = jackknife_input.index.year.unique()
 
         # Jackknife in time
         loo = LeaveOneOut()
@@ -73,13 +75,14 @@ class JackknifeGPI(object):
             this_year = test_index[0] + year_list[0]
 
             logger.info('Jackknife on year: {}.'.format(str(this_year)))
-
-            train_all = jackknife_all[(jackknife_all.index.year != this_year)]
-            test_all = jackknife_all[(jackknife_all.index.year == this_year)]
-            train_input, train_output = train_all[
-                self.input_list].values, train_all[self.output_list].values
-            test_input, test_output = test_all[
-                self.input_list].values, test_all[self.output_list].values
+            train_input = jackknife_input[
+                jackknife_input.index.year != this_year]
+            train_output = jackknife_output[
+                jackknife_output.index.year != this_year]
+            test_input = jackknife_input[jackknife_input.index.year ==
+                                         this_year]
+            test_output = jackknife_output[jackknife_output.index.year ==
+                                           this_year]
 
             # Execute training
             training = NNTrain(train_input, train_output)
