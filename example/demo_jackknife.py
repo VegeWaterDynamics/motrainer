@@ -6,9 +6,10 @@ from ml_lsmodel_ascat.dnn import NNTrain
 from ml_lsmodel_ascat.jackknife import JackknifeGPI
 from ml_lsmodel_ascat.util import shap_values
 
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s | %(name)s | %(levelname)s | %(message)s',
-                    stream=sys.stdout)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s | %(name)s | %(levelname)s | %(message)s',
+    stream=sys.stdout)
 
 if __name__ == "__main__":
     # Manual input
@@ -70,8 +71,7 @@ if __name__ == "__main__":
             gpi.export_best()
 
             # Compute shap
-            shaps = shap_values(gpi.best_train.model,
-                                gpi.gpi_data[gpi.input_list].values)
+            shaps = shap_values(gpi.best_train.model, gpi.gpi_input.values)
 
             # Export apriori performance
             path_apriori_performance = '{}/apriori_performance_{}'.format(
