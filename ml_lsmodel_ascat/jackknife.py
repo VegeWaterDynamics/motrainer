@@ -122,9 +122,8 @@ class JackknifeGPI(object):
                 self.best_year = this_year
         logger.info('Found best year: {}'
                     'A-priori performance: {}'
-                    'Post-priori performance: {}'.format(str(self.best_year),
-                                                     self.apr_perf,
-                                                     self.post_perf))
+                    'Post-priori performance: {}'.format(
+                        str(self.best_year), self.apr_perf, self.post_perf))
 
     def export_best(self, output_options=['model', 'hyperparameters']):
 
