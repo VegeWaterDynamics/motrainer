@@ -122,7 +122,7 @@ class JackknifeGPI(object):
                 self.best_year = this_year
         logger.info('Found best year: {}'
                     'A-priori performance: {}'
-                    'Post-priori performance'.format(str(self.best_year),
+                    'Post-priori performance: {}'.format(str(self.best_year),
                                                      self.apr_perf,
                                                      self.post_perf))
 
