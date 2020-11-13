@@ -1,10 +1,13 @@
 import numpy as np
 import pickle
 import sklearn
+import logging
 from pathlib import Path
 from sklearn.model_selection import LeaveOneOut
 from ml_lsmodel_ascat.dnn import NNTrain
 from ml_lsmodel_ascat.util import performance, normalize
+
+logger = logging.getLogger(__name__)
 
 
 class JackknifeGPI(object):
@@ -15,6 +18,13 @@ class JackknifeGPI(object):
                  output_list,
                  export_all_years=True,
                  outpath='./jackknife_results'):
+
+        logger.info('Initializing Jackkinfe trainning:\n'
+                    'val_split_year: {}\n'
+                    'input_list: {}\n'
+                    'output_list: {}\n'.format(val_split_year, input_list,
+                                               output_list))
+
         self.gpi_data = gpi_data
         self.input_list = input_list
         self.output_list = output_list
@@ -37,12 +47,17 @@ class JackknifeGPI(object):
               verbose=0):
 
         # Data normalization
+        logger.debug('Normalizing input/output data. Method: {}.'.format(
+            normalize_method))
         self.gpi_data[self.input_list], scaler_input = normalize(
             self.gpi_data[self.input_list], normalize_method)
         self.gpi_data[self.output_list], scaler_output = normalize(
             self.gpi_data[self.output_list], normalize_method)
 
         # Data split
+        logger.debug(
+            'Spliting Trainning and validation data. Split year: {}.'.format(
+                self.val_split_year))
         jackknife_all = self.gpi_data[
             self.gpi_data.index.year < self.val_split_year]
         year_list = jackknife_all.copy().resample('Y').mean().index.year
@@ -57,9 +72,7 @@ class JackknifeGPI(object):
         for train_index, test_index in loo.split(year_list):
             this_year = test_index[0] + year_list[0]
 
-            print('=====================================')
-            print('jackknife on ' + str(this_year))
-            print('=====================================')
+            logger.info('Jackknife on year: {}.'.format(str(this_year)))
 
             train_all = jackknife_all[(jackknife_all.index.year != this_year)]
             test_all = jackknife_all[(jackknife_all.index.year == this_year)]
@@ -81,6 +94,8 @@ class JackknifeGPI(object):
 
             # TODO: Add warning if no model selected for the year
             if training.model is None:
+                logger.warning('No best model was found for year: {}.'.format(
+                    str(this_year)))
                 continue
 
             if self.export_all_years:
@@ -105,8 +120,16 @@ class JackknifeGPI(object):
                                              performance_method, scaler_output)
                 self.best_train = training
                 self.best_year = this_year
+        logger.info('Found best year: {}'
+                    'A-priori performance: {}'
+                    'Post-priori performance: {}'.format(
+                        str(self.best_year), self.apr_perf, self.post_perf))
 
     def export_best(self, output_options=['model', 'hyperparameters']):
+
+        logger.info(
+            'Exporting model and hyperparameters of year {} to {}'.format(
+                self.best_year, self.outpath))
 
         if 'model' in output_options:
             path_model = '{}/best_optimized_model_{}'.format(

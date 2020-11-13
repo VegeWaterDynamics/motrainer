@@ -1,5 +1,5 @@
 import logging
-import tensorflow.keras
+import tensorflow as tf
 import sklearn
 import skopt
 import numpy as np
@@ -36,6 +36,7 @@ class NNTrain(object):
 
     def update_space(self, **kwrags):
         for key, value in kwrags.items():
+            logger.debug('Update seaching sapce: {}={}'.format(key, value))
             # skopt.space instances
             if isinstance(value, (Real, Categorical, Integer)):
                 self.dimensions[key] = value
@@ -91,8 +92,10 @@ class NNTrain(object):
 
         @skopt.utils.use_named_args(dimensions=list(self.dimensions.values()))
         def func(**dimensions):
+            logger.info('optimizing with dimensions: {}'.format(dimensions))
+
             # setup model
-            earlystop = tensorflow.keras.callbacks.EarlyStopping(
+            earlystop = tf.keras.callbacks.EarlyStopping(
                 monitor='val_loss',
                 mode='min',
                 verbose=self.keras_verbose,
@@ -132,7 +135,7 @@ class NNTrain(object):
                 self.model = model
                 self.best_loss = loss
             del model
-            tensorflow.keras.backend.clear_session()
+            tf.keras.backend.clear_session()
             return loss
 
         self.gp_result = skopt.gp_minimize(func=func,

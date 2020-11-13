@@ -1,8 +1,14 @@
 import pickle
 import pandas as pd
+import logging
+import sys
 from ml_lsmodel_ascat.dnn import NNTrain
 from ml_lsmodel_ascat.jackknife import JackknifeGPI
 from ml_lsmodel_ascat.util import shap_values
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s | %(name)s | %(levelname)s | %(message)s',
+                    stream=sys.stdout)
 
 if __name__ == "__main__":
     # Manual input
