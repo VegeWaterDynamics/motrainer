@@ -3,12 +3,14 @@ import matplotlib.pyplot as plt
 import cartopy
 import shapely.geometry as sgeom
 from copy import copy
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 def plot_gsdata(data,
                 nrowcol,
                 outpath,
                 outformat='jpeg',
+                figsize=None,
                 titles=None,
                 rowlabels=None,
                 kw_padding=None,
@@ -28,6 +30,12 @@ def plot_gsdata(data,
     :type data: pandas.DataFrame
     :param nrowcol: number of (row, cloumn) of the subplots.
     :type nrowcol: tuple
+    :param outpath: output path
+    :type outpath: str
+    :param outformat: outformat, defaults to 'jpeg'
+    :type outformat: str, optional
+    :param figsize: figure size in inches, defaults to None
+    :type figsize: tuple or list, optional
     :param titles: Titles of each plot, defaults to None
     :type titles: list, optional
     :param rowlabels: row labels, defaults to None
@@ -77,8 +85,10 @@ def plot_gsdata(data,
 
     data_crs = cartopy.crs.PlateCarree()
     plot_crs = cartopy.crs.Orthographic(
-        central_longitude=(basemap_extent[3] - basemap_extent[2]) / 2.,
-        central_latitude=(basemap_extent[1] - basemap_extent[0]) / 2.,
+#        central_longitude=(basemap_extent[3] + basemap_extent[2]) / 2.,
+#        central_latitude=(basemap_extent[1] + basemap_extent[0]) / 2.,
+        central_longitude=0,
+        central_latitude=45,
         globe=None)
 
     coast = cartopy.feature.NaturalEarthFeature(category='physical',
@@ -94,13 +104,17 @@ def plot_gsdata(data,
     fig, axes = plt.subplots(nrows=nrowcol[0],
                              ncols=nrowcol[1],
                              subplot_kw={'projection': plot_crs})
+    
+    if figsize is not None:
+        fig.set_size_inches(figsize[0], figsize[1])
+        
     if kw_padding is not None:
         plt.tight_layout(**kw_padding)
     subplotid = 0
     features = data.columns[2:]
     for ax in axes.flat:
         ax.set_extent(basemap_extent)
-        ax.axis('equal')
+#        ax.axis('equal')
         ax.add_feature(coast, lw=0.8, alpha=0.5)
         ax.add_feature(ocean, alpha=0.4)
 
@@ -111,7 +125,9 @@ def plot_gsdata(data,
                         transform=data_crs,
                         cmap=colormap,
                         s=5)
-
+        
+        fig.canvas.draw()
+        
         # Ticks and gridlines
         xticks = np.arange(
             np.floor(basemap_extent[0]), np.ceil(basemap_extent[1]),
@@ -157,7 +173,8 @@ def plot_gsdata(data,
                 if subplotid % nrowcol[1] == 0:
                     ax.set_ylabel(rowlabels[int(subplotid / nrowcol[1])],
                                   fontsize=fontsize)
-
+        
+        make_axes_locatable(ax)
         subplotid += 1
 
     # Colorbar for the entire figure
@@ -167,7 +184,8 @@ def plot_gsdata(data,
         plt.colorbar(sc, cax=cax, orientation='horizontal')
         if cbar_label is not None:
             cax.set_xlabel(cbar_label, fontdict={'size': fontsize})
-
+    
+    fig.show()
     plt.savefig(outpath, bbox_inches='tight', format=outformat)
 
 
