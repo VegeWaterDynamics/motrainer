@@ -195,6 +195,8 @@ def plot_tsdata(data,
                 outformat='jpeg',
                 figsize=None,
                 linecolor=None,
+                linestyle=None,
+                linewidth=None,
                 titles=None,
                 rowlabels=None,
                 kw_padding=None,
@@ -240,13 +242,25 @@ def plot_tsdata(data,
     linelist = dict()
     for ax in axes.flat:
         # Plot
-        for col in data[subplotid].columns:
+        for i, col in enumerate(data[subplotid].columns):
             if (linecolor is not None) and (col in linecolor.keys()):
                 lc = linecolor[col]
             else:
                 lc = ['b', 'g', 'r', 'c', 'm', 'y',
                       'k'][data[subplotid].columns.get_loc(col)]
-            line = ax.plot(data[subplotid][col], color=lc)
+            if (linestyle is not None) and (col in linestyle.keys()):
+                ls = linestyle[col]
+            elif len(data[subplotid].columns) >= 5:
+                ls = ['-', (0, (5, 5)),  (0, (3, 5, 1, 5))]
+# https://matplotlib.org/gallery/lines_bars_and_markers/linestyles.html?highlight=linestyles
+                # 'solid', 'dashed', 'dashdot'
+                ls_ind = i%3
+            if (linewidth is not None) and (col in linewidth.keys()):
+                lw = linewidth[col]
+            else:
+                lw = 3
+            line = ax.plot(data[subplotid][col], color=lc, linewidth=lw,
+                           linestyle=ls[ls_ind])
             linelist[col] = line[0]
             ax.tick_params(axis='both', labelsize=fontsize / 2)
 
