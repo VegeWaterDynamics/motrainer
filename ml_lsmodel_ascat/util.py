@@ -5,6 +5,7 @@ import shap
 import sklearn
 import random
 from scipy.stats.stats import pearsonr, spearmanr
+from shapely.geometry import Point
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Force tensorflow debug logging off
 
@@ -67,3 +68,29 @@ def normalize(data, method):
 
     data_norm = scaler.fit_transform(data)
     return data_norm, scaler
+
+def geom_to_masked_cube(df, geometry, lats, lons,
+                        mask_excludes=True):
+    # Get horizontal coords for masking purposes.
+
+    mask_t = []
+    # Iterate through all horizontal points in cube, and
+    # check for containment within the specified geometry.
+    for lat, lon in zip(lats, lons):
+#        this_point = gpd.geoseries.Point(lon, lat)
+        this_point = Point(lon, lat)
+        res = geometry.contains(this_point)
+        mask_t.append(res.values[0])
+    
+    mask_t = np.array(mask_t)#.reshape(lon2d.shape)
+    if mask_excludes:
+        # Invert the mask if we want to include the geometry's area.
+        mask_t = ~mask_t
+#    # Make sure the mask is the same shape as the cube.
+
+    # Apply the mask to the cube's data.
+    df_copy = df.copy()
+    data = df_copy.values
+    masked_data = np.ma.masked_array(data, mask_t)
+    df_copy = masked_data
+    return df_copy
