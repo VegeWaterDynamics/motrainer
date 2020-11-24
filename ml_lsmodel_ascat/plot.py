@@ -118,13 +118,21 @@ def plot_gsdata(data,
 #        ax.axis('equal')
         ax.add_feature(coast, lw=0.8, alpha=0.5)
         ax.add_feature(ocean, alpha=0.4)
-
+        
+        if cbar_mode == 'row':
+            row_id = int(subplotid/nrowcol[1])
+            if isinstance(colormap,list):
+                cmap = colormap[row_id]
+            else:
+                cmap = colormap
+        else:
+            cmap = colormap
         sc = ax.scatter(data['lon'].values,
                         data['lat'].values,
                         marker='o',
                         c=data[features[subplotid]],
                         transform=data_crs,
-                        cmap=colormap,
+                        cmap=cmap,
                         s=5)
         
         fig.canvas.draw()
@@ -157,6 +165,14 @@ def plot_gsdata(data,
                     [axpos.x1, axpos.y0, 0.01, axpos.height])  # l, b, w, h
                 cbar = fig.colorbar(sc, cax=cbar_ax)
                 cbar.ax.tick_params(labelsize=fontsize / 2)
+                
+                cbar_tick_label_tmp = cbar_tick_label[row_id]
+                if cbar_tick_label_tmp is not None:
+                    n_clusters = len(cbar_tick_label_tmp)
+                    tick_locs = (np.arange(n_clusters) + 0.5)*(n_clusters-1)/n_clusters
+                    
+                    cbar.set_ticks(tick_locs)
+                    cbar.ax.set_yticklabels(cbar_tick_label_tmp, fontdict={'size': fontsize/2})
 
         # Title
         title_text = '(' + chr(97 + subplotid) + ') '  # Alphabet label
