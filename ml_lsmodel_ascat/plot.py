@@ -21,6 +21,7 @@ def plot_gsdata(data,
                 fontsize=8,
                 colormap='YlGnBu',
                 cbar_mode='plot',
+                cbar_tick_label=None,
                 cbar_label=None):
     """Plot geo-spratial data on a basmap
 
@@ -179,11 +180,17 @@ def plot_gsdata(data,
 
     # Colorbar for the entire figure
     if cbar_mode == 'fig':
-        cax = fig.add_axes([0.35, 0.06, 0.3, 0.01])
+        cax = fig.add_axes([0.2, 0.06, 0.6, 0.01])
         cax.tick_params(labelsize=fontsize / 2)
-        plt.colorbar(sc, cax=cax, orientation='horizontal')
+        cbar = plt.colorbar(sc, cax=cax, orientation='horizontal')
         if cbar_label is not None:
-            cax.set_xlabel(cbar_label, fontdict={'size': fontsize})
+            cbar.ax.set_xlabel(cbar_label, fontdict={'size': fontsize})
+        if cbar_tick_label is not None:
+            n_clusters = len(cbar_tick_label)
+            tick_locs = (np.arange(n_clusters) + 0.5)*(n_clusters-1)/n_clusters
+            
+            cbar.set_ticks(tick_locs)
+            cbar.ax.set_xticklabels(cbar_tick_label, fontdict={'size': fontsize/1.5})
     
     fig.show()
     plt.savefig(outpath, bbox_inches='tight', format=outformat)
