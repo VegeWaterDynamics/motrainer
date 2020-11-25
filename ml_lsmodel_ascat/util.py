@@ -13,6 +13,13 @@ def shap_values(model, input_whole):
     background = input_whole[np.random.choice(input_whole.shape[0],
                                               1000,
                                               replace=False)]
+    
+    # concatenate multiple outputs for shap calculation
+    if len(model.outputs)>1:
+        model = tf.keras.Model(
+            inputs=model.inputs,
+            outputs=tf.keras.layers.concatenate(model.outputs))
+
     e = shap.DeepExplainer(model, background)
     shap_values = e.shap_values(input_whole)
 
