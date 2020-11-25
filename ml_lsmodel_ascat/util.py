@@ -26,6 +26,10 @@ def performance(data_input, data_label, model, method, scaler_output=None):
     model.save(tmp_path)
     model = tf.keras.models.load_model(tmp_path)
     predicted = model.predict(data_input)
+    
+    # In case multiple outputs, re-arrange to one df
+    if isinstance(predicted, list):
+        predicted = np.hstack(predicted)
 
     # Scale back if the data was normalized
     if scaler_output is not None:

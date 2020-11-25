@@ -116,7 +116,7 @@ class NNTrain(object):
                                              self.train_output.shape[1],
                                              self.loss_weights)
                 train_output = [
-                    self.train_output[:, i]
+                    self.train_output.iloc[:, i]
                     for i in range(self.train_output.shape[1])
                 ]
 
