@@ -13,12 +13,12 @@ def shap_values(model, input_whole):
     background = input_whole[np.random.choice(input_whole.shape[0],
                                               1000,
                                               replace=False)]
-    
+
     # concatenate multiple outputs for shap calculation
-    if len(model.outputs)>1:
-        model = tf.keras.Model(
-            inputs=model.inputs,
-            outputs=tf.keras.layers.concatenate(model.outputs))
+    if len(model.outputs) > 1:
+        model = tf.keras.Model(inputs=model.inputs,
+                               outputs=tf.keras.layers.concatenate(
+                                   model.outputs))
 
     e = shap.DeepExplainer(model, background)
     shap_values = e.shap_values(input_whole)
@@ -33,7 +33,7 @@ def performance(data_input, data_label, model, method, scaler_output=None):
     model.save(tmp_path)
     model = tf.keras.models.load_model(tmp_path)
     predicted = model.predict(data_input)
-    
+
     # In case multiple outputs, re-arrange to one df
     if isinstance(predicted, list):
         predicted = np.hstack(predicted)
