@@ -21,6 +21,7 @@ def plot_gsdata(data,
                 fontsize=8,
                 colormap='YlGnBu',
                 cbar_mode='plot',
+                vlim=None,
                 cbar_tick_label=None,
                 cbar_label=None):
     """Plot geo-spratial data on a basmap
@@ -114,23 +115,36 @@ def plot_gsdata(data,
     subplotid = 0
     features = data.columns[2:]
     for ax in axes.flat:
+        row_id = int(subplotid/nrowcol[1])
+        
         ax.set_extent(basemap_extent)
 #        ax.axis('equal')
         ax.add_feature(coast, lw=0.8, alpha=0.5)
         ax.add_feature(ocean, alpha=0.4)
         
+        if vlim is not None:
+            if isinstance(vlim,list):
+                vmin, vmax = vlim[row_id][0], vlim[row_id][1]
+#                if vmin == None, vmax
+            else:
+                vmin, vmax = vlim[0], vlim[1]
+        else:
+            vmin, vmax = np.nanmin(data[features[subplotid]]), np.nanmax(data[features[subplotid]])
+        
         if cbar_mode == 'row':
-            row_id = int(subplotid/nrowcol[1])
             if isinstance(colormap,list):
                 cmap = colormap[row_id]
             else:
                 cmap = colormap
         else:
             cmap = colormap
+        
         sc = ax.scatter(data['lon'].values,
                         data['lat'].values,
                         marker='o',
                         c=data[features[subplotid]],
+                        vmin=vmin,
+                        vmax=vmax,
                         transform=data_crs,
                         cmap=cmap,
                         s=5)
@@ -173,6 +187,22 @@ def plot_gsdata(data,
                     
                     cbar.set_ticks(tick_locs)
                     cbar.ax.set_yticklabels(cbar_tick_label_tmp, fontdict={'size': fontsize/2})
+        elif cbar_mode == 'flexible':
+            if row_id  == 0:
+                axpos = ax.get_position()
+                cbar_ax = fig.add_axes([axpos.x1, axpos.y0, 0.0075,
+                                        axpos.height])  # l, b, w, h
+                cbar = fig.colorbar(sc, cax=cbar_ax)
+                cbar.ax.tick_params(labelsize=fontsize / 2)
+            elif row_id > 0:
+                if subplotid % nrowcol[1] == nrowcol[1] - 1:
+                    axpos = ax.get_position()
+                    cbar_ax = fig.add_axes(
+                        [axpos.x1, axpos.y0, 0.01, axpos.height])  # l, b, w, h
+                    cbar = fig.colorbar(sc, cax=cbar_ax)
+                    cbar.ax.tick_params(labelsize=fontsize / 2)
+                    
+#                    cbar_tick_label_tmp = cbar_tick_label[row_id]
 
         # Title
         title_text = '(' + chr(97 + subplotid) + ') '  # Alphabet label
