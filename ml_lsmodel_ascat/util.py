@@ -56,11 +56,13 @@ def performance(data_input, data_label, model, method, scaler_output=None):
             perf[j, 0] = np.round((difference[j].mean()), 5)
     elif method == 'pearson':
         for j in range(predicted.shape[1]):
-            perf[j, 0] = np.round(pearsonr(re_predicted[j], re_label[j]), 5)[0]
+            perf[j, 0] = np.round(pearsonr(re_predicted[:, j], re_label[:, j]),
+                                  5)[0]
     elif method == 'spearman':
         for j in range(predicted.shape[1]):
-            perf[j, 0] = np.round(spearmanr(re_predicted[j], re_label[j]),
-                                  5)[0]
+            perf[j,
+                 0] = np.round(spearmanr(re_predicted[:, j], re_label[:, j]),
+                               5)[0]
 
     return perf
 
