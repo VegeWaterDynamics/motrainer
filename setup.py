@@ -44,7 +44,7 @@ setup(
     install_requires=[
         'numpy',
         'scipy',
-        'keras',
+        'tensorflow',
         'sklearn',
         'cartopy',
         'pandas'],  

@@ -1,5 +1,5 @@
 numpy
 scipy
-keras
+tensorflow
 sklearn
 pandas
