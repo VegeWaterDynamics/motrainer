@@ -6,7 +6,7 @@ import numpy as np
 import pickle
 from pathlib import Path
 from skopt.space import Real, Categorical, Integer
-from ml_lsmodel_ascat.model import keras_dnn, keras_dnn_lossweight
+from ml_lsmodel_ascat.model import keras_dnn, keras_dnn_lossweight, keras_lstm
 
 logger = logging.getLogger(__name__)
 
@@ -25,8 +25,14 @@ class NNTrain(object):
             Integer(low=1, high=2, name='num_dense_layers'),
             'num_input_nodes':
             Integer(low=2, high=6, name='num_input_nodes'),
-            'num_dense_nodes':
-            Integer(low=1, high=128, name='num_dense_nodes'),
+#            'num_dense_nodes':
+#            Integer(low=1, high=128, name='num_dense_nodes'),
+            'num_filters':
+            Integer(low=1, high=128, name='num_filters'),
+            'dropout_rate':
+            Real(low=0.1, high=0.7, name='dropout_rate'),
+            'momentum':
+            Real(low=0.9, high=0.999, name='momentum'),
             'activation':
             Categorical(categories=['relu'], name='activation'),
             'batch_size':
@@ -119,6 +125,11 @@ class NNTrain(object):
                     self.train_output.iloc[:, i]
                     for i in range(self.train_output.shape[1])
                 ]
+            elif training_method == 'lstm':
+                model = keras_lstm(dimensions, self.train_input.shape[1],
+                                   self.train_input.shape[2],
+                                  self.train_output.shape[2])
+                train_output = self.train_output
 
             # Fit model
             blackbox = model.fit(x=self.train_input,
