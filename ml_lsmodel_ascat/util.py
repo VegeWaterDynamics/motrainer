@@ -5,6 +5,8 @@ import shap
 import sklearn
 import random
 from scipy.stats.stats import pearsonr, spearmanr
+from shapely.geometry import Point
+import pandas as pd
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Force tensorflow debug logging off
 
@@ -78,3 +80,71 @@ def normalize(data, method):
 
     data_norm = scaler.fit_transform(data)
     return data_norm, scaler
+
+
+def geom_to_masked_cube(df, geometry, lats, lons,
+                        mask_excludes=True):
+    # Get horizontal coords for masking purposes.
+
+    mask_t = []
+    # Iterate through all horizontal points in cube, and
+    # check for containment within the specified geometry.
+    for lat, lon in zip(lats, lons):
+#        this_point = gpd.geoseries.Point(lon, lat)
+        this_point = Point(lon, lat)
+        res = geometry.contains(this_point)
+        mask_t.append(res.values[0])
+    
+    mask_t = np.array(mask_t)#.reshape(lon2d.shape)
+    if mask_excludes:
+        # Invert the mask if we want to include the geometry's area.
+        mask_t = ~mask_t
+#    # Make sure the mask is the same shape as the cube.
+
+    # Apply the mask to the cube's data.
+    df_copy = df.copy()
+    data = df_copy.values
+    masked_data = np.ma.masked_array(data, mask_t)
+    df_copy = masked_data
+    return df_copy
+def series_to_supervised(df_input, df_output,
+                         input_list, output_list,
+                         n_in=1, n_out=1, dropnan=True):
+    """
+	Frame a time series as a supervised learning dataset.
+	Arguments:
+		data: Sequence of observations as a list or NumPy array.
+		n_in: Number of lag observations as input (X).
+		n_out: Number of observations as output (y).
+		dropnan: Boolean whether or not to drop rows with NaN values.
+	Returns:
+		Pandas DataFrame of series framed for supervised learning.
+    """
+
+    cols_input, names_input = list(), list()
+    cols_output, names_output = list(), list()
+	# input sequence (t-n, ... t-1)
+    for i in range(n_in, 0, -1):
+        cols_input.append(df_input.shift(i))
+        names_input += [('var%d(t-%d)' % (j+1, i)) for j in range(len(input_list))]
+    cols_input = pd.concat(cols_input, axis=1)
+    cols_input.columns = names_input
+	# forecast sequence (t, t+1, ... t+n)
+    for i in range(0, n_out):
+        cols_output.append(df_output.shift(-i))
+        if i == 0:
+            names_output += [('var%d(t)' % (j+1)) for j in range(len(output_list))]
+        else:
+            names_output += [('var%d(t+%d)' % (j+1, i)) for j in range(len(output_list))]
+    cols_output = pd.concat(cols_output, axis=1)
+    cols_output.columns = names_output
+    # put it all together
+    agg = pd.concat([cols_input, cols_output], axis=1)
+
+    # drop rows with NaN values
+    if dropnan:
+        agg.dropna(inplace=True)
+        cols_input.dropna(inplace=True)
+        cols_output.dropna(inplace=True)
+    return agg[names_input], agg[names_output]#agg
+
