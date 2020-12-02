@@ -40,7 +40,8 @@ class TestJacknife(unittest.TestCase):
         gpi = JackknifeGPI(gpi_data,
                            val_split_year=2019,
                            input_list=['x'],
-                           output_list=['y'])
+                           output_list=['y'],
+                           export_all_years=False)
         gpi.train(searching_space={
             'learning_rate': [0.01, 0.02],
             'num_dense_layers': [1, 2],
