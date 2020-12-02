@@ -1,4 +1,7 @@
 numpy
 scipy
-keras
+tensorflow
 sklearn
+pandas
+shap
+scikit-optimize

@@ -44,9 +44,12 @@ setup(
     install_requires=[
         'numpy',
         'scipy',
-        'keras',
+        'tensorflow',
         'sklearn',
-        'cartopy'],  
+        'scikit-optimize',
+        'cartopy',
+        'pandas',
+        'shap'],  
     setup_requires=[
         # dependency for `python setup.py test`
         'pytest-runner',

@@ -121,19 +121,20 @@ class NNTrain(object):
                 ]
 
             # Fit model
-            blackbox = model.fit(x=self.train_input,
-                                 y=train_output,
-                                 epochs=epochs,
-                                 batch_size=dimensions['batch_size'],
-                                 callbacks=[earlystop],
-                                 verbose=self.keras_verbose,
-                                 validation_split=validation_split)
+            history = model.fit(x=self.train_input,
+                                y=train_output,
+                                epochs=epochs,
+                                batch_size=dimensions['batch_size'],
+                                callbacks=[earlystop],
+                                verbose=self.keras_verbose,
+                                validation_split=validation_split)
 
             # Get loss
-            loss = blackbox.history['val_loss'][-1]
+            loss = history.history['val_loss'][-1]
             if loss < self.best_loss:
                 self.model = model
                 self.best_loss = loss
+                self.history = history.history
             del model
             tf.keras.backend.clear_session()
             return loss
