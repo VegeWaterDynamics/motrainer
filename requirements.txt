@@ -3,3 +3,5 @@ scipy
 tensorflow
 sklearn
 pandas
+shap
+scikit-optimize

@@ -46,8 +46,10 @@ setup(
         'scipy',
         'tensorflow',
         'sklearn',
+        'scikit-optimize',
         'cartopy',
-        'pandas'],  
+        'pandas',
+        'shap'],  
     setup_requires=[
         # dependency for `python setup.py test`
         'pytest-runner',
