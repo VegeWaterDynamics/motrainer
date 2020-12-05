@@ -316,7 +316,8 @@ def plot_tsdata(data,
         kw_plot.update(dict(zip(cols_non, [{'color': cl} for cl in colors])))
 
     subplotid = 0
-    linelist = dict(zip(kw_plot.keys(), [[]]*len(kw_plot.keys())))
+    linelist = dict(
+        zip(kw_plot.keys(), [[] for i in range(len(kw_plot.keys()))]))
     for ax in axes.flat:
         # Plot
         for col in data[subplotid].columns:
