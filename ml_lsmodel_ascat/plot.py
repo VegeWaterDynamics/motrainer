@@ -86,7 +86,7 @@ def plot_gsdata(data,
 
     # Check arguments
     assert nrowcol[0] * nrowcol[1] == data.shape[1] - 2
-    assert (titles is None) or (len(titles) == data.shape[1] - 2) 
+    assert (titles is None) or (len(titles) == data.shape[1] - 2)
     assert (rowlabels is None) or (len(rowlabels) == nrowcol[0])
     if (vlim is not None) and isinstance(vlim[0], list):
         assert len(vlim) == data.shape[1] - 2
@@ -212,8 +212,8 @@ def plot_gsdata(data,
                 if cbar_mode == 'plot' or cbar_mode == 'row':
                     if subplotid % nrowcol[1] == nrowcol[1] - 1:
                         cbar.set_label(rowlabels[int(subplotid / nrowcol[1])],
-                                    fontsize=fontsize)
-                        
+                                       fontsize=fontsize)
+
             elif rowlabel_loc == 'left':
                 if subplotid % nrowcol[1] == 0:
                     ax.set_ylabel(rowlabels[int(subplotid / nrowcol[1])],
@@ -236,44 +236,59 @@ def plot_gsdata(data,
 
 def plot_tsdata(data,
                 nrowcol,
-                outpath,
-                outformat='jpeg',
                 figsize=None,
-                linecolor=None,
-                linestyle=None,
-                linewidth=None,
+                kw_plot=None,
                 titles=None,
                 rowlabels=None,
                 kw_padding=None,
                 fontsize=8):
-    """plot time-series data
-
-    :param data: list of DataFrames. Each DataFrames in the list will
-        be plotted into a subplot. The row index of DataFrame should be
-        DatetimeIndex. The columns will be ploted
-    :type data: list
-    :param nrowcol: number of (row, cloumn) of the subplots.
-    :type nrowcol: tuple
-    :param outpath: output path
-    :type outpath: str
-    :param outformat: outformat, defaults to 'jpeg'
-    :type outformat: str, optional
-    :param figsize: figure size in inches, defaults to None
-    :type figsize: tuple or list, optional
-    :param linecolor: line color per column in data, defaults to None
-    :type linecolor: dict, optional
-    :param titles: Titles of each plot, defaults to None
-    :type titles: list, optional
-    :param rowlabels: row labels, defaults to None
-    :type rowlabels: list, optional
-    :param kw_padding: Keyword arguement for pyplot.tight_layout().
-        Adjust subplot padding.
-        E.g. {'pad': 5, 'h_pad': 5, 'w_pad': 3}. defaults to None.
-    :type kw_padding: dict, optional
-    :param fontsize: fontsize of tick, title and labels,
-        defaults to 8.
-    :type fontsize: int, optional
     """
+    Plot time series data in subplots.
+
+    Parameters
+    ----------
+    data : list
+        list of DataFrames.
+        Each DataFrame in the list will be plotted into a subplot.
+        The columns of each DataFrame will be ploted as a line respectively.
+        The row index of each DataFrame should be DatetimeIndex. 
+    nrowcol : tuple
+        number of (row, cloumn) of the subplots.
+        row*column should equal to len(data).
+    figsize : tuple or list, optional
+        figure size in inches, by default None.
+    kw_plot : dict, optional
+        Dictionary of line plotting properties.
+        Keys are the column names of DataFrames in "data".
+        Keys are keywards of pyplot.plot.
+        E.g. {'TS1': {'color':'b', 'linestyle': '-'},
+              'TS3': {'color':'k', 'linestyle': '-.'}}
+        By default None.
+    titles : list, optional
+        Titles of each plot, by default None.
+        The number of elements should equal to row*column.
+    rowlabels : list, optional
+        row labels, by default None.
+    kw_padding : dict, optional
+        Keyword arguement for pyplot.tight_layout().
+        Adjust subplot padding.
+        E.g. {'pad': 5, 'h_pad': 5, 'w_pad': 3}. By default None.
+    fontsize : int, optional
+        fontsize: fontsize of tick, title and labels, by default 8.
+
+    Returns
+    -------
+    list
+        A list of handles [fig, axes, linelist, legend]:
+        - fig: handle of the entire figure
+        - axes: list of handles of subplot axes
+        - linelist: dict of line handles per column of DataFrames in "data"
+        - legend: handle of the legend
+    """
+
+    assert nrowcol[0] * nrowcol[1] == len(data)
+    assert (titles is None) or (len(titles) == len(data))
+    assert (rowlabels is None) or (len(rowlabels) == nrowcol[0])
 
     fig, axes = plt.subplots(nrows=nrowcol[0], ncols=nrowcol[1])
 
@@ -283,31 +298,28 @@ def plot_tsdata(data,
     if figsize is not None:
         fig.set_size_inches(figsize[0], figsize[1])
 
+    if kw_plot is None:
+        # If kw_plot not specified, automatically assign colors for each
+        # unique columns in all DateFrames in 'data'
+        cols = list(set([col for df in data for col in df.columns.to_list()]))
+        colors = plt.cm.get_cmap('rainbow')(np.linspace(0, 1, len(cols)))
+        kw_plot = dict(zip(cols, [{'color': cl} for cl in colors]))
+    else:
+        # If kw_plot specified, assign colors for non-specified columns
+        cols_non = list(
+            set([
+                col for df in data for col in df.columns.to_list()
+                if col not in kw_plot.keys()
+            ]))
+        colors = plt.cm.get_cmap('rainbow')(np.linspace(0, 1, len(cols_non)))
+        kw_plot.update(dict(zip(cols_non, [{'color': cl} for cl in colors])))
+
     subplotid = 0
     linelist = dict()
     for ax in axes.flat:
         # Plot
-        for i, col in enumerate(data[subplotid].columns):
-            if (linecolor is not None) and (col in linecolor.keys()):
-                lc = linecolor[col]
-            else:
-                lc = ['b', 'g', 'r', 'c', 'm', 'y',
-                      'k'][data[subplotid].columns.get_loc(col)]
-            if (linestyle is not None) and (col in linestyle.keys()):
-                ls = linestyle[col]
-            elif len(data[subplotid].columns) >= 5:
-                ls = ['-', (0, (5, 5)), (0, (3, 5, 1, 5))]
-                # https://matplotlib.org/gallery/lines_bars_and_markers/linestyles.html?highlight=linestyles
-                # 'solid', 'dashed', 'dashdot'
-                ls_ind = i % 3
-            if (linewidth is not None) and (col in linewidth.keys()):
-                lw = linewidth[col]
-            else:
-                lw = 3
-            line = ax.plot(data[subplotid][col],
-                           color=lc,
-                           linewidth=lw,
-                           linestyle=ls[ls_ind])
+        for col in data[subplotid].columns:
+            line = ax.plot(data[subplotid][col], **kw_plot[col])
             linelist[col] = line[0]
             ax.tick_params(axis='both', labelsize=fontsize / 2)
 
@@ -326,17 +338,13 @@ def plot_tsdata(data,
         subplotid += 1
 
     # Legend
-    fig.legend(handles=linelist.values(),
-               labels=linelist.keys(),
-               fontsize=fontsize,
-               ncol=min([5, len(linelist)]),
-               loc="lower center")
-    fig.subplots_adjust(left=0.07,
-                        right=0.93,
-                        wspace=0.15,
-                        hspace=0.35,
-                        bottom=0.15)
-    plt.savefig(outpath, bbox_inches='tight', format=outformat)
+    legend = fig.legend(handles=linelist.values(),
+                        labels=linelist.keys(),
+                        fontsize=fontsize,
+                        ncol=min([5, len(linelist)]),
+                        loc="lower center")
+
+    return fig, axes, linelist, legend
 
 
 def _lambert_xticks(ax, ticks, tick_location, tickfontsize):
