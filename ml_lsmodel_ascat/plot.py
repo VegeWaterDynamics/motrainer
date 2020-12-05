@@ -282,7 +282,8 @@ def plot_tsdata(data,
         A list of handles [fig, axes, linelist, legend]:
         - fig: handle of the entire figure
         - axes: list of handles of subplot axes
-        - linelist: dict of line handles per column of DataFrames in "data"
+        - linelist: dict of line handles, nested per column of  the DataFrames 
+                    in "data"
         - legend: handle of the legend
     """
 
@@ -315,12 +316,12 @@ def plot_tsdata(data,
         kw_plot.update(dict(zip(cols_non, [{'color': cl} for cl in colors])))
 
     subplotid = 0
-    linelist = dict()
+    linelist = dict(zip(kw_plot.keys(), [[]]*len(kw_plot.keys())))
     for ax in axes.flat:
         # Plot
         for col in data[subplotid].columns:
             line = ax.plot(data[subplotid][col], **kw_plot[col])
-            linelist[col] = line[0]
+            linelist[col].append(line[0])
             ax.tick_params(axis='both', labelsize=fontsize / 2)
 
         # Title
@@ -338,7 +339,8 @@ def plot_tsdata(data,
         subplotid += 1
 
     # Legend
-    legend = fig.legend(handles=linelist.values(),
+    l_handles = [line[0] for line in linelist.values()]
+    legend = fig.legend(handles=l_handles,
                         labels=linelist.keys(),
                         fontsize=fontsize,
                         ncol=min([5, len(linelist)]),
