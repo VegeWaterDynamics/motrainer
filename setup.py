@@ -49,7 +49,8 @@ setup(
         'scikit-optimize',
         'cartopy',
         'pandas',
-        'shap'],  
+        'shap',
+        'shapely'],  
     setup_requires=[
         # dependency for `python setup.py test`
         'pytest-runner',

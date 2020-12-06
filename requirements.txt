@@ -5,3 +5,4 @@ sklearn
 pandas
 shap
 scikit-optimize
+shapely
