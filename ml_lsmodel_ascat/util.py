@@ -83,26 +83,38 @@ def normalize(data, method):
     return data_norm, scaler
 
 
-def geom_to_masked_cube(df, geometry, lats, lons, mask_excludes=True):
-    # Get horizontal coords for masking purposes.
+def select_geom(df, geometry, invert=False):
+    """
+    Selects points within a geometry 
 
-    mask_t = []
-    # Iterate through all horizontal points in cube, and
-    # check for containment within the specified geometry.
-    for lat, lon in zip(lats, lons):
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Source data. Requires 'lat' and 'lon' fields
+    geometry : geopandas.Geodataframe
+        Geometry for selection. 
+    invert : bool, optional
+        If True, select points outside the geometry, by default False
+
+    Returns
+    -------
+    pandas.DataFrame
+        The DataFrame of selected points,
+    """
+
+    mask = []
+    # Get the mask of points in the geometry
+    for lat, lon in zip(df['lat'], df['lon']):
         this_point = Point(lon, lat)
         res = geometry.contains(this_point)
-        mask_t.append(res.values[0])
+        mask.append(res.values[0])
+    mask = np.array(mask)
 
-    mask_t = np.array(mask_t)
-    if mask_excludes:
-        # Invert the mask if we want to include the geometry's area.
-        mask_t = ~mask_t
+    # Invert selection
+    if invert:
+        mask = ~mask
 
-    # Make sure the mask is the same shape as the cube.
-    # Apply the mask to the cube's data.
+    # Apply mask
     df_copy = df.copy()
-    data = df_copy.values
-    masked_data = np.ma.masked_array(data, mask_t)
-    df_copy = masked_data
-    return df_copy
+
+    return df_copy[mask]
