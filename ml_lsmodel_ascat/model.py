@@ -5,6 +5,7 @@ including different structures, different loss functions
 
 import os
 import tensorflow as tf
+#tf.compat.v1.disable_v2_behavior()
 import numpy as np
 import logging
 from pathlib import Path
@@ -86,8 +87,9 @@ def keras_lstm(dimensions,
                input_timesteps, input_features, 
                output_feature
                ):
-    sgd_method = tf.keras.optimizers.SGD(learning_rate=dimensions['learning_rate'],
-                     momentum = dimensions['momentum'], nesterov=False)
+    adam = tf.keras.optimizers.Adam(lr=dimensions['learning_rate'])
+#    sgd_method = tf.keras.optimizers.SGD(learning_rate=dimensions['learning_rate'],
+#                     momentum = dimensions['momentum'], nesterov=False)
     
     model = tf.keras.models.Sequential()
 #    inputs = tf.keras.Input(shape=(input_shape, ))
@@ -96,44 +98,52 @@ def keras_lstm(dimensions,
 #        tf.keras.layers.Dense(dimensions['num_input_nodes'],
 #                              input_shape=(input_features,input_timesteps,),
 #                              activation=dimensions['activation']))
-    for i in range(dimensions['num_dense_layers']):
-        name = 'layer_dense_{0}'.format(i)
-        if i == 0:
-            model.add(tf.keras.layers.LSTM(units = dimensions['num_filters'],
-#                                           batch_input_shape=(
-#                                                   dimensions['batch_size'],
-#                                                   input_timesteps,
-#                                                   input_features),
+    if dimensions['num_dense_layers'] == 1:
+        name = 'layer_dense_0'
+        model.add(tf.keras.layers.LSTM(units = dimensions['num_filters'],
                                            input_shape=(
                                                    input_timesteps,
                                                    input_features),
                                            activation=dimensions['activation'],
-                                           dropout=dimensions['dropout_rate'],
-                                           return_sequences=True,
-                                           name=name
-                                           ))
-        elif i < (dimensions['num_dense_layers']-1) and i >0:
-            model.add(tf.keras.layers.LSTM(units = dimensions['num_filters'],
-                                           activation=dimensions['activation'],
-                                           dropout=dimensions['dropout_rate'],
-                                           return_sequences=True,
-                                           name=name
-                                           ))
-        else:
-            model.add(tf.keras.layers.LSTM(units = dimensions['num_filters'],
-                                           activation=dimensions['activation'],
-                                           dropout=dimensions['dropout_rate'],
+#                                           dropout=dimensions['dropout_rate'],
                                            return_sequences=False,
-#                                           return_sequences=True,
                                            name=name
                                            ))
+    elif dimensions['num_dense_layers'] > 1:
+        for i in range(dimensions['num_dense_layers']):
+            name = 'layer_dense_{0}'.format(i)
+            if i == 0:
+                model.add(tf.keras.layers.LSTM(units = dimensions['num_filters'],
+                                               input_shape=(
+                                                       input_timesteps,
+                                                       input_features),
+                                               activation=dimensions['activation'],
+#                                               dropout=dimensions['dropout_rate'],
+                                               return_sequences=True,
+                                               name=name
+                                               ))
+            elif i < (dimensions['num_dense_layers']-1) and i >0:
+                model.add(tf.keras.layers.LSTM(units = dimensions['num_filters'],
+                                               activation=dimensions['activation'],
+#                                               dropout=dimensions['dropout_rate'],
+                                               return_sequences=True,
+                                               name=name
+                                               ))
+            else:
+                model.add(tf.keras.layers.LSTM(units = dimensions['num_filters'],
+                                               activation=dimensions['activation'],
+#                                               dropout=dimensions['dropout_rate'],
+                                               return_sequences=False,
+    #                                           return_sequences=True,
+                                               name=name
+                                               ))
     
     
     model.add(tf.keras.layers.Dense(units = output_feature, activation='linear', name='output'))
     print(model.summary())
 
     model.compile(loss=tf.keras.losses.mean_squared_error,
-                  optimizer= sgd_method,#adam, #'rmsprop',
+                  optimizer= adam,#sgd_method,#adam, #'rmsprop',
                   metrics=['mae', 'acc'])
 
     return model

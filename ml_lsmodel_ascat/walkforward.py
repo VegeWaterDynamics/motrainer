@@ -85,7 +85,7 @@ class ForwardChainingGPI(object):
                                                len(self.input_list))
         vali_output= vali_output.values.reshape(vali_output.shape[0],
                                                 self.n_out,
-                                                len(self.output_list))
+                                                len(self.output_list)).squeeze()
 
         # Jackknife in time
 #        loo = LeaveOneOut()
@@ -127,7 +127,7 @@ class ForwardChainingGPI(object):
                                               len(self.input_list))
             train_output= train_output.values.reshape(train_output.shape[0],
                                               self.n_out,
-                                              len(self.output_list))
+                                              len(self.output_list)).squeeze()
             
             test_input, test_output=series_to_supervised(test_input,
                                                          test_output,
@@ -141,7 +141,7 @@ class ForwardChainingGPI(object):
                                                    len(self.input_list))
             test_output= test_output.values.reshape(test_output.shape[0],
                                                     self.n_out,
-                                                    len(self.output_list))
+                                                    len(self.output_list)).squeeze()
             
 
             # Execute training

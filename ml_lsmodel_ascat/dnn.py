@@ -1,5 +1,6 @@
 import logging
 import tensorflow as tf
+#tf.compat.v1.disable_v2_behavior()
 import sklearn
 import skopt
 import numpy as np
@@ -25,14 +26,14 @@ class NNTrain(object):
             Integer(low=1, high=2, name='num_dense_layers'),
             'num_input_nodes':
             Integer(low=2, high=6, name='num_input_nodes'),
-#            'num_dense_nodes':
-#            Integer(low=1, high=128, name='num_dense_nodes'),
+            'num_dense_nodes':
+            Integer(low=1, high=128, name='num_dense_nodes'),
             'num_filters':
             Integer(low=1, high=128, name='num_filters'),
-            'dropout_rate':
-            Real(low=0.1, high=0.7, name='dropout_rate'),
-            'momentum':
-            Real(low=0.9, high=0.999, name='momentum'),
+#            'dropout_rate':
+#            Real(low=0.1, high=0.7, prior='log-uniform', name='dropout_rate'),
+#            'momentum':
+#            Real(low=0.9, high=0.999, prior='log-uniform', name='momentum'),
             'activation':
             Categorical(categories=['relu'], name='activation'),
             'batch_size':
@@ -128,7 +129,7 @@ class NNTrain(object):
             elif training_method == 'lstm':
                 model = keras_lstm(dimensions, self.train_input.shape[1],
                                    self.train_input.shape[2],
-                                  self.train_output.shape[2])
+                                  self.train_output.shape[-1])
                 train_output = self.train_output
 
             # Fit model
