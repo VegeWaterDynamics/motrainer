@@ -28,10 +28,10 @@ def plot_gsdata(data,
     Parameters
     ----------
     data : pandas.DataFrame
-        Input data for plotting. First two columns should be ['lat', 'lon']. 
+        Input data for plotting. First two columns should be ['lat', 'lon'].
         Each other column will be plotted orderly as a subplot.
     nrowcol : tuple
-        Number of (row, column) of the subplots. 
+        Number of (row, column) of the subplots.
         row*column should equal to data.shape[1] - 2
     figsize : tuple or list, optional
         Figure size in inches, by default None.
@@ -48,13 +48,13 @@ def plot_gsdata(data,
         Keyword arguement for pyplot.tight_layout() to adjust subplot padding.
         E.g. {'pad': 5, 'h_pad': 5, 'w_pad': 3}, by default None.
     buffer_percentage : float, optional
-        The fraction of the extra basemap extent to the data extent. 
-        When >0, the basemap will be larger than the data coverage, 
+        The fraction of the extra basemap extent to the data extent.
+        When >0, the basemap will be larger than the data coverage,
         by default 0.05.
     basemap_scale : str, optional
         Scale of the basemap elements, by default '50m'.
     basemap_extent : str, optional
-        Mannual basemap extent setting, by default 'auto'. 
+        Mannual basemap extent setting, by default 'auto'.
         When set to 'auto', the extent will be determined based on the data and
         the `buffer_percentage`.
     marksize : int, optional
@@ -65,26 +65,25 @@ def plot_gsdata(data,
     colormap : str, optional
         Mannual color scale setting, by default 'YlGnBu'
     cbar_mode : str, optional
-        Modes of colorbar. Choose from 'plot' (colorbar per plot), 'row' 
-        (colorbar per row) or 'fig' (one colorbar for the entire figure), 
+        Modes of colorbar. Choose from 'plot' (colorbar per plot), 'row'
+        (colorbar per row) or 'fig' (one colorbar for the entire figure),
         by default 'plot'.
     vlim : list, optional
         List of value limits of each subplot, by default None
         The number of elements should equal to row*column.
     cbar_label : str, optional
-        Labels for colorbar. Only active when cbar_mode is 'fig', 
+        Labels for colorbar. Only active when cbar_mode is 'fig',
         by default None
 
     Returns
     -------
-    list 
+    list
         A list of handles [fig, axes, cbars]:
         - fig: handle of the entire figure
         - axes: list of handles of subplot axes
         - cbars: list of handles of colorbars
     """
 
-    # Check arguments
     assert nrowcol[0] * nrowcol[1] == data.shape[1] - 2
     assert (titles is None) or (len(titles) == data.shape[1] - 2)
     assert (rowlabels is None) or (len(rowlabels) == nrowcol[0])
@@ -251,7 +250,7 @@ def plot_tsdata(data,
         list of DataFrames.
         Each DataFrame in the list will be plotted into a subplot.
         The columns of each DataFrame will be ploted as a line respectively.
-        The row index of each DataFrame should be DatetimeIndex. 
+        The row index of each DataFrame should be DatetimeIndex.
     nrowcol : tuple
         number of (row, cloumn) of the subplots.
         row*column should equal to len(data).
@@ -282,8 +281,8 @@ def plot_tsdata(data,
         A list of handles [fig, axes, linelist, legend]:
         - fig: handle of the entire figure
         - axes: list of handles of subplot axes
-        - linelist: dict of line handles, nested per column of  the DataFrames 
-                    in "data"
+        - linelist: dict of line handles, nested per column of  the DataFrames
+            in "data"
         - legend: handle of the legend
     """
 
