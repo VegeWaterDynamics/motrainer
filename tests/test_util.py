@@ -24,12 +24,6 @@ def init_trainning():
 class TestUtil(unittest.TestCase):
     model = init_trainning()
 
-    def test_shap(self):
-        x = np.linspace(-0.5, 0.5, 1000)
-        datain = np.column_stack((x, x))
-        shaps = util.shap_values(TestUtil.model, datain)
-        self.assertIsNotNone(shaps)
-
     def test_performance(self):
         x = np.linspace(-0.5, 0.5, 1000)
         y = np.linspace(-0.5, 0.5, 1000)

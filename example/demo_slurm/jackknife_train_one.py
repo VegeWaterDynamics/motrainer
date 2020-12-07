@@ -2,7 +2,6 @@ import pickle
 import sys
 from ml_lsmodel_ascat.dnn import NNTrain
 from ml_lsmodel_ascat.jackknife import JackknifeGPI
-from ml_lsmodel_ascat.util import shap_values
 
 if __name__ == "__main__":
     # Parsing input
@@ -53,9 +52,6 @@ if __name__ == "__main__":
 
         gpi.export_best()
 
-        # Compute shap
-        shaps = shap_values(gpi.best_train.model, gpi.gpi_input.values)
-
         # Export apriori performance
         path_apriori_performance = '{}/apriori_performance_{}'.format(
             gpi.outpath, gpi.best_year)
@@ -68,25 +64,6 @@ if __name__ == "__main__":
         with open(path_postpriori_performance, 'wb') as f:
             pickle.dump(gpi.post_perf, f)
 
-        # Export shap
-        path_shap = '{}/shap_values_{}'.format(gpi.outpath, gpi.best_year)
-        with open(path_shap, 'wb') as f:
-            pickle.dump([
-                zip(
-                    shaps[0][:, 0],
-                    shaps[0][:, 1],
-                    shaps[0][:, 2],
-                    shaps[0][:, 3],
-                    shaps[1][:, 0],
-                    shaps[1][:, 1],
-                    shaps[1][:, 2],
-                    shaps[1][:, 3],
-                    shaps[2][:, 0],
-                    shaps[2][:, 1],
-                    shaps[2][:, 2],
-                    shaps[2][:, 3],
-                )
-            ], f)
 
         print("=========================================")
         print("       GPI " + str(gpi_id) + " done")
