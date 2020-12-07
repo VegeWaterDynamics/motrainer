@@ -85,14 +85,14 @@ def normalize(data, method):
 
 def select_geom(df, geometry, invert=False):
     """
-    Selects points within a geometry 
+    Selects points within a geometry
 
     Parameters
     ----------
     df : pandas.DataFrame
         Source data. Requires 'lat' and 'lon' fields
     geometry : geopandas.Geodataframe
-        Geometry for selection. 
+        Geometry for selection.
     invert : bool, optional
         If True, select points outside the geometry, by default False
 
