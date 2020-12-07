@@ -11,6 +11,18 @@ logger = logging.getLogger(__name__)
 
 
 class JackknifeGPI(object):
+    """
+    GPI object oriented for neuron netowork training using Jackknife resampling
+    method.
+
+    Methods
+    -------
+    train(searching_space, optimize_space, normalize_method='standard',
+          performance_method='rmse', training_method='dnn', verbose=0)
+        train neuron network with given method
+    export_best
+        export the best results in Jackknife process.
+    """
     def __init__(self,
                  gpi_data,
                  val_split_year,
@@ -18,7 +30,27 @@ class JackknifeGPI(object):
                  output_list,
                  export_all_years=True,
                  outpath='./jackknife_results'):
+        """
+        Initialize JackknifeGPI object.
 
+        Parameters
+        ----------
+        gpi_data : pandas.DataFrame
+            DataFrame of a single GPI.
+            Each row represents all properties at a certain timestamp.
+            Each column represents a time-series of a property.
+        val_split_year : int
+            Split year of validation. All data after (include) this year will
+            be reserved for benchmarking.
+        input_list : list of str
+            Column names in gpi_data will will be used as input.
+        output_list : list of str
+            Column names in gpi_data will will be used as output.
+        export_all_years : bool, optional
+            Switch to export the results of all years, by default True
+        outpath : str, optional
+            Results exporting path, by default './jackknife_results'
+        """
         logger.info('Initializing Jackkinfe trainning:\n'
                     'val_split_year: {}\n'
                     'input_list: {}\n'
@@ -45,6 +77,37 @@ class JackknifeGPI(object):
               performance_method='rmse',
               training_method='dnn',
               verbose=0):
+        """
+        Train neuron network with Jackknife resampling method.
+        Procedures:
+        1. Reserve in/output after self.val_split_year for later benchmarking.
+        2. From the rest in/output data, leave out one year as validation data.
+        3. Perform neuron network training.
+        4. Repeat Step 2 and 3 until all years exept benchmarking years have
+            been used for validation.
+        5. Select the best trainning by best performance.
+        6. Perform benchmarking on reserved data.
+
+        Parameters
+        ----------
+        searching_space : dict
+            Arguments of searching space.
+        optimize_space : dict
+            Arguments of optimazation space.
+        normalize_method : str, optional
+            Method of normalization. Choose from 'standard' and 'min_max'.
+            By default 'standard'
+        performance_method : str, optional
+            Method of computing performance. Choose from 'rmse', 'mae',
+            'pearson' and 'spearman'.
+            By default 'rmse'.
+        training_method : str, optional
+            Traning method selection. Select from 'dnn' or 'dnn_lossweights'.
+            By default 'dnn'
+        verbose : int, optional
+            Control the verbosity.
+            By default 0, which means no screen feedback.
+        """
 
         # Data normalization
         logger.debug('Normalizing input/output data. Method: {}.'.format(
@@ -129,7 +192,9 @@ class JackknifeGPI(object):
                         str(self.best_year), self.apr_perf, self.post_perf))
 
     def export_best(self, output_options=['model', 'hyperparameters']):
-
+        """
+        export the best results in Jackknife process.
+        """
         logger.info(
             'Exporting model and hyperparameters of year {} to {}'.format(
                 self.best_year, self.outpath))
