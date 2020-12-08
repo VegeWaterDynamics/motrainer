@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 import os
-import sklearn
+import sklearn.preprocessing
 import random
 from scipy.stats.stats import pearsonr, spearmanr
 from shapely.geometry import Point
