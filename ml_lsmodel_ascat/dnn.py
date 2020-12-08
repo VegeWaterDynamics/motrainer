@@ -12,7 +12,30 @@ logger = logging.getLogger(__name__)
 
 
 class NNTrain(object):
+    """
+    Neuron Network trainning object
+
+    Methods
+    -------
+    update_space(**kwrags)
+        Update searching space of tranning
+    optimize(best_loss=1, n_calls=15, epochs=100, noise=0.01, n_jobs=-1,
+             kappa=5, validation_split=0.2, x0=[1e-3, 1, 4, 13, 'relu', 64],
+             training_method='dnn', loss_weights=None, verbose=0):
+        Optimize the neuron network within the searching space by given
+        optimization settings
+    """
     def __init__(self, train_input, train_output):
+        """
+        Initialize NNTrain object
+
+        Parameters
+        ----------
+        train_input : pandas.DataFrame
+            Input data of trainning
+        train_output : pandas.DataFrame
+            Output data of trainning
+        """
         self.train_input = train_input
         self.train_output = train_output
         self.dimensions = {
@@ -35,6 +58,9 @@ class NNTrain(object):
         self.model = None
 
     def update_space(self, **kwrags):
+        """
+        Update searching space of optimization.
+        """
         for key, value in kwrags.items():
             logger.debug('Update seaching sapce: {}={}'.format(key, value))
             # skopt.space instances
@@ -75,7 +101,7 @@ class NNTrain(object):
                 raise NotImplementedError
 
     def optimize(self,
-                 best_loss=1,
+                 best_loss=1.,
                  n_calls=15,
                  epochs=100,
                  noise=0.01,
@@ -86,6 +112,45 @@ class NNTrain(object):
                  training_method='dnn',
                  loss_weights=None,
                  verbose=0):
+        """
+        Optimize the neuron network within the searching space by given
+        optimization settings
+
+        Parameters
+        ----------
+        best_loss : float, optional
+            Threshold of loss, by default 1.
+            If the final loss is larger than best_loss, the model won't be
+            accepted.
+        n_calls : int, optional
+            Total number of evaluations, by default 15
+        epochs : int, optional
+            Number of epochs to train the model, by default 100
+        noise : float, optional
+            Variance of input, by default 0.01
+        n_jobs : int, optional
+            Number of cores to run in parallel, by default -1, which sets the
+            number of jobs equal to the number of cores.
+        kappa : int, optional
+            Controls how much of the variance in the predicted values should be
+             taken into account. , by default 5
+        validation_split : float, optional
+            Float between 0 and 1. Fraction of the training data to be used as
+            validation data. , by default 0.2
+        x0 : list, optional
+            Initial input points., by default [1e-3, 1, 4, 13, 'relu', 64]
+        training_method : str, optional
+            Traning method selection. Select from 'dnn' or 'dnn_lossweights'.
+            By default 'dnn'
+        loss_weights : list, optional
+            Scalar coefficients (Python floats) to weight the loss
+            contributions of different model outputs
+            By default None, which means equal weights of all outputs
+        verbose : int, optional
+            Control the verbosity.
+            By default 0, which means no screen feedback.
+        """
+
         self.best_loss = best_loss
         self.keras_verbose = verbose
         self.loss_weights = loss_weights
@@ -149,6 +214,9 @@ class NNTrain(object):
                                            x0=x0)
 
     def export(self, path_model=None, path_hyperparameters=None):
+        """
+        Export model and hyperparameters from tranning.
+        """
 
         if path_model is not None:
             Path(path_model).parent.mkdir(parents=True, exist_ok=True)

@@ -46,6 +46,8 @@ def keras_dnn(dimensions, input_shape, output_shape):
 
 def keras_dnn_lossweight(dimensions, input_shape, output_shape, loss_weights):
     """
+    Deep Neural Network implemented by Keras.
+    Implemented to adapt 'loss_weights'.
     """
     inputs = tf.keras.Input(shape=(input_shape, ))
 
