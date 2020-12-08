@@ -3,5 +3,6 @@ scipy
 tensorflow
 sklearn
 pandas
-shap
+geopandas
 scikit-optimize
+shapely

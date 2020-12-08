@@ -4,7 +4,6 @@ import logging
 import sys
 from ml_lsmodel_ascat.dnn import NNTrain
 from ml_lsmodel_ascat.jackknife import JackknifeGPI
-from ml_lsmodel_ascat.util import shap_values
 
 logging.basicConfig(
     level=logging.INFO,
@@ -70,8 +69,7 @@ if __name__ == "__main__":
 
             gpi.export_best()
 
-            # Compute shap
-            shaps = shap_values(gpi.best_train.model, gpi.gpi_input.values)
+            
 
             # Export apriori performance
             path_apriori_performance = '{}/apriori_performance_{}'.format(
@@ -84,13 +82,6 @@ if __name__ == "__main__":
                 gpi.outpath, gpi.best_year)
             with open(path_postpriori_performance, 'wb') as f:
                 pickle.dump(gpi.post_perf, f)
-
-            # Export shap
-            path_shap = '{}/shap_values_{}'.format(gpi.outpath, gpi.best_year)
-            df_shap = pd.DataFrame()
-            df_shap['shaps'] = shaps
-            with open(path_shap, 'wb') as f:
-                pickle.dump(shaps, f)
 
             aprior.append(gpi.apr_perf)
             post.append(gpi.post_perf)

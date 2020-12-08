@@ -3,14 +3,15 @@ import matplotlib.pyplot as plt
 import cartopy
 import shapely.geometry as sgeom
 from copy import copy
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 def plot_gsdata(data,
                 nrowcol,
-                outpath,
-                outformat='jpeg',
+                figsize=None,
                 titles=None,
                 rowlabels=None,
+                rowlabel_loc='right',
                 kw_padding=None,
                 buffer_percentage=0.05,
                 basemap_scale='50m',
@@ -19,49 +20,75 @@ def plot_gsdata(data,
                 fontsize=8,
                 colormap='YlGnBu',
                 cbar_mode='plot',
+                vlim=None,
                 cbar_label=None):
-    """Plot geo-spratial data on a basmap
-
-    :param data: Input data for plotting. First two columns
-        should be ['lat', 'lon']. Each other column will be
-        plotted orderly as a subplot.
-    :type data: pandas.DataFrame
-    :param nrowcol: number of (row, cloumn) of the subplots.
-    :type nrowcol: tuple
-    :param titles: Titles of each plot, defaults to None
-    :type titles: list, optional
-    :param rowlabels: row labels, defaults to None
-    :type rowlabels: list, optional
-    :param kw_padding: Keyword arguement for pyplot.tight_layout().
-        Adjust subplot padding.
-        E.g. {'pad': 5, 'h_pad': 5, 'w_pad': 3}. defaults to None.
-    :type kw_padding: dict, optional
-    :param buffer_percentage: The fraction of the extra basemap
-        extent to the data extent. when >0, the basemap will be
-        larger than the data coverage., defaults to 0.05
-    :type buffer_percentage: float, optional
-    :param basemap_scale: Scale of the basemap elements,
-        defaults to '50m'
-    :type basemap_scale: str, optional
-    :param basemap_extent: Mannual basemap extent setting,
-        defaults to 'auto', which means the extent will be
-        determined based on the data coverage, and the `buffer_percentage`
-    :type basemap_extent: list, optional
-    :param marksize: scatter plot maker size, defaults to 5
-    :type marksize: int, optional
-    :param fontsize: fontsize of tick, title and labels,
-        defaults to 8. For colorbar the tick labe size will be halved.
-    :type fontsize: int, optional
-    :param colormap: Mannual color scale setting, defaults to 'YlGnBu'
-    :type colormap: str, optional
-    :param cbar_mode: Modes of colorbar. Choose from 'plot'
-        (colorbar per plot), 'row' (colorbar per row) or
-        'fig' (one colorbar for the entire figure), defaults to 'plot'
-    :type cbar_mode: str, optional
-    :param cbar_label: Labels for colorvar. Only active when cbar_mode
-        is 'fig'. defaults to None
-    :type cbar_label: str, optional
     """
+    Plot geo-spratial data on a basmap
+
+    Parameters
+    ----------
+    data : pandas.DataFrame
+        Input data for plotting. First two columns should be ['lat', 'lon'].
+        Each other column will be plotted orderly as a subplot.
+    nrowcol : tuple
+        Number of (row, column) of the subplots.
+        row*column should equal to data.shape[1] - 2
+    figsize : tuple or list, optional
+        Figure size in inches, by default None.
+    titles : list, optional
+        Titles of each plot, by default None.
+        The number of elements should equal to row*column.
+    rowlabels : list, optional
+        row labels, by default None.
+        The number of elements should equal to data.shape[0].
+    rowlabel_loc : str, optional
+        row label location, choose from 'left' or 'right', by default 'right'.
+        When set to 'right', cbar_mode cannot be 'fig'
+    kw_padding : dict, optional
+        Keyword arguement for pyplot.tight_layout() to adjust subplot padding.
+        E.g. {'pad': 5, 'h_pad': 5, 'w_pad': 3}, by default None.
+    buffer_percentage : float, optional
+        The fraction of the extra basemap extent to the data extent.
+        When >0, the basemap will be larger than the data coverage,
+        by default 0.05.
+    basemap_scale : str, optional
+        Scale of the basemap elements, by default '50m'.
+    basemap_extent : str, optional
+        Mannual basemap extent setting, by default 'auto'.
+        When set to 'auto', the extent will be determined based on the data and
+        the `buffer_percentage`.
+    marksize : int, optional
+        Scatter plot maker size, by default 5.
+    fontsize : int, optional
+        Fontsize of tick, title and labels, by default 8.
+        For colorbar the tick labe size will be halved.
+    colormap : str, optional
+        Mannual color scale setting, by default 'YlGnBu'
+    cbar_mode : str, optional
+        Modes of colorbar. Choose from 'plot' (colorbar per plot), 'row'
+        (colorbar per row) or 'fig' (one colorbar for the entire figure),
+        by default 'plot'.
+    vlim : list, optional
+        List of value limits of each subplot, by default None
+        The number of elements should equal to row*column.
+    cbar_label : str, optional
+        Labels for colorbar. Only active when cbar_mode is 'fig',
+        by default None
+
+    Returns
+    -------
+    list
+        A list of handles [fig, axes, cbars]:
+        - fig: handle of the entire figure
+        - axes: list of handles of subplot axes
+        - cbars: list of handles of colorbars
+    """
+
+    assert nrowcol[0] * nrowcol[1] == data.shape[1] - 2
+    assert (titles is None) or (len(titles) == data.shape[1] - 2)
+    assert (rowlabels is None) or (len(rowlabels) == nrowcol[0])
+    if (vlim is not None) and isinstance(vlim[0], list):
+        assert len(vlim) == data.shape[1] - 2
 
     if basemap_extent == 'auto':
         buffer_lon = (max(data['lon'].values) -
@@ -77,8 +104,8 @@ def plot_gsdata(data,
 
     data_crs = cartopy.crs.PlateCarree()
     plot_crs = cartopy.crs.Orthographic(
-        central_longitude=(basemap_extent[3] - basemap_extent[2]) / 2.,
-        central_latitude=(basemap_extent[1] - basemap_extent[0]) / 2.,
+        central_longitude=(basemap_extent[1] + basemap_extent[0]) / 2.,
+        central_latitude=(basemap_extent[3] + basemap_extent[2]) / 2.,
         globe=None)
 
     coast = cartopy.feature.NaturalEarthFeature(category='physical',
@@ -94,22 +121,50 @@ def plot_gsdata(data,
     fig, axes = plt.subplots(nrows=nrowcol[0],
                              ncols=nrowcol[1],
                              subplot_kw={'projection': plot_crs})
+    cbars = [[None for i in range(nrowcol[1])] for j in range(nrowcol[0])]
+
+    if figsize is not None:
+        fig.set_size_inches(figsize[0], figsize[1])
+
     if kw_padding is not None:
         plt.tight_layout(**kw_padding)
     subplotid = 0
     features = data.columns[2:]
+
     for ax in axes.flat:
+        row_id = int(subplotid / nrowcol[1])
+        col_id = subplotid - row_id * nrowcol[1]
+
         ax.set_extent(basemap_extent)
         ax.axis('equal')
         ax.add_feature(coast, lw=0.8, alpha=0.5)
         ax.add_feature(ocean, alpha=0.4)
 
+        if vlim is not None:
+            if isinstance(vlim[0], list):
+                vmin, vmax = vlim[subplotid][0], vlim[subplotid][1]
+            else:
+                vmin, vmax = vlim[0], vlim[1]
+        else:
+            vmin, vmax = np.nanmin(data[features[subplotid]]), np.nanmax(
+                data[features[subplotid]])
+
+        if cbar_mode == 'row':
+            if isinstance(colormap, list):
+                cmap = colormap[row_id]
+            else:
+                cmap = colormap
+        else:
+            cmap = colormap
+
         sc = ax.scatter(data['lon'].values,
                         data['lat'].values,
                         marker='o',
                         c=data[features[subplotid]],
+                        vmin=vmin,
+                        vmax=vmax,
                         transform=data_crs,
-                        cmap=colormap,
+                        cmap=cmap,
                         s=5)
 
         # Ticks and gridlines
@@ -127,6 +182,7 @@ def plot_gsdata(data,
         _lambert_xticks(ax, xticks, 'bottom', fontsize)
 
         # Colorbar
+        cbar = None
         if cbar_mode == 'plot':
             axpos = ax.get_position()
             cbar_ax = fig.add_axes([axpos.x1, axpos.y0, 0.0075,
@@ -140,6 +196,8 @@ def plot_gsdata(data,
                     [axpos.x1, axpos.y0, 0.01, axpos.height])  # l, b, w, h
                 cbar = fig.colorbar(sc, cax=cbar_ax)
                 cbar.ax.tick_params(labelsize=fontsize / 2)
+        if cbar is not None:
+            cbars[row_id][col_id] = cbar
 
         # Title
         title_text = '(' + chr(97 + subplotid) + ') '  # Alphabet label
@@ -149,66 +207,88 @@ def plot_gsdata(data,
 
         # Row label
         if rowlabels is not None:
-            if cbar_mode == 'plot' or cbar_mode == 'row':
-                if subplotid % nrowcol[1] == nrowcol[1] - 1:
-                    cbar.set_label(rowlabels[int(subplotid / nrowcol[1])],
-                                   fontsize=fontsize)
-            else:
+            if rowlabel_loc == 'right':
+                if cbar_mode == 'plot' or cbar_mode == 'row':
+                    if subplotid % nrowcol[1] == nrowcol[1] - 1:
+                        cbar.set_label(rowlabels[int(subplotid / nrowcol[1])],
+                                       fontsize=fontsize)
+
+            elif rowlabel_loc == 'left':
                 if subplotid % nrowcol[1] == 0:
                     ax.set_ylabel(rowlabels[int(subplotid / nrowcol[1])],
                                   fontsize=fontsize)
 
+        make_axes_locatable(ax)
         subplotid += 1
 
     # Colorbar for the entire figure
     if cbar_mode == 'fig':
-        cax = fig.add_axes([0.35, 0.06, 0.3, 0.01])
+        cax = fig.add_axes([0.2, 0.06, 0.6, 0.01])
         cax.tick_params(labelsize=fontsize / 2)
-        plt.colorbar(sc, cax=cax, orientation='horizontal')
+        cbar = plt.colorbar(sc, cax=cax, orientation='horizontal')
         if cbar_label is not None:
-            cax.set_xlabel(cbar_label, fontdict={'size': fontsize})
+            cbar.ax.set_xlabel(cbar_label, fontdict={'size': fontsize})
+        cbars = cbar
 
-    plt.savefig(outpath, bbox_inches='tight', format=outformat)
+    return fig, axes, cbars
 
 
 def plot_tsdata(data,
                 nrowcol,
-                outpath,
-                outformat='jpeg',
                 figsize=None,
-                linecolor=None,
+                kw_plot=None,
                 titles=None,
                 rowlabels=None,
                 kw_padding=None,
                 fontsize=8):
-    """plot time-series data
-
-    :param data: list of DataFrames. Each DataFrames in the list will
-        be plotted into a subplot. The row index of DataFrame should be
-        DatetimeIndex. The columns will be ploted
-    :type data: list
-    :param nrowcol: number of (row, cloumn) of the subplots.
-    :type nrowcol: tuple
-    :param outpath: output path
-    :type outpath: str
-    :param outformat: outformat, defaults to 'jpeg'
-    :type outformat: str, optional
-    :param figsize: figure size in inches, defaults to None
-    :type figsize: tuple or list, optional
-    :param linecolor: line color per column in data, defaults to None
-    :type linecolor: dict, optional
-    :param titles: Titles of each plot, defaults to None
-    :type titles: list, optional
-    :param rowlabels: row labels, defaults to None
-    :type rowlabels: list, optional
-    :param kw_padding: Keyword arguement for pyplot.tight_layout().
-        Adjust subplot padding.
-        E.g. {'pad': 5, 'h_pad': 5, 'w_pad': 3}. defaults to None.
-    :type kw_padding: dict, optional
-    :param fontsize: fontsize of tick, title and labels,
-        defaults to 8.
-    :type fontsize: int, optional
     """
+    Plot time series data in subplots.
+
+    Parameters
+    ----------
+    data : list
+        list of DataFrames.
+        Each DataFrame in the list will be plotted into a subplot.
+        The columns of each DataFrame will be ploted as a line respectively.
+        The row index of each DataFrame should be DatetimeIndex.
+    nrowcol : tuple
+        number of (row, cloumn) of the subplots.
+        row*column should equal to len(data).
+    figsize : tuple or list, optional
+        figure size in inches, by default None.
+    kw_plot : dict, optional
+        Dictionary of line plotting properties.
+        Keys are the column names of DataFrames in "data".
+        Keys are keywards of pyplot.plot.
+        E.g. {'TS1': {'color':'b', 'linestyle': '-'},
+              'TS3': {'color':'k', 'linestyle': '-.'}}
+        By default None.
+    titles : list, optional
+        Titles of each plot, by default None.
+        The number of elements should equal to row*column.
+    rowlabels : list, optional
+        row labels, by default None.
+    kw_padding : dict, optional
+        Keyword arguement for pyplot.tight_layout().
+        Adjust subplot padding.
+        E.g. {'pad': 5, 'h_pad': 5, 'w_pad': 3}. By default None.
+    fontsize : int, optional
+        fontsize: fontsize of tick, title and labels, by default 8.
+
+    Returns
+    -------
+    list
+        A list of handles [fig, axes, linelist, legend]:
+        - fig: handle of the entire figure
+        - axes: list of handles of subplot axes
+        - linelist: dict of line handles, nested per column of  the DataFrames
+            in "data"
+        - legend: handle of the legend
+    """
+
+    assert nrowcol[0] * nrowcol[1] == len(data)
+    assert (titles is None) or (len(titles) == len(data))
+    assert (rowlabels is None) or (len(rowlabels) == nrowcol[0])
 
     fig, axes = plt.subplots(nrows=nrowcol[0], ncols=nrowcol[1])
 
@@ -218,18 +298,30 @@ def plot_tsdata(data,
     if figsize is not None:
         fig.set_size_inches(figsize[0], figsize[1])
 
+    if kw_plot is None:
+        # If kw_plot not specified, automatically assign colors for each
+        # unique columns in all DateFrames in 'data'
+        cols = list(set([col for df in data for col in df.columns.to_list()]))
+        colors = plt.cm.get_cmap('rainbow')(np.linspace(0, 1, len(cols)))
+        kw_plot = dict(zip(cols, [{'color': cl} for cl in colors]))
+    else:
+        # If kw_plot specified, assign colors for non-specified columns
+        cols_non = list(
+            set([
+                col for df in data for col in df.columns.to_list()
+                if col not in kw_plot.keys()
+            ]))
+        colors = plt.cm.get_cmap('rainbow')(np.linspace(0, 1, len(cols_non)))
+        kw_plot.update(dict(zip(cols_non, [{'color': cl} for cl in colors])))
+
     subplotid = 0
-    linelist = dict()
+    linelist = dict(
+        zip(kw_plot.keys(), [[] for i in range(len(kw_plot.keys()))]))
     for ax in axes.flat:
         # Plot
         for col in data[subplotid].columns:
-            if (linecolor is not None) and (col in linecolor.keys()):
-                lc = linecolor[col]
-            else:
-                lc = ['b', 'g', 'r', 'c', 'm', 'y',
-                      'k'][data[subplotid].columns.get_loc(col)]
-            line = ax.plot(data[subplotid][col], color=lc)
-            linelist[col] = line[0]
+            line = ax.plot(data[subplotid][col], **kw_plot[col])
+            linelist[col].append(line[0])
             ax.tick_params(axis='both', labelsize=fontsize / 2)
 
         # Title
@@ -247,17 +339,14 @@ def plot_tsdata(data,
         subplotid += 1
 
     # Legend
-    fig.legend(handles=linelist.values(),
-               labels=linelist.keys(),
-               fontsize=fontsize,
-               ncol=min([5, len(linelist)]),
-               loc="lower center")
-    fig.subplots_adjust(left=0.07,
-                        right=0.93,
-                        wspace=0.15,
-                        hspace=0.35,
-                        bottom=0.15)
-    plt.savefig(outpath, bbox_inches='tight', format=outformat)
+    l_handles = [line[0] for line in linelist.values()]
+    legend = fig.legend(handles=l_handles,
+                        labels=linelist.keys(),
+                        fontsize=fontsize,
+                        ncol=min([5, len(linelist)]),
+                        loc="lower center")
+
+    return fig, axes, linelist, legend
 
 
 def _lambert_xticks(ax, ticks, tick_location, tickfontsize):
