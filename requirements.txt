@@ -1,4 +1,8 @@
 numpy
 scipy
-keras
+tensorflow
 sklearn
+pandas
+geopandas
+scikit-optimize
+shapely
