@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 import os
-import sklearn
+import sklearn.preprocessing
 import random
 from scipy.stats.stats import pearsonr, spearmanr
 from shapely.geometry import Point
@@ -10,6 +10,31 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Force tensorflow debug logging off
 
 
 def performance(data_input, data_label, model, method, scaler_output=None):
+    """
+    Compute performance of trained neuron netowrk.
+
+    Parameters
+    ----------
+    data_input : pandas.DataFrame
+        Input data.
+    data_label : pandas.DataFrame
+        Label data.
+    model : tf.keras.models
+        Trained model to compute performance.
+    method : str
+        Method to compute
+    scaler_output : optional
+        Scaler of output, by default None.
+        When not None, function will assume that a normalization has been
+        performed to output, and will use scaler_output to transform the output
+        back to the original scale.
+
+    Returns
+    -------
+    float or list of float
+        Performance value. If the model gives multiple output, the performance
+        will be a list.
+    """
     # Temporally SL the model because of TF graph execution issue
     # TODO: fix the model prediction issue
     tmp_path = '/tmp/tmp_model{}'.format(random.getrandbits(64))
@@ -51,9 +76,24 @@ def performance(data_input, data_label, model, method, scaler_output=None):
 
 
 def normalize(data, method):
-    # prenormalization for output (or label)
-    # we just need do normalization for output and input seperately
-    # which means mean/std are same for train and test
+    """
+    Pre-normalization for input/output
+
+    Parameters
+    ----------
+    data : pandas.DataFrAME
+        Data to normalize.
+    method : str
+        Data to normalize. Choose from 'standard' or 'min_max'.
+
+    Returns
+    -------
+    list
+        A list of [data_norm, scaler]. Normalized data and scaler used for
+        normalization.
+
+    """
+
     if method == 'standard':
         scaler = sklearn.preprocessing.StandardScaler()
     elif method == 'min_max':

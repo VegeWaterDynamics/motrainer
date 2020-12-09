@@ -11,4 +11,9 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Added
 -----
 
-* Empty Python project directory structure
+* Deep Neuron Networking (DNN) training tools for single GPI with:
+* Geo-spatial and Time-series visualization tools
+* Example scripts of DNN training
+* Example Jupyter Notebook of visualization function usage
+* Example Slurm workflow for executing training tasks on Cartesius
+* Unit tests for DNN
