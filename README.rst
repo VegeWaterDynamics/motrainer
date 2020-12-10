@@ -6,67 +6,13 @@
      - Badges
    * - \1. Code repository
      - |GitHub Badge|
-   * - \2. License
-     - |License Badge|
-   * - \3. Community Registry
-     - |PyPI Badge| |Research Software Directory Badge|
-   * - \4. Enable Citation
-     - |Zenodo Badge|
-   * - \5. Checklist
-     - |CII Best Practices Badge|
-   * - **Other best practices**
-     -
-   * - Continuous integration
-     - |Python Build| |PyPI Publish|
-
-(Customize these badges with your own links, and check https://shields.io/ or https://badgen.net/ to see which other badges are available.)
-
-.. |GitHub Badge| image:: https://img.shields.io/badge/github-repo-000.svg?logo=github&labelColor=gray&color=blue
-   :target: https://github.com/VegeWaterDynamics/ml_lsmodel_ascat
-   :alt: GitHub Badge
-
-.. |License Badge| image:: https://img.shields.io/github/license/VegeWaterDynamics/ml_lsmodel_ascat
-   :target: https://github.com/VegeWaterDynamics/ml_lsmodel_ascat
-   :alt: License Badge
-
-.. |PyPI Badge| image:: https://img.shields.io/pypi/v/ml_lsmodel_ascat.svg?colorB=blue
-   :target: https://pypi.python.org/project/ml_lsmodel_ascat/
-   :alt: PyPI Badge
-.. |Research Software Directory Badge| image:: https://img.shields.io/badge/rsd-ml_lsmodel_ascat-00a3e3.svg
-   :target: https://www.research-software.nl/software/ml_lsmodel_ascat
-   :alt: Research Software Directory Badge
-
-..
-    Goto https://zenodo.org/account/settings/github/ to enable Zenodo/GitHub integration.
-    After creation of a GitHub release at https://github.com/VegeWaterDynamics/ml_lsmodel_ascat/releases
-    there will be a Zenodo upload created at https://zenodo.org/deposit with a DOI, this DOI can be put in the Zenodo badge urls.
-    In the README, we prefer to use the concept DOI over versioned DOI, see https://help.zenodo.org/#versioning.
-.. |Zenodo Badge| image:: https://zenodo.org/badge/DOI/< replace with created DOI >.svg
-   :target: https://doi.org/<replace with created DOI>
-   :alt: Zenodo Badge
-
-..
-    A CII Best Practices project can be created at https://bestpractices.coreinfrastructure.org/en/projects/new
-.. |CII Best Practices Badge| image:: https://bestpractices.coreinfrastructure.org/projects/< replace with created project identifier >/badge
-   :target: https://bestpractices.coreinfrastructure.org/projects/< replace with created project identifier >
-   :alt: CII Best Practices Badge
-
-.. |Python Build| image:: https://github.com/VegeWaterDynamics/ml_lsmodel_ascat/workflows/Python/badge.svg
-   :target: https://github.com/VegeWaterDynamics/ml_lsmodel_ascat/actions?query=workflow%3A%22Python%22
-   :alt: Python Build
-
-.. |PyPI Publish| image:: https://github.com/VegeWaterDynamics/ml_lsmodel_ascat/workflows/PyPI/badge.svg
-   :target: https://github.com/VegeWaterDynamics/ml_lsmodel_ascat/actions?query=workflow%3A%22PyPI%22
-   :alt: PyPI Publish
 
 ################################################################################
 ml_lsmodel_ascat
 ################################################################################
 
-Machine Learning module to train a surrogate module using Land-surface model dtput
-
-
-The project setup is documented in `a separate document <project_setup.rst>`_. Feel free to remove this document (and/or the link to this document) if you don't need it.
+ml_lsmodel_ascat is a Machine Learning package written in Python. 
+It trains surrogate model to connect soil and vegetation states/parameters to microwave observations.
 
 Installation
 ------------
@@ -92,7 +38,7 @@ Documentation
 
 .. _README:
 
-Include a link to your project's full documentation here.
+Currently the package is not released. Plz refer to the source code for documentation.
 
 Contributing
 ************

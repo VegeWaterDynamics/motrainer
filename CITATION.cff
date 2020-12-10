@@ -1,13 +1,26 @@
 # YAML 1.2
 ---
-cff-version: "1.1.0"
-title: "ml_lsmodel_ascat"
+abstract: "ml_lsmodel_ascat is a Machine Learning package written in Python. It trains surrogate model to connect soil and vegetation states/parameters to microwave observations."
 authors:
   -
-    family-names: "Netherlands eScience Center, TUDelft"
-    given-names:
-    orcid: "https://orcid.org/0000-0000-0000-0000"
-date-released: 20??-MM-DD
+    affiliation: "Netherlands eScience Center"
+    family-names: Ku
+    given-names: Ou
+  -
+    affiliation: "Delft University of Technology"
+    family-names: Shan
+    given-names: Xu
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Georgievska
+    given-names: Sonja
+  - 
+    affiliation: "Delft University of Technology"
+    family-names: Steele-Dunne
+    given-names: Susan
+cff-version: "0.1.0"
+title: "ml_lsmodel_ascat"
+date-released: YYYY-MM-DD
 doi: <insert your DOI here>
 version: "0.1.0"
 repository-code: "https://github.com/VegeWaterDynamics/ml_lsmodel_ascat"
