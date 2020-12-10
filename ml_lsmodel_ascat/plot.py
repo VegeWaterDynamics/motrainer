@@ -136,7 +136,6 @@ def plot_gsdata(data,
         col_id = subplotid - row_id * nrowcol[1]
 
         ax.set_extent(basemap_extent)
-        ax.axis('equal')
         ax.add_feature(coast, lw=0.8, alpha=0.5)
         ax.add_feature(ocean, alpha=0.4)
 
