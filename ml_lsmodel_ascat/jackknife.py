@@ -23,6 +23,7 @@ class JackknifeGPI(object):
     export_best
         export the best results in Jackknife process.
     """
+
     def __init__(self,
                  gpi_data,
                  val_split_year,
@@ -191,9 +192,7 @@ class JackknifeGPI(object):
                     'Post-priori performance: {}'.format(
                         str(self.best_year), self.apr_perf, self.post_perf))
 
-    def export_best(self, 
-                    model_name = 'best_optimized_model',
-                    hyper_name = 'best_hyperparameters'):
+    def export_best(self, model_name='best_optimized_model', hyper_name='best_hyperparameters'):
         """
         export the best results in Jackknife process.
         """
@@ -207,13 +206,13 @@ class JackknifeGPI(object):
         else:
             path_model = '{}/best_optimized_model_{}'.format(
                 self.outpath, self.best_year)
-        
+
         if hyper_name is not None:
             path_hyperparameters = '{}/{}_{}'.format(
                 self.outpath, hyper_name, self.best_year)
         else:
             path_hyperparameters = '{}/best_hyperparameters_{}'.format(
                 self.outpath, self.best_year)
-        
+
         self.best_train.export(path_model=path_model,
                                path_hyperparameters=path_hyperparameters)
