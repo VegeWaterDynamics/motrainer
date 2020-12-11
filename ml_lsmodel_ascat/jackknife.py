@@ -192,7 +192,7 @@ class JackknifeGPI(object):
                     'Post-priori performance: {}'.format(
                         str(self.best_year), self.apr_perf, self.post_perf))
 
-    def export_best(self, model_name='best_optimized_model', 
+    def export_best(self, model_name='best_optimized_model',
                     hyper_name='best_hyperparameters'):
         """
         export the best results in Jackknife process.
