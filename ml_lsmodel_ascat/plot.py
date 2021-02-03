@@ -238,6 +238,8 @@ def plot_tsdata(data,
                 kw_plot=None,
                 titles=None,
                 rowlabels=None,
+                sharex=False,
+                sharey=False,
                 kw_padding=None,
                 fontsize=8):
     """
@@ -289,7 +291,8 @@ def plot_tsdata(data,
     assert (titles is None) or (len(titles) == len(data))
     assert (rowlabels is None) or (len(rowlabels) == nrowcol[0])
 
-    fig, axes = plt.subplots(nrows=nrowcol[0], ncols=nrowcol[1])
+    fig, axes = plt.subplots(nrows=nrowcol[0], ncols=nrowcol[1],
+                             sharex=sharex, sharey=sharey)
 
     if kw_padding is not None:
         plt.tight_layout(**kw_padding)
