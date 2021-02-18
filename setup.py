@@ -15,6 +15,9 @@ with open('CITATION.cff', 'r') as cff:
 with open('README.rst') as readme_file:
     readme = readme_file.read()
 
+with open('requirements.txt') as requirements_file:
+    requirements = requirements_file.read().split()
+
 setup(
     name='ml_lsmodel_ascat',
     version=version,
@@ -41,16 +44,7 @@ setup(
         'Programming Language :: Python :: 3.7',
     ],
     test_suite='tests',
-    install_requires=[
-        'numpy',
-        'scipy',
-        'tensorflow',
-        'sklearn',
-        'scikit-optimize',
-        'cartopy',
-        'pandas',
-        'geopandas'
-        'shapely'],  
+    install_requires=requirements,  
     setup_requires=[
         # dependency for `python setup.py test`
         'pytest-runner',
