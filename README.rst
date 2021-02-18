@@ -1,12 +1,3 @@
-.. list-table::
-   :widths: 25 25
-   :header-rows: 1
-
-   * - fair-software.nl recommendations
-     - Badges
-   * - \1. Code repository
-     - |GitHub Badge|
-
 ################################################################################
 ml_lsmodel_ascat
 ################################################################################
@@ -17,7 +8,21 @@ It trains surrogate model to connect soil and vegetation states/parameters to mi
 Installation
 ------------
 
-To install ml_lsmodel_ascat, do:
+We recommend to install ``ml_lsmodel_ascat`` under a ``conda`` environment. You can do this via ``miniconda``.
+Please check the `installation tutorial <https://conda.io/projects/conda/en/latest/user-guide/install/index.html>`_ to install ``miniconda``.
+
+After you succesfully installed ``miniconda``, you can create and activate a new environment:  
+
+.. code-block:: console
+
+  conda create -n env_ml_lsmodel_ascat
+  conda activate env_ml_lsmodel_ascat
+
+There is also a `cheat sheet <https://conda.io/projects/conda/en/latest/_downloads/843d9e0198f2a193a3484886fa28163c/conda-cheatsheet.pdf>`_ for more commands of conda environment management. 
+
+Now we are going to install ``ml_lsmodel_ascat`` under our newly created environment ``env_ml_lsmodel_ascat``.
+First you need to make sure you are in a desired working directory.
+Then the installation can be done simpy by:
 
 .. code-block:: console
 
@@ -25,12 +30,21 @@ To install ml_lsmodel_ascat, do:
   cd ml_lsmodel_ascat
   pip install .
 
-
-Run tests (including coverage) with:
+By this we clone the Github repository to local and install it with all dependencies. 
+Well, all dependencies but one: ``Cartopy``, which is used for managing geospatial projection system for visulization.
+Unfortuantely ``Cartopy`` has a very poor ``pip`` support. We can manually install it via ``conda``:
 
 .. code-block:: console
 
-  python setup.py test
+  conda install -c conda-forge cartopy
+
+The installation is complete.
+Alternatively, to check if everything is working, you can run unittests:
+
+
+.. code-block:: console
+
+  python3 setup.py test
 
 
 Documentation
@@ -38,7 +52,7 @@ Documentation
 
 .. _README:
 
-Currently the package is not released. Plz refer to the source code for documentation.
+Currently the package is not publicly released. Plz refer to the source code for documentation.
 
 Contributing
 ************
@@ -49,7 +63,7 @@ have a look at the `contribution guidelines <CONTRIBUTING.rst>`_.
 License
 *******
 
-Copyright (c) 2020, 
+Copyright (c) 2021, 
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
