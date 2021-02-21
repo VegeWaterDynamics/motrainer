@@ -49,7 +49,7 @@ setup(
         'scikit-optimize',
         'cartopy',
         'pandas',
-        'geopandas'
+        'geopandas',
         'shapely'],  
     setup_requires=[
         # dependency for `python setup.py test`
