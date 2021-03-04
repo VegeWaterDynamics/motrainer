@@ -21,6 +21,7 @@ def plot_gsdata(data,
                 colormap='YlGnBu',
                 cbar_mode='plot',
                 vlim=None,
+                norm=None,
                 cbar_label=None):
     """
     Plot geo-spratial data on a basmap
@@ -155,6 +156,14 @@ def plot_gsdata(data,
                 cmap = colormap
         else:
             cmap = colormap
+            
+        if norm is not None:
+            if isinstance(norm, list):
+                norm_ax = norm[subplotid]
+            else:
+                norm_ax = norm
+        else:
+            norm_ax = None
 
         sc = ax.scatter(data['lon'].values,
                         data['lat'].values,
@@ -162,6 +171,7 @@ def plot_gsdata(data,
                         c=data[features[subplotid]],
                         vmin=vmin,
                         vmax=vmax,
+                        norm=norm_ax,
                         transform=data_crs,
                         cmap=cmap,
                         s=5)
