@@ -156,7 +156,7 @@ def plot_gsdata(data,
                 cmap = colormap
         else:
             cmap = colormap
-            
+
         if norm is not None:
             if isinstance(norm, list):
                 norm_ax = norm[subplotid]
@@ -301,8 +301,10 @@ def plot_tsdata(data,
     assert (titles is None) or (len(titles) == len(data))
     assert (rowlabels is None) or (len(rowlabels) == nrowcol[0])
 
-    fig, axes = plt.subplots(nrows=nrowcol[0], ncols=nrowcol[1],
-                             sharex=sharex, sharey=sharey)
+    fig, axes = plt.subplots(nrows=nrowcol[0],
+                             ncols=nrowcol[1],
+                             sharex=sharex,
+                             sharey=sharey)
 
     if kw_padding is not None:
         plt.tight_layout(**kw_padding)
