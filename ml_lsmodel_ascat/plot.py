@@ -21,6 +21,7 @@ def plot_gsdata(data,
                 colormap='YlGnBu',
                 cbar_mode='plot',
                 vlim=None,
+                norm=None,
                 cbar_label=None):
     """
     Plot geo-spratial data on a basmap
@@ -156,12 +157,21 @@ def plot_gsdata(data,
         else:
             cmap = colormap
 
+        if norm is not None:
+            if isinstance(norm, list):
+                norm_ax = norm[subplotid]
+            else:
+                norm_ax = norm
+        else:
+            norm_ax = None
+
         sc = ax.scatter(data['lon'].values,
                         data['lat'].values,
                         marker='o',
                         c=data[features[subplotid]],
                         vmin=vmin,
                         vmax=vmax,
+                        norm=norm_ax,
                         transform=data_crs,
                         cmap=cmap,
                         s=5)
@@ -238,6 +248,8 @@ def plot_tsdata(data,
                 kw_plot=None,
                 titles=None,
                 rowlabels=None,
+                sharex=False,
+                sharey=False,
                 kw_padding=None,
                 fontsize=8):
     """
@@ -289,7 +301,10 @@ def plot_tsdata(data,
     assert (titles is None) or (len(titles) == len(data))
     assert (rowlabels is None) or (len(rowlabels) == nrowcol[0])
 
-    fig, axes = plt.subplots(nrows=nrowcol[0], ncols=nrowcol[1])
+    fig, axes = plt.subplots(nrows=nrowcol[0],
+                             ncols=nrowcol[1],
+                             sharex=sharex,
+                             sharey=sharey)
 
     if kw_padding is not None:
         plt.tight_layout(**kw_padding)

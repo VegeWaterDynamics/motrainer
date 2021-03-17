@@ -14,7 +14,7 @@ if __name__ == "__main__":
     # Manual input
     val_split_year = 2017
     out_path = './results/'
-    file_data = './example_data/input_SURFEX_label_ASCAT_5GPI_2007_2019'
+    file_data = './example_data/input_SURFEX_label_ASCAT_5GPI_2007_2019.pickle'
     list_gpi = range(5)
     output_list = ['sig', 'slop', 'curv']
     input_list = [
