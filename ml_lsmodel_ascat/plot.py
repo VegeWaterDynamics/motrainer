@@ -174,7 +174,7 @@ def plot_gsdata(data,
                         norm=norm_ax,
                         transform=data_crs,
                         cmap=cmap,
-                        s=5)
+                        s=marksize)
 
         # Ticks and gridlines
         xticks = np.arange(
