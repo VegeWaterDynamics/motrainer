@@ -357,7 +357,7 @@ def plot_tsdata(data,
     legend = fig.legend(handles=l_handles,
                         labels=linelist.keys(),
                         fontsize=fontsize,
-                        ncol=min([5, len(linelist)]),
+                        ncol=min([6, len(linelist)]),
                         loc="lower center")
 
     return fig, axes, linelist, legend
