@@ -4,6 +4,7 @@ import cartopy
 import shapely.geometry as sgeom
 from copy import copy
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from pygeogrids.grids import BasicGrid, genreg_grid
 
 
 def plot_gsdata(data,
@@ -22,6 +23,7 @@ def plot_gsdata(data,
                 cbar_mode='plot',
                 vlim=None,
                 norm=None,
+                methods='ax.scatter',
                 cbar_label=None):
     """
     Plot geo-spratial data on a basmap
@@ -164,17 +166,44 @@ def plot_gsdata(data,
                 norm_ax = norm
         else:
             norm_ax = None
-
-        sc = ax.scatter(data['lon'].values,
-                        data['lat'].values,
-                        marker='o',
-                        c=data[features[subplotid]],
-                        vmin=vmin,
-                        vmax=vmax,
-                        norm=norm_ax,
-                        transform=data_crs,
-                        cmap=cmap,
-                        s=marksize)
+        
+        if methods == 'ax.scatter':
+            sc = ax.scatter(data['lon'].values,
+                            data['lat'].values,
+                            marker='o',
+                            c=data[features[subplotid]],
+                            vmin=vmin,
+                            vmax=vmax,
+                            norm=norm_ax,
+                            transform=data_crs,
+                            cmap=cmap,
+                            s=marksize)
+        elif methods == "ax.imshow":
+            other = BasicGrid(data['lon'], data['lat'])
+            reg_grid = genreg_grid(0.25, 0.25, minlat=data['lat'].min()-0.125, 
+                                   maxlat=data['lat'].max()+0.125,
+                                   minlon=data['lon'].min()-0.125, 
+                                   maxlon=data['lon'].max()+0.125)
+            
+            lut = reg_grid.calc_lut(other, max_dist=25000)
+            img = np.ma.masked_where(lut==-1, 
+                                     data[features[subplotid]].iloc[lut])
+            cimg = np.flipud(img.reshape(-1, reg_grid.shape[1]))
+            
+            img_extent = [data['lon'].min()-0.125, 
+                          data['lon'].max()+0.125, 
+                          data['lat'].min()-0.125, 
+                          data['lat'].max()+0.125]
+            cimg1 = cimg.filled(np.nan)
+            sc = ax.imshow(cimg,#np.flip(cimg, 0),
+#                           zorder=5,
+                           vmin=vmin,
+                           vmax=vmax,
+                           norm=norm_ax,
+                           transform=data_crs,
+                           interpolation=None,
+                           extent=basemap_extent,
+                           cmap=cmap)
 
         # Ticks and gridlines
         xticks = np.arange(
