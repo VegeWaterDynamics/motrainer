@@ -5,10 +5,6 @@ including different structures, different loss functions
 
 import os
 import tensorflow as tf
-import numpy as np
-import logging
-from pathlib import Path
-from skopt.space import Real, Categorical, Integer
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Force tensorflow debug logging off
 

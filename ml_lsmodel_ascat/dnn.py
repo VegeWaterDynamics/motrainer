@@ -1,8 +1,6 @@
 import logging
 import tensorflow as tf
-import sklearn
 import skopt
-import numpy as np
 import pickle
 from pathlib import Path
 from skopt.space import Real, Categorical, Integer

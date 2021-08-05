@@ -1,5 +1,4 @@
 import unittest
-import datetime
 import pandas as pd
 import numpy as np
 from ml_lsmodel_ascat.jackknife import JackknifeGPI
