@@ -1,4 +1,5 @@
 import unittest
+import pandas as pd
 import numpy as np
 import tensorflow as tf
 from ml_lsmodel_ascat import util

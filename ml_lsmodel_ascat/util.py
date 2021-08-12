@@ -4,6 +4,7 @@ import os
 import sklearn.preprocessing
 import random
 from scipy.stats.stats import pearsonr, spearmanr
+from shapely.geometry import Point
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Force tensorflow debug logging off
 
@@ -102,3 +103,40 @@ def normalize(data, method):
 
     data_norm = scaler.fit_transform(data)
     return data_norm, scaler
+
+
+def select_geom(df, geometry, invert=False):
+    """
+    Selects points within a geometry
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Source data. Requires 'lat' and 'lon' fields
+    geometry : geopandas.Geodataframe
+        Geometry for selection.
+    invert : bool, optional
+        If True, select points outside the geometry, by default False
+
+    Returns
+    -------
+    pandas.DataFrame
+        The DataFrame of selected points,
+    """
+
+    mask = []
+    # Get the mask of points in the geometry
+    for lat, lon in zip(df['lat'], df['lon']):
+        this_point = Point(lon, lat)
+        res = geometry.contains(this_point)
+        mask.append(res.values[0])
+    mask = np.array(mask)
+
+    # Invert selection
+    if invert:
+        mask = ~mask
+
+    # Apply mask
+    df_copy = df.copy()
+
+    return df_copy[mask]
