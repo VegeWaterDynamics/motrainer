@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
-
 from setuptools import setup
-
-here = os.path.abspath(os.path.dirname(__file__))
 
 # To update the package version number, edit CITATION.cff
 with open('CITATION.cff', 'r') as cff:
@@ -50,7 +46,7 @@ setup(
         'pytest-runner',
         # dependencies for `python setup.py build_sphinx`
         'sphinx',
-        'sphinx_rtd_theme',
+        'sphinx_rtd_theme<=0.5.0',
         'recommonmark'
     ],
     tests_require=[
