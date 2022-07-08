@@ -1,5 +1,7 @@
+from importlib_metadata import metadata
 import numpy as np
 import logging
+import json
 from pathlib import Path
 from sklearn.model_selection import LeaveOneOut
 from ml_lsmodel_ascat.dnn import NNTrain
@@ -215,3 +217,13 @@ class JackknifeGPI(object):
 
         self.best_train.export(path_model=path_model,
                                path_hyperparameters=path_hyperparameters)
+
+        # write metadata
+        f_metadata = '{}/metadata.json'.format(self.outpath)
+        metedata = dict()
+        metedata['input_list'] = self.input_list
+        metedata['output_list'] = self.input_list
+        metedata['best_year'] = int(self.best_year)
+        metedata['lat'] = float(self.gpi_data['lat'].iloc[0])
+        metedata['lon'] = float(self.gpi_data['lon'].iloc[0])
+        with open(f_metadata, 'w') as f: json.dump(metedata, f)
