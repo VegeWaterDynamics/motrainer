@@ -226,4 +226,5 @@ class JackknifeGPI(object):
         metedata['best_year'] = int(self.best_year)
         metedata['lat'] = float(self.gpi_data['lat'].iloc[0])
         metedata['lon'] = float(self.gpi_data['lon'].iloc[0])
-        with open(f_metadata, 'w') as f: json.dump(metedata, f)
+        with open(f_metadata, 'w') as f:
+            json.dump(metedata, f)
