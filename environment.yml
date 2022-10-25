@@ -56,7 +56,6 @@ dependencies:
     - keras-preprocessing==1.1.2
     - libclang==12.0.0
     - markdown==3.3.6
-    - ml-lsmodel-ascat==0.1.0
     - numpy==1.22.0
     - oauthlib==3.1.1
     - opt-einsum==3.3.0
