@@ -8,51 +8,41 @@ It trains surrogate model to connect soil and vegetation states/parameters to mi
 Installation
 ------------
 
-We recommend to install ``ml_lsmodel_ascat`` under a ``conda`` environment. You can do this via ``miniconda``.
-Please check the `installation tutorial <https://conda.io/projects/conda/en/latest/user-guide/install/index.html>`_ to install ``miniconda``.
-
-After you succesfully installed ``miniconda``, you can create and activate a new environment:  
-
-.. code-block:: console
-
-  conda create -n env_ml_lsmodel_ascat
-  conda activate env_ml_lsmodel_ascat
-
-There is also a `cheat sheet <https://conda.io/projects/conda/en/latest/_downloads/843d9e0198f2a193a3484886fa28163c/conda-cheatsheet.pdf>`_ for more commands of conda environment management. 
-
-Now we are going to install ``ml_lsmodel_ascat`` under our newly created environment ``env_ml_lsmodel_ascat``.
-First you need to make sure you are in a desired working directory.
-Then the installation can be done simpy by:
+First, please clone this repository to prepare for installation.
 
 .. code-block:: console
 
   git clone https://github.com/VegeWaterDynamics/ml_lsmodel_ascat.git
-  cd ml_lsmodel_ascat
-  pip install .
 
-By this we clone the Github repository to local and install it with all dependencies. 
-Well, all dependencies but one: ``Cartopy``, which is used for managing geospatial projection system for visulization.
-Unfortuantely ``Cartopy`` has a very poor ``pip`` support. We can manually install it via ``conda``:
+We recommend to install ``ml_lsmodel_ascat`` via ``mamba``. It can either be installed independently, or under 
+the ``base`` environment of ``conda``.
+Please check the `installation guide <https://mamba.readthedocs.io/en/latest/installation.html>`_ to install ``mamba``.
 
-.. code-block:: console
 
-  conda install -c conda-forge cartopy
-
-The installation is complete.
-Alternatively, to check if everything is working, you can run unittests:
-
+After you succesfully installed ``mamba``, you can install the environment from the ``environment.yml`` file:  
 
 .. code-block:: console
 
-  python3 setup.py test
+  mamba env create -f environment.yml
+  
+A new environment with the name ``vegetation`` will be created. You can activate it by:
 
+.. code-block:: console
+
+  mamba activate env_ml_lsmodel_ascat
+
+To make sure everything works, you can run:
+
+.. code-block:: console
+
+  pytest tests/
 
 Documentation
 *************
 
 .. _README:
 
-Currently the package is not publicly released. Plz refer to the source code for documentation.
+Currently the package is not publicly released. Please refer to the source code for documentation.
 
 Contributing
 ************
