@@ -1,6 +1,8 @@
 numpy
 scipy
 tensorflow
-sklearn
+scikit-learn
 pandas
 scikit-optimize
+ipykernel
+matplotlib
