@@ -20,7 +20,7 @@ authors:
     given-names: Susan
 cff-version: "0.1.0"
 title: "motrainer"
-date-released: YYYY-MM-DD
+date-released: "2022-12-10"
 doi: <insert your DOI here>
 version: "0.1.0"
 repository-code: "https://github.com/VegeWaterDynamics/motrainer"
