@@ -1,8 +1,8 @@
 import unittest
 import pandas as pd
 import numpy as np
-from ml_lsmodel_ascat.jackknife import JackknifeGPI
-from ml_lsmodel_ascat.dnn import NNTrain
+from motrainer.jackknife import JackknifeGPI
+from motrainer.dnn import NNTrain
 
 
 def init_gpi_linear():

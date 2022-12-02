@@ -4,8 +4,8 @@ import logging
 import json
 from pathlib import Path
 from sklearn.model_selection import LeaveOneOut
-from ml_lsmodel_ascat.dnn import NNTrain
-from ml_lsmodel_ascat.util import performance, normalize
+from motrainer.dnn import NNTrain
+from motrainer.util import performance, normalize
 
 logger = logging.getLogger(__name__)
 

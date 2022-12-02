@@ -1,8 +1,8 @@
 ################################################################################
-ml_lsmodel_ascat
+motrainer
 ################################################################################
 
-ml_lsmodel_ascat is a Machine Learning package written in Python. 
+motrainer is a Machine Learning package written in Python. 
 It trains surrogate model to connect soil and vegetation states/parameters to microwave observations.
 
 Installation
@@ -12,9 +12,9 @@ First, please clone this repository to prepare for installation.
 
 .. code-block:: console
 
-  git clone https://github.com/VegeWaterDynamics/ml_lsmodel_ascat.git
+  git clone https://github.com/VegeWaterDynamics/motrainer.git
 
-We recommend to install ``ml_lsmodel_ascat`` via ``mamba``. It can either be installed independently, or under 
+We recommend to install ``motrainer`` via ``mamba``. It can either be installed independently, or under 
 the ``base`` environment of ``conda``.
 Please check the `installation guide <https://mamba.readthedocs.io/en/latest/installation.html>`_ to install ``mamba``.
 
@@ -29,7 +29,7 @@ A new environment with the name ``vegetation`` will be created. You can activate
 
 .. code-block:: console
 
-  mamba activate env_ml_lsmodel_ascat
+  mamba activate motrainer
 
 To make sure everything works, you can run:
 
@@ -47,7 +47,7 @@ Currently the package is not publicly released. Please refer to the source code 
 Contributing
 ************
 
-If you want to contribute to the development of ml_lsmodel_ascat,
+If you want to contribute to the development of motrainer,
 have a look at the `contribution guidelines <CONTRIBUTING.rst>`_.
 
 License

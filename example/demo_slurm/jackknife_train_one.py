@@ -1,7 +1,6 @@
 import pickle
 import sys
-from ml_lsmodel_ascat.dnn import NNTrain
-from ml_lsmodel_ascat.jackknife import JackknifeGPI
+from motrainer.jackknife import JackknifeGPI
 
 if __name__ == "__main__":
     # Parsing input
@@ -9,14 +8,11 @@ if __name__ == "__main__":
 
     # Manual input
     out_path = './results/'
-    file_data = '../example_data/input_SURFEX_label_ASCAT_3GPI_2007_2019'
+    file_data = '../example_data/example_data.pickle'
     val_split_year = 2017
     output_list = ['sig', 'slop', 'curv']
     input_list = [
-        'TG1', 'TG2', 'TG3', 'WG1', 'WG2', 'WG3', 'BIOMA1', 'BIOMA2',
-        'RN_ISBA', 'H_ISBA', 'LE_ISBA', 'GFLUX_ISBA', 'EVAP_ISBA', 'GPP_ISBA',
-        'R_ECO_ISBA', 'LAI_ISBA', 'XRS_ISBA'
-    ]
+        'TG1', 'TG2', 'TG3', 'WG1', 'WG2', 'WG3', 'BIOMA1', 'BIOMA2']
     searching_space = {'learning_rate': [5e-4, 1e-2], 'activation': ['relu']}
     optimize_space = {
         'best_loss': 1,
@@ -28,10 +24,8 @@ if __name__ == "__main__":
         'x0': [1e-3, 1, 4, 13, 'relu', 64]
     }
 
-    # read the whole data
-    with open(file_data, 'rb') as f:
-        clusters = pickle.load(f)
-    df_all_gpi = clusters
+    # Read example data
+    df_all_gpi = pd.read_pickle(file_data)
 
     gpi_data = df_all_gpi.iloc[gpi_id]['data']
     gpi_data = gpi_data.dropna()

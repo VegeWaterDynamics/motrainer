@@ -2,8 +2,8 @@ import pickle
 import pandas as pd
 import logging
 import sys
-from ml_lsmodel_ascat.dnn import NNTrain
-from ml_lsmodel_ascat.jackknife import JackknifeGPI
+from motrainer.dnn import NNTrain
+from motrainer.jackknife import JackknifeGPI
 
 logging.basicConfig(
     level=logging.INFO,
@@ -36,7 +36,7 @@ if __name__ == "__main__":
         'kappa': 5,
         'validation_split': 0.2,
         'x0': [1e-3, 1, 4, 13, 'relu', 64]
-    }
+    } # For weightling loss: 'loss_weights': [1, 1, 0.5], 
 
     # Read example data
     df_all_gpi = pd.read_pickle(file_data)
