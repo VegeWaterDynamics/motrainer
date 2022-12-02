@@ -4,7 +4,7 @@ import skopt
 import pickle
 from pathlib import Path
 from skopt.space import Real, Categorical, Integer
-from ml_lsmodel_ascat.model import keras_dnn, keras_dnn_lossweight
+from motrainer.model import keras_dnn, keras_dnn_lossweight
 
 logger = logging.getLogger(__name__)
 
