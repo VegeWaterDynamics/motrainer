@@ -14,14 +14,12 @@ if __name__ == "__main__":
     # Manual input
     val_split_year = 2017
     out_path = './results/'
-    file_data = './example_data/input_SURFEX_label_ASCAT_5GPI_2007_2019.pickle'
+    file_data = './example_data/example_data.pickle'
     list_gpi = range(5)
+    
     output_list = ['sig', 'slop', 'curv']
     input_list = [
-        'TG1', 'TG2', 'TG3', 'WG1', 'WG2', 'WG3', 'BIOMA1', 'BIOMA2',
-        'RN_ISBA', 'H_ISBA', 'LE_ISBA', 'GFLUX_ISBA', 'EVAP_ISBA', 'GPP_ISBA',
-        'R_ECO_ISBA', 'LAI_ISBA', 'XRS_ISBA'
-    ]
+        'TG1', 'TG2', 'TG3', 'WG1', 'WG2', 'WG3', 'BIOMA1', 'BIOMA2']
     searching_space = {
         'num_dense_layers': [1, 10],
         'num_input_nodes': [1, 6],
@@ -29,7 +27,6 @@ if __name__ == "__main__":
         'learning_rate': [5e-4, 1e-2],
         'activation': ['relu']
     }
-
     optimize_space = {
         'best_loss': 1,
         'n_calls': 15,
@@ -41,10 +38,8 @@ if __name__ == "__main__":
         'x0': [1e-3, 1, 4, 13, 'relu', 64]
     }
 
-    # read the whole data
-    with open(file_data, 'rb') as f:
-        clusters = pickle.load(f)
-    df_all_gpi = clusters
+    # Read example data
+    df_all_gpi = pd.read_pickle(file_data)
 
     aprior, post = [], []
     # Loop all gpi
@@ -68,8 +63,6 @@ if __name__ == "__main__":
                       verbose=2)
 
             gpi.export_best()
-
-            
 
             # Export apriori performance
             path_apriori_performance = '{}/apriori_performance_{}'.format(
