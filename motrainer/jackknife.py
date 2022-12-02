@@ -1,4 +1,3 @@
-from importlib_metadata import metadata
 import numpy as np
 import logging
 import json
