@@ -1,9 +1,14 @@
 ################################################################################
-ml_lsmodel_ascat
+MOTrainer: Measurement Operator Trainer
 ################################################################################
 
-ml_lsmodel_ascat is a Machine Learning package written in Python. 
-It trains surrogate model to connect soil and vegetation states/parameters to microwave observations.
+Measurement Operator Trainer is a Python package training measurement operators 
+(MO) for data assimilations purposes. At present, the MOTrainer trains Deep Neuron
+Networks as measurement operators for Earth Observation (EO) application. The 
+trained predicts sensor measurement based on certain physical model states.
+
+MOTrainer assumes the availability of the training dataset, i.e. input (model 
+status) and output (sensor data).
 
 Installation
 ------------
@@ -12,42 +17,38 @@ First, please clone this repository to prepare for installation.
 
 .. code-block:: console
 
-  git clone https://github.com/VegeWaterDynamics/ml_lsmodel_ascat.git
+  git clone https://github.com/VegeWaterDynamics/motrainer.git
 
-We recommend to install ``ml_lsmodel_ascat`` via ``mamba``. It can either be installed independently, or under 
-the ``base`` environment of ``conda``.
-Please check the `installation guide <https://mamba.readthedocs.io/en/latest/installation.html>`_ to install ``mamba``.
-
-
-After you succesfully installed ``mamba``, you can install the environment from the ``environment.yml`` file:  
+We recommend installing ``MOtrainer`` under a blank `conda environment 
+<https://docs.conda.io/en/latest/>`_. After activating the conda environment,
+you can install ``MOTrainer`` from the source:
 
 .. code-block:: console
-
-  mamba env create -f environment.yml
   
-A new environment with the name ``vegetation`` will be created. You can activate it by:
+  cd motrainer
+  pip install .
+
+
+Alternatively, you can also install ``motrainer`` via ``conda``. 
 
 .. code-block:: console
 
-  mamba activate env_ml_lsmodel_ascat
+  conda env create -f environment.yml
 
-To make sure everything works, you can run:
 
-.. code-block:: console
-
-  pytest tests/
-
-Documentation
+Usage examples
 *************
 
-.. _README:
+The usage example of MOTrainer can be found `here <example/demo_jackknife.py>`_
 
-Currently the package is not publicly released. Please refer to the source code for documentation.
+Alternatively, the execution of MOTrainer can be scaled up to an HPC system by using
+SLURM. Please refer to the example `here <example/demo_slurm/readme.md>`_.
+
 
 Contributing
 ************
 
-If you want to contribute to the development of ml_lsmodel_ascat,
+If you want to contribute to the development of MOtrainer,
 have a look at the `contribution guidelines <CONTRIBUTING.rst>`_.
 
 License

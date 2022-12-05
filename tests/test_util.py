@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import tensorflow as tf
-from ml_lsmodel_ascat import util
+from motrainer import util
 
 
 def init_trainning():

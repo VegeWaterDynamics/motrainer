@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=ml_lsmodel_ascat
+set SPHINXPROJ=motrainer
 
 if "%1" == "" goto help
 

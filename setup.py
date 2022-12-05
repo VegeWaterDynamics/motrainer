@@ -15,20 +15,20 @@ with open('requirements.txt') as requirements_file:
     requirements = requirements_file.read().split()
 
 setup(
-    name='ml_lsmodel_ascat',
+    name='motrainer',
     version=version,
     description="Machine Learning module to train a surrogate module using Land-surface model dtput",
     long_description=readme + '\n\n',
     author="Netherlands eScience Center, TUDelft",
     author_email='team-atlas@esciencecenter.nl',
-    url='https://github.com/VegeWaterDynamics/ml_lsmodel_ascat',
+    url='https://github.com/VegeWaterDynamics/motrainer',
     packages=[
-        'ml_lsmodel_ascat',
+        'motrainer',
     ],
     include_package_data=True,
     license="Apache Software License 2.0",
     zip_safe=False,
-    keywords='ml_lsmodel_ascat',
+    keywords='motrainer',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
@@ -55,5 +55,5 @@ setup(
         'pytest-cov',
         'pycodestyle',
     ],
-    data_files=[('citation/ml_lsmodel_ascat', ['CITATION.cff'])]
+    data_files=[('citation/motrainer', ['CITATION.cff'])]
 )
