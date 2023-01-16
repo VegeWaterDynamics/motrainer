@@ -2,6 +2,9 @@
 MOTrainer: Measurement Operator Trainer
 ################################################################################
 
+.. image:: https://zenodo.org/badge/299843809.svg
+   :target: https://zenodo.org/badge/latestdoi/299843809
+
 Measurement Operator Trainer is a Python package training measurement operators 
 (MO) for data assimilations purposes. At present, the MOTrainer trains Deep Neuron
 Networks as measurement operators for Earth Observation (EO) application. The 
