@@ -27,4 +27,4 @@ repository-code: "https://github.com/VegeWaterDynamics/motrainer"
 identifiers:
 keywords:
 message: "If you use this software, please cite it using these metadata."
-license: "Apache Software License 2.0"
+license: "Apache-2.0"
