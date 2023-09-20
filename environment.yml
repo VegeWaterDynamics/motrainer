@@ -7,7 +7,7 @@ dependencies:
   - scipy
   - tensorflow
   - scikit-learn
-  - pandas
+  - pandas <= 2.0.0
   - scikit-optimize
   - ipykernel
   - matplotlib
