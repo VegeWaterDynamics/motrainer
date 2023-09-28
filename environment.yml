@@ -3,14 +3,16 @@ channels:
   - conda-forge
   - defaults
 dependencies:
+  - jupyterlab # needed to run notebooks
   - numpy
   - scipy
   - tensorflow
   - scikit-learn
-  - pandas
+  - pandas <= 2.0.0
   - scikit-optimize
   - ipykernel
   - matplotlib
   - pip
+  - xarray
   - pip:
     - -e ./
