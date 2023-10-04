@@ -8,6 +8,15 @@ MOT_DIMS = ["space", "time"]  # Expected xr.Dataset dimensions
 
 @xr.register_dataset_accessor("mot")
 class MOTrainerDataset:
+    """Xarray.Dataset extension for MOTrainer
+
+    It contains methods facilitating distributed training tasks. 
+
+    Following constraints are applied to a regular Dataset:
+        1. The Dataset should have exactly two dimensions: "space" and "time"
+        2. There are no duplicated entries in coordinates
+    """
+
     def __init__(self, xarray_obj):
         self._obj = xarray_obj
 
@@ -48,6 +57,29 @@ class MOTrainerDataset:
         return flag_valid
 
     def model_split(self, identifier: dict | str):
+        """Split a Dataset by indentifier for independent training tasks.
+
+        Args:
+            identifier (dict | str): Split identifier. 
+            When `indentifier` is a dictionary, it should map "space" and/or "time" dimension with corresponding separation indentifier.
+            When `indentifier` is a string, `model_split` will use the corresponding field as the indertifier. This field can only be 1D.
+
+        Returns:
+            dask.bag: A Dask Databag of splited Datasets 
+        """
+
+        if isinstance(identifier, dict):
+            if len(identifier.keys())==0:
+                raise ValueError('identifier is empty')
+            if not set(identifier.keys()).issubset(MOT_DIMS):
+                raise ValueError('Acceptable keys are "space" and/or "time".')
+        elif isinstance(identifier, str):
+            if not (identifier in self._obj.variables):
+                raise ValueError(f'Cannot find "{identifier}" in the Dataset')
+            if len(self._obj[identifier].dims)>1:
+                raise ValueError(f'Field "{identifier}" is not 1D. To perform 2D split, please specify both space and time indertifier in a dict.')
+        else:
+            raise NotImplementedError("identifier must be a dictionary or string")
         
         ds = self._obj
 
