@@ -1,7 +1,7 @@
 import warnings
 import xarray as xr
 import numpy as np
-import dask
+import dask.bag as db
 
 MOT_DIMS = ["space", "time"]  # Expected xr.Dataset dimensions
 
@@ -112,6 +112,6 @@ class MOTrainerDataset:
         list_db = []
         for grp in list(ds.groupby(key_gb)):
             list_db.append(grp[1])
-        bags = dask.bag.from_sequence(list_db)
+        bags = db.from_sequence(list_db)
 
         return bags
