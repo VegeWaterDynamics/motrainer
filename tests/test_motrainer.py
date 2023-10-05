@@ -82,13 +82,13 @@ class TestModelSplit:
 
     def test_split_2d(self, ds):
         identifier = {
-            "space": np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 0]), # 4 and 6
-            "time": np.array([1, 0, 0, 0, 0]), # 1 and 4
-        }  
+            "space": np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 0]),  # 4 and 6
+            "time": np.array([1, 0, 0, 0, 0]),  # 1 and 4
+        }
         db = ds.mot.model_split(identifier)
         list_ds = db.compute()
         samples_lens = [len(list_ds[i].samples) for i in range(4)]
-        assert len(list_ds) == 4 # In total 4 ds
+        assert len(list_ds) == 4  # In total 4 ds
         assert set(samples_lens).issubset(
             [4, 16, 6, 24]
-        ) # Check sample lenth regardless of order
+        )  # Check sample lenth regardless of order
