@@ -6,3 +6,5 @@ pandas
 scikit-optimize
 ipykernel
 matplotlib
+xarray
+dask
