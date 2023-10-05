@@ -78,6 +78,7 @@ class MOTrainerDataset:
                 raise ValueError(f'Cannot find "{identifier}" in the Dataset')
             if len(self._obj[identifier].dims)>1:
                 raise ValueError(f'Field "{identifier}" is not 1D. To perform 2D split, please specify both space and time indertifier in a dict.')
+            identifier = {identifier: self._obj[identifier].values}
         else:
             raise NotImplementedError("identifier must be a dictionary or string")
         
