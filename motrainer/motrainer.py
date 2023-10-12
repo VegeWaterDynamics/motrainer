@@ -38,13 +38,13 @@ class MOTrainerDataset:
         # Dimension size should be 2
         if len(self._obj.dims) != 2:
             warnings.warn(
-                f'Dataset should have two dimensions: "space" and "time"', UserWarning
+                'Dataset should have two dimensions: "space" and "time"', UserWarning
             )
             flag_valid = False
 
         # space and time dimensions should exist
         for dim in MOT_DIMS:
-            if not (dim in self._obj.dims):
+            if dim not in self._obj.dims:
                 warnings.warn(f"{dim} not found in the dimensions", UserWarning)
                 flag_valid = False
 
@@ -69,14 +69,14 @@ class MOTrainerDataset:
         """
 
         if isinstance(identifier, dict):
-            if len(identifier.keys())==0:
+            if len(identifier.keys()) == 0:
                 raise ValueError('identifier is empty')
             if not set(identifier.keys()).issubset(MOT_DIMS):
                 raise ValueError('Acceptable keys are "space" and/or "time".')
         elif isinstance(identifier, str):
-            if not (identifier in self._obj.variables):
+            if identifier not in self._obj.variables:
                 raise ValueError(f'Cannot find "{identifier}" in the Dataset')
-            if len(self._obj[identifier].dims)>1:
+            if len(self._obj[identifier].dims) > 1:
                 raise ValueError(f'Field "{identifier}" is not 1D. To perform 2D split, please specify both space and time indertifier in a dict.')
             identifier = {identifier: self._obj[identifier].values}
         else:
