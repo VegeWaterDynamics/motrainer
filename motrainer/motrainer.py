@@ -56,13 +56,13 @@ class MOTrainerDataset:
 
         return flag_valid
 
-    def model_split(self, identifier: dict | str):
+    def dataset_split(self, identifier: dict | str):
         """Split a Dataset by indentifier for independent training tasks.
 
         Args:
             identifier (dict | str): Split identifier. 
             When `indentifier` is a dictionary, it should map "space" and/or "time" dimension with corresponding separation indentifier.
-            When `indentifier` is a string, `model_split` will use the corresponding field as the indertifier. This field can only be 1D.
+            When `indentifier` is a string, `dataset_split` will use the corresponding field as the indertifier. This field can only be 1D.
 
         Returns:
             dask.bag: A Dask Databag of splited Datasets 
