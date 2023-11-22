@@ -1,7 +1,7 @@
 import xarray as xr
 import numpy as np
 import pytest
-import motrainer
+from motrainer import is_splitable, dataset_split
 
 
 class TestValidate:
@@ -23,23 +23,23 @@ class TestValidate:
         )
 
     def test_valid_ds(self, ds_valid):
-        assert ds_valid.mot.is_valid()
+        assert is_splitable(ds_valid)
 
     @pytest.mark.filterwarnings("ignore::UserWarning")
     def test_miss_one_dim(self, ds_valid):
         ds_invalid = ds_valid.drop_dims("space")
-        assert not ds_invalid.mot.is_valid()
+        assert not is_splitable(ds_invalid)
 
     @pytest.mark.filterwarnings("ignore::UserWarning")
     def test_redundant_dim(self, ds_valid):
         ds_invalid = ds_valid.expand_dims({"redundant": 3})
-        assert not ds_invalid.mot.is_valid()
+        assert not is_splitable(ds_invalid)
 
     @pytest.mark.filterwarnings("ignore::UserWarning")
     def test_duplicate_coords(self, ds_valid):
         ds_invalid = ds_valid
         ds_invalid["space"] = np.ones(ds_valid.dims["space"])
-        assert not ds_invalid.mot.is_valid()
+        assert not is_splitable(ds_invalid)
 
 
 class TestModelSplit:
@@ -62,7 +62,7 @@ class TestModelSplit:
 
     def test_split_space(self, ds):
         identifier = {"space": np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 0])}  # 4 and 6
-        db = ds.mot.dataset_split(identifier)
+        db = dataset_split(ds, identifier)
         list_ds = db.compute()
         space_lens = [len(list_ds[i].space) for i in range(2)]
         assert len(list_ds) == 2
@@ -72,7 +72,7 @@ class TestModelSplit:
 
     def test_split_time(self, ds):
         identifier = {"time": np.array([1, 0, 0, 0, 0])}  # 1 and 4
-        db = ds.mot.dataset_split(identifier)
+        db = dataset_split(ds, identifier)
         list_ds = db.compute()
         time_lens = [len(list_ds[i].time) for i in range(2)]
         assert len(list_ds) == 2
@@ -85,7 +85,7 @@ class TestModelSplit:
             "space": np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 0]),  # 4 and 6
             "time": np.array([1, 0, 0, 0, 0]),  # 1 and 4
         }
-        db = ds.mot.dataset_split(identifier)
+        db = dataset_split(ds, identifier)
         list_ds = db.compute()
         samples_lens = [len(list_ds[i].samples) for i in range(4)]
         assert len(list_ds) == 4  # In total 4 ds
