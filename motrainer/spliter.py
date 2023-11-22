@@ -75,12 +75,12 @@ def dataset_split(ds: xr.Dataset, identifier: dict | str):
             raise ValueError('Acceptable keys are "space" and/or "time".')
     elif isinstance(identifier, str):
         if identifier not in ds.variables:
-            raise ValueError(f'Cannot find "{identifier}" in the Dataset')
-        if len(ds[identifier].dims) > 1:
-            raise ValueError(
-                f'Field "{identifier}" is not 1D. To perform 2D split, please specify both space and time indertifier in a dict.'
-            )
-        identifier = {identifier: ds[identifier].values}
+            if identifier in ds.dims:
+                identifier = {identifier: range(ds.dims[identifier])}
+            else:
+                raise ValueError(f'Cannot find "{identifier}" in the Dataset')
+        else:
+            identifier = {identifier: ds[identifier].values}
     else:
         raise NotImplementedError("identifier must be a dictionary or string")
 

@@ -80,12 +80,6 @@ class TestModelSplit:
             [1, 4]
         )  # Check the size of separated is 1 and 4, regardless of order
 
-    def test_split_space_no_coords(self, ds):
-        identifier = "space"  # split data per entry in that dimension
-        db = dataset_split(ds, identifier)
-        list_ds = db.compute()
-        assert len(list_ds) == 10
-
     def test_split_2d(self, ds):
         identifier = {
             "space": np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 0]),  # 4 and 6
@@ -98,3 +92,19 @@ class TestModelSplit:
         assert set(samples_lens).issubset(
             [4, 16, 6, 24]
         )  # Check sample lenth regardless of order
+    
+    def test_split_by_dim(self, ds):
+        db_space = dataset_split(ds, "space")
+        db_time = dataset_split(ds, "time")
+        list_space = db_space.compute()
+        list_time = db_time.compute()
+        assert len(list_space) == 10
+        assert len(list_time) == 5
+
+    def test_split_space_no_coords(self, ds):
+        db_no_space_coords = dataset_split(ds.drop_vars("space"), "space")
+        db_no_time_coords = dataset_split(ds.drop_vars("time"), "time")
+        list_ds_no_space = db_no_space_coords.compute()
+        list_ds_no_time = db_no_time_coords.compute()
+        assert len(list_ds_no_space) == 10
+        assert len(list_ds_no_time) == 5
