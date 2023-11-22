@@ -59,7 +59,7 @@ class TestModelSplit:
                 time=(["time"], np.arange(ntime)),
             ),
         )
-
+    
     def test_split_space(self, ds):
         identifier = {"space": np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 0])}  # 4 and 6
         db = dataset_split(ds, identifier)
@@ -79,6 +79,12 @@ class TestModelSplit:
         assert set(time_lens).issubset(
             [1, 4]
         )  # Check the size of separated is 1 and 4, regardless of order
+
+    def test_split_space_no_coords(self, ds):
+        identifier = "space"  # split data per entry in that dimension
+        db = dataset_split(ds, identifier)
+        list_ds = db.compute()
+        assert len(list_ds) == 10
 
     def test_split_2d(self, ds):
         identifier = {
