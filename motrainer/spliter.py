@@ -31,26 +31,32 @@ def is_splitable(ds: xr.Dataset) -> bool:
     # Dimension size should be 2
     if len(ds.dims) != 2:
         warnings.warn(
-            'Dataset should have two dimensions: "space" and "time"', UserWarning
+            'Dataset should have two dimensions: "space" and "time"',
+            UserWarning,
+            stacklevel=2,
         )
         flag_valid = False
 
     # space and time dimensions should exist
     for dim in MOT_DIMS:
         if dim not in ds.dims:
-            warnings.warn(f"{dim} not found in the dimensions", UserWarning)
+            warnings.warn(
+                f"{dim} not found in the dimensions", UserWarning, stacklevel=2
+            )
             flag_valid = False
 
     # Check duplicated coordinates
     for coord in ds.coords:
         if np.unique(ds[coord]).shape != ds[coord].shape:
-            warnings.warn(f"Duplicated coordinates found in {coord}", UserWarning)
+            warnings.warn(
+                f"Duplicated coordinates found in {coord}", UserWarning, stacklevel=2
+            )
             flag_valid = False
 
     return flag_valid
 
 
-def dataset_split(ds: xr.Dataset, identifier: dict | str):
+def dataset_split(ds: xr.Dataset, identifier: dict | str) -> db:
     """Split a Dataset by indentifier for independent training tasks.
 
     Parameters
@@ -58,31 +64,22 @@ def dataset_split(ds: xr.Dataset, identifier: dict | str):
     ds : xr.Dataset
         Xarray Dataset to be splitted.
     identifier : dict | str
-        When `indentifier` is a dictionary, it should map "space" and/or "time" dimension
-        with corresponding separation indentifier.
-        When `indentifier` is a string, `dataset_split` will use the corresponding field
-        as the indertifier. This field can only be 1D.
+        When `indentifier` is a dictionary, its keys should be a subset of
+        {"space", "time"},  and map "space" and/or "time" dimension with corresponding
+        separation indentifier.
+
+        When `indentifier` is a string, the separation will depends on if `indentifier`
+        is a key of coords/data_vars or a dimension name ("space" or "time").
+        In the former case the corresponding coords/data_vars will be used as separation
+        indentifier.
+        In the latter case ds will be separated per entry in that dimension.
 
     Returns
     -------
     dask.bag
         A Dask Databag of splited Datasets
     """
-    if isinstance(identifier, dict):
-        if len(identifier.keys()) == 0:
-            raise ValueError("identifier is empty")
-        if not set(identifier.keys()).issubset(MOT_DIMS):
-            raise ValueError('Acceptable keys are "space" and/or "time".')
-    elif isinstance(identifier, str):
-        if identifier not in ds.variables:
-            if identifier in ds.dims:
-                identifier = {identifier: range(ds.dims[identifier])}
-            else:
-                raise ValueError(f'Cannot find "{identifier}" in the Dataset')
-        else:
-            identifier = {identifier: ds[identifier].values}
-    else:
-        raise NotImplementedError("identifier must be a dictionary or string")
+    identifier = _regulate_identifier(ds, identifier)
 
     list_id = []
     for key in MOT_DIMS:
@@ -115,3 +112,58 @@ def dataset_split(ds: xr.Dataset, identifier: dict | str):
     bags = db.from_sequence(list_db)
 
     return bags
+
+
+def _regulate_identifier(ds: xr.Dataset, identifier: dict | str) -> dict:
+    """Regulate the split identifier w.r.t. the dataset.
+
+    When `indentifier` is a dictionary:
+        function will check if the keys are a subset of {"space", "time"}.
+
+    When `indentifier` is a string:
+        if `indentifier` is a key of any coords/data_vars, the corresponding
+        coords/data_vars will be converter to a dict and used as indentifier
+        if `indentifier` is not a key of any coords/data_vars, but is one of dimensions
+        i.e. "space" or "time", then it will be converted to either:
+            {"space": range(ds.dims["space"])} or
+            {"time": range(ds.dims["space"])}
+
+    Parameters
+    ----------
+    ds : xr.Dataset
+        referce DS
+    identifier : dict | str
+        input indertifier
+
+    Returns
+    -------
+    dict
+        regulated identifier
+
+    Raises
+    ------
+    ValueError
+        identifier is an empty dict.
+    ValueError
+        identifier is a dict but has keys other that "space" and "time".
+    ValueError
+        identifier is a str but does not match any key in dims, coords or data_vars.
+    NotImplementedError
+        identifier is not a dict nor str
+    """
+    if isinstance(identifier, dict):
+        if len(identifier.keys()) == 0:
+            raise ValueError("identifier is empty")
+        if not set(identifier.keys()).issubset(MOT_DIMS):
+            raise ValueError('Acceptable keys are "space" and/or "time".')
+    elif isinstance(identifier, str):
+        if identifier in ds.variables:
+            identifier = {identifier: ds[identifier].values}
+        elif identifier in ds.dims:
+            identifier = {identifier: range(ds.dims[identifier])}
+        else:
+            raise ValueError(f'Cannot find "{identifier}" in the Dataset')
+    else:
+        raise NotImplementedError("identifier must be a dictionary or string")
+
+    return identifier
