@@ -118,18 +118,16 @@ class JackknifeGPI(object):
                                                       normalize_method)
 
         # Data split
+        input_years = self.gpi_input.index.get_level_values('year')
+        output_years = self.gpi_output.index.get_level_values('year')
         logger.debug(
             'Spliting Trainning and validation data. Split year: {}.'.format(
                 self.val_split_year))
-        jackknife_input = self.gpi_input[
-            self.gpi_input.index.year < self.val_split_year]
-        jackknife_output = self.gpi_output[
-            self.gpi_output.index.year < self.val_split_year]
-        vali_input = self.gpi_input[
-            self.gpi_input.index.year >= self.val_split_year]
-        vali_output = self.gpi_output[
-            self.gpi_output.index.year >= self.val_split_year]
-        year_list = jackknife_input.index.year.unique()
+        jackknife_input = self.gpi_input[input_years < self.val_split_year]
+        jackknife_output = self.gpi_output[output_years < self.val_split_year]
+        vali_input = self.gpi_input[input_years >= self.val_split_year]
+        vali_output = self.gpi_output[output_years >= self.val_split_year]
+        year_list = jackknife_input.index.get_level_values('year').unique()
 
         # Jackknife in time
         loo = LeaveOneOut()
@@ -137,14 +135,17 @@ class JackknifeGPI(object):
         for train_index, test_index in loo.split(year_list):
             this_year = test_index[0] + year_list[0]
 
+            input_years = jackknife_input.index.get_level_values('year')
+            output_years = jackknife_output.index.get_level_values('year')
+
             logger.info('Jackknife on year: {}.'.format(str(this_year)))
             train_input = jackknife_input[
-                jackknife_input.index.year != this_year]
+                input_years != this_year]
             train_output = jackknife_output[
-                jackknife_output.index.year != this_year]
-            test_input = jackknife_input[jackknife_input.index.year ==
+                output_years != this_year]
+            test_input = jackknife_input[input_years ==
                                          this_year]
-            test_output = jackknife_output[jackknife_output.index.year ==
+            test_output = jackknife_output[output_years ==
                                            this_year]
 
             # Execute training
@@ -223,7 +224,7 @@ class JackknifeGPI(object):
         metedata['input_list'] = self.input_list
         metedata['output_list'] = self.input_list
         metedata['best_year'] = int(self.best_year)
-        metedata['lat'] = float(self.gpi_data['lat'].iloc[0])
-        metedata['lon'] = float(self.gpi_data['lon'].iloc[0])
+        # metedata['lat'] = float(self.gpi_data['lat'].iloc[0])
+        # metedata['lon'] = float(self.gpi_data['lon'].iloc[0])
         with open(f_metadata, 'w') as f:
             json.dump(metedata, f)
