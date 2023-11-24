@@ -118,8 +118,8 @@ class JackknifeGPI(object):
                                                       normalize_method)
 
         # Data split
-        input_years = self.gpi_input.index.get_level_values('year')
-        output_years = self.gpi_output.index.get_level_values('year')
+        input_years = self.gpi_input.index.year
+        output_years = self.gpi_output.index.year
         logger.debug(
             'Spliting Trainning and validation data. Split year: {}.'.format(
                 self.val_split_year))
@@ -127,7 +127,7 @@ class JackknifeGPI(object):
         jackknife_output = self.gpi_output[output_years < self.val_split_year]
         vali_input = self.gpi_input[input_years >= self.val_split_year]
         vali_output = self.gpi_output[output_years >= self.val_split_year]
-        year_list = jackknife_input.index.get_level_values('year').unique()
+        year_list = jackknife_input.index.year.unique()
 
         # Jackknife in time
         loo = LeaveOneOut()
@@ -135,18 +135,14 @@ class JackknifeGPI(object):
         for train_index, test_index in loo.split(year_list):
             this_year = test_index[0] + year_list[0]
 
-            input_years = jackknife_input.index.get_level_values('year')
-            output_years = jackknife_output.index.get_level_values('year')
+            input_years = jackknife_input.index.year
+            output_years = jackknife_output.index.year
 
             logger.info('Jackknife on year: {}.'.format(str(this_year)))
-            train_input = jackknife_input[
-                input_years != this_year]
-            train_output = jackknife_output[
-                output_years != this_year]
-            test_input = jackknife_input[input_years ==
-                                         this_year]
-            test_output = jackknife_output[output_years ==
-                                           this_year]
+            train_input = jackknife_input[input_years != this_year]
+            train_output = jackknife_output[output_years != this_year]
+            test_input = jackknife_input[input_years == this_year]
+            test_output = jackknife_output[output_years == this_year]
 
             # Execute training
             training = NNTrain(train_input, train_output)
