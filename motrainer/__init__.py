@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-
 import logging
 
-logging.getLogger(__name__).addHandler(logging.NullHandler())
+from motrainer.splitter import is_splitable, dataset_split
 
-import motrainer.motrainer
+logging.getLogger(__name__).addHandler(logging.NullHandler())
