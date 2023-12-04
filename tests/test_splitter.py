@@ -1,8 +1,8 @@
 import xarray as xr
 import numpy as np
 import pytest
-from motrainer import is_splitable, dataset_split
-from motrainer.splitter import _regulate_identifier
+from motrainer import is_splitable, dataset_split, train_test_split
+from motrainer.splitter import _regulate_identifier, _validate_train_test_split
 
 
 @pytest.fixture
@@ -95,6 +95,38 @@ class TestModelSplit:
         assert len(list_ds_no_time) == 5
 
 
+class TestTrainTestSplit:
+    def test_mask(self, ds_valid):
+        mask = ds_valid["space"] < 4
+        train, test = train_test_split(ds_valid, mask=mask)
+        assert train.space.shape[0] == 4
+        assert test.space.shape[0] == 6
+
+    def test_mask_reverse(self, ds_valid):
+        mask = ds_valid["space"] < 4
+        train, test = train_test_split(ds_valid, mask=mask, reverse=True)
+        assert train.space.shape[0] == 6
+        assert test.space.shape[0] == 4
+
+    def test_split(self, ds_valid):
+        train, test = train_test_split(ds_valid, split={"space": 4})
+        assert train.space.shape[0] == 4
+        assert test.space.shape[0] == 6
+
+    def test_masksplit_reverse(self, ds_valid):
+        train, test = train_test_split(ds_valid, split={"space": 4}, reverse=True)
+        assert train.space.shape[0] == 6
+        assert test.space.shape[0] == 4
+
+    def test_errors(self, ds_valid):
+        with pytest.raises(ValueError):
+            _ = train_test_split(ds_valid)
+        with pytest.raises(ValueError):
+            _ = train_test_split(
+                ds_valid, mask=ds_valid["space"] < 4, split={"space": 4}
+            )
+
+
 class TestValidateIdentifier:
     def test_dict_identifier(self, ds_valid):
         idf = _regulate_identifier(ds_valid, {"space": range(10)})
@@ -120,3 +152,16 @@ class TestValidateIdentifier:
             _ = _regulate_identifier(ds_valid, "non_exists")
         with pytest.raises(NotImplementedError):
             _ = _regulate_identifier(ds_valid, ["space"])
+
+
+class TestValidateTrainTestSplit:
+    def test_split(self):
+        _validate_train_test_split({"space": 5})
+        _validate_train_test_split({"time": 20})
+
+    def test_errors(self, ds_valid):
+        with pytest.raises(ValueError):
+            _ = _validate_train_test_split({"space": 5, "time": 5})
+
+        with pytest.raises(ValueError):
+            _ = _validate_train_test_split(["space", "time"])
