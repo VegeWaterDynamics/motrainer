@@ -6,6 +6,12 @@ from pathlib import Path
 from skopt.space import Real, Categorical, Integer
 from motrainer.model import keras_dnn, keras_dnn_lossweight
 
+# disable WARNING:absl:Found untraced functions such as _update_step_xla while saving
+# see https://github.com/tensorflow/tensorflow/issues/47554
+import absl.logging
+absl.logging.set_verbosity(absl.logging.ERROR)
+
+
 logger = logging.getLogger(__name__)
 
 
