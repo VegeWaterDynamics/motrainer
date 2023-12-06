@@ -119,8 +119,9 @@ class TestTrainTestSplit:
         assert test.space.shape[0] == 4
 
     def test_errors(self, ds_valid):
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError) as error_msg:
             _ = train_test_split(ds_valid)
+            assert "Either mask or split should be specified" in str(error_msg.value)
         with pytest.raises(ValueError):
             _ = train_test_split(
                 ds_valid, mask=ds_valid["space"] < 4, split={"space": 4}

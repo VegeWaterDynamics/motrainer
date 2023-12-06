@@ -120,7 +120,7 @@ def train_test_split(
     split: dict = None,
     reverse: bool = False,
 ) -> tuple[xr.Dataset, xr.Dataset]:
-    """Split train and test dataset.
+    """Split data to train and test datasets.
 
     The split is performed either 1) by specifying the training data mask (`mask`)
     where training data locations are True, or 2) by a specifying a coordinate value
@@ -131,7 +131,7 @@ def train_test_split(
     ds : xr.Dataset
         Xarray dataset to split
     mask : xr.DataArray, optional
-        Mask, True at training data localtions. By default None
+        Mask, True at training data locations. By default None
     split : dict, optional
         coordinate diactionary in {NAME: coordinates} which split the Dataset into two.
         The part smaller than it will be training, by default None.
@@ -150,10 +150,10 @@ def train_test_split(
     ValueError
         When both mask and split are specified.
     """
-    if all([mask is None, split is None]):
-        raise ValueError("Specify either mask or split.")
-    elif all([mask is not None, split is not None]):
-        raise ValueError("Cannot specify mask and split at the same time.")
+    if mask is None and split is None:
+        raise ValueError("Either mask or split should be specified.")
+    elif mask is not None and split is not None:
+        raise ValueError("Only one of mask and split should be specified.")
 
     # Convert split to mask
     if split is not None:
@@ -163,10 +163,7 @@ def train_test_split(
     train = ds.where(mask, drop=True)
     test = ds.where(~mask, drop=True)
 
-    if reverse:
-        return (test, train)
-    else:
-        return (train, test)
+    return (test, train)  if reverse else (train, test)
 
 
 def _regulate_identifier(ds: xr.Dataset, identifier: dict | str) -> dict:
@@ -225,10 +222,10 @@ def _regulate_identifier(ds: xr.Dataset, identifier: dict | str) -> dict:
 
 
 def _validate_train_test_split(split):
-    if isinstance(split, dict):
-        if not (set(split.keys()).issubset(MOT_DIMS) and len(split.keys()) == 1):
-            raise ValueError("split should only have 1 key")
-    else:
+    if not isinstance(split, dict):
         raise ValueError("split should be a dict")
+        
+    if not set(split.keys()).issubset(MOT_DIMS) or len(split.keys()) != 1:
+            raise ValueError("split should only have 1 key")        
 
     return None
