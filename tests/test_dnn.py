@@ -90,7 +90,7 @@ class TestOptimize:
         test_train.export("/tmp/model", "/tmp/params")
         assert test_train.model is not None
 
-    @pytest.mark.filterwarnings("ignore::DeprecationWarning")
+    @pytest.mark.filterwarnings("ignore::DeprecationWarning", "ignore::UserWarning")
     def test_dnn_results_exist_lossweight(self):
         datain = pd.DataFrame(
             data={"x1": np.linspace(0, 1, 10), "x2": np.linspace(0, 1, 10)}
