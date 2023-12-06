@@ -114,6 +114,58 @@ def dataset_split(ds: xr.Dataset, identifier: dict | str) -> db:
     return bags
 
 
+def train_test_split(
+    ds: xr.Dataset,
+    mask: xr.DataArray = None,
+    split: dict = None,
+    reverse: bool = False,
+) -> tuple[xr.Dataset, xr.Dataset]:
+    """Split data to train and test datasets.
+
+    The split is performed either 1) by specifying the training data mask (`mask`)
+    where training data locations are True, or 2) by a specifying a coordinate value
+    (`split`) splitting the data into two.
+
+    Parameters
+    ----------
+    ds : xr.Dataset
+        Xarray dataset to split
+    mask : xr.DataArray, optional
+        Mask, True at training data locations. By default None
+    split : dict, optional
+        coordinate diactionary in {NAME: coordinates} which split the Dataset into two.
+        The part smaller than it will be training, by default None.
+    reverse : bool, optional
+        Reverse the split results, by default False
+
+    Returns
+    -------
+    tuple[xr.Dataset, xr.Dataset]
+        Split results. In (training, test).
+
+    Raises
+    ------
+    ValueError
+        When neither mask nor split is specified.
+    ValueError
+        When both mask and split are specified.
+    """
+    if mask is None and split is None:
+        raise ValueError("Either mask or split should be specified.")
+    elif mask is not None and split is not None:
+        raise ValueError("Only one of mask and split should be specified.")
+
+    # Convert split to mask
+    if split is not None:
+        _validate_train_test_split(split)
+        mask = ds[list(split.keys())[0]] < list(split.values())[0]
+
+    train = ds.where(mask, drop=True)
+    test = ds.where(~mask, drop=True)
+
+    return (test, train)  if reverse else (train, test)
+
+
 def _regulate_identifier(ds: xr.Dataset, identifier: dict | str) -> dict:
     """Regulate the split identifier w.r.t. the dataset.
 
@@ -167,3 +219,13 @@ def _regulate_identifier(ds: xr.Dataset, identifier: dict | str) -> dict:
         raise NotImplementedError("identifier must be a dictionary or string")
 
     return identifier
+
+
+def _validate_train_test_split(split):
+    if not isinstance(split, dict):
+        raise ValueError("split should be a dict")
+        
+    if not set(split.keys()).issubset(MOT_DIMS) or len(split.keys()) != 1:
+            raise ValueError("split should only have 1 key")        
+
+    return None
