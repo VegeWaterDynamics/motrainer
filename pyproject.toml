@@ -65,6 +65,7 @@ demo = [
     "jupyterlab",
     "matplotlib",
     "dask-ml",
+    "dask-labextension",
 ]
 
 [tool.setuptools]
