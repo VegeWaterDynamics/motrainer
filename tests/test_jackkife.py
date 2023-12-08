@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import pytest
+import json
 
 from motrainer.jackknife import JackknifeGPI
 
@@ -22,6 +23,7 @@ def train_data():
     )
     return df
 
+
 class TestJacknife:
     @pytest.mark.filterwarnings("ignore::DeprecationWarning")
     def test_initialize_gpi(self, train_data):
@@ -30,7 +32,7 @@ class TestJacknife:
         )
         assert gpi.gpi_input["x"] is not None
         assert gpi.gpi_output["y"] is not None
-    
+
     @pytest.mark.filterwarnings("ignore::DeprecationWarning")
     def test_gpi_results_exist(self, train_data):
         gpi = JackknifeGPI(
@@ -39,7 +41,7 @@ class TestJacknife:
             input_list=["x"],
             output_list=["y"],
             export_all_years=False,
-            outpath='/tmp/'
+            outpath="/tmp/",
         )
         gpi.train(
             searching_space={
@@ -63,3 +65,8 @@ class TestJacknife:
         assert gpi.post_perf is not None
         assert gpi.best_train is not None
         assert gpi.best_year in [2017, 2018]
+
+        with open("/tmp/metadata.json") as j:
+            metadata = json.loads(j.read())
+
+        assert {"input_list", "output_list", "best_year"}.issubset(set(metadata.keys()))
