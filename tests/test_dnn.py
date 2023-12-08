@@ -25,16 +25,14 @@ def train_data():
 
 
 # Expected searching dimensions
-EXPECTED_DIMS = set(
-    [
-        "learning_rate",
-        "num_dense_layers",
-        "num_input_nodes",
-        "num_dense_nodes",
-        "activation",
-        "batch_size",
-    ]
-)
+EXPECTED_DIMS = {
+    "learning_rate",
+    "num_dense_layers",
+    "num_input_nodes",
+    "num_dense_nodes",
+    "activation",
+    "batch_size",
+}
 
 
 class TestDNN:
