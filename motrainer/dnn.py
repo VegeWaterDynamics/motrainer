@@ -109,7 +109,7 @@ class NNTrain:
                  n_jobs=-1,
                  kappa=5,
                  validation_split=0.2,
-                 x0=[1e-3, 1, 4, 13, 'relu', 64],
+                 x0=None,
                  training_method='dnn',
                  loss_weights=None,
                  verbose=0):
@@ -200,6 +200,9 @@ class NNTrain:
             del model
             tf.keras.backend.clear_session()
             return loss
+
+        if x0 is None:
+            x0 = [1e-3, 1, 4, 13, 'relu', 64]
 
         self.gp_result = skopt.gp_minimize(func=func,
                                            dimensions=list(
