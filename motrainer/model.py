@@ -1,9 +1,11 @@
-"""
+"""Implementing different types of neural network.
+
 This script is for the implementation of different types of neural network,
-including different structures, different loss functions
+including different structures, different loss functions.
 """
 
 import os
+
 import tensorflow as tf
 
 # Force tensorflow debug logging off, keep only error logging
@@ -11,8 +13,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
 def keras_dnn(dimensions, input_shape, output_shape):
-    """
-    Deep Neural Network implemented by Keras
+    """Deep Neural Network implemented by Keras.
+
     by default:
     dimension consists of:
     learning_rate, num_dense_layers,num_input_nodes,
@@ -27,7 +29,7 @@ def keras_dnn(dimensions, input_shape, output_shape):
                               activation=dimensions['activation']))
 
     for i in range(dimensions['num_dense_layers']):
-        name = 'layer_dense_{0}'.format(i + 1)
+        name = f'layer_dense_{i + 1}'
         model.add(
             tf.keras.layers.Dense(dimensions['num_dense_nodes'],
                                   activation=dimensions['activation'],
@@ -42,14 +44,14 @@ def keras_dnn(dimensions, input_shape, output_shape):
 
 
 def keras_dnn_lossweight(dimensions, input_shape, output_shape, loss_weights):
-    """
-    Deep Neural Network implemented by Keras.
+    """Deep Neural Network implemented by Keras.
+
     Implemented to adapt 'loss_weights'.
     """
     inputs = tf.keras.Input(shape=(input_shape, ))
 
     for i in range(dimensions['num_dense_layers']):
-        name = 'layer_dense_{0}'.format(i + 1)
+        name = f'layer_dense_{i + 1}'
         if i == 0:
             hidden = tf.keras.layers.Dense(dimensions['num_input_nodes'],
                                            activation=dimensions['activation'],
@@ -63,7 +65,7 @@ def keras_dnn_lossweight(dimensions, input_shape, output_shape, loss_weights):
 
     outputs = []
     for i in range(output_shape):
-        name = 'out{}'.format(i + 1)
+        name = f'out{i + 1}'
         outputs.append(tf.keras.layers.Dense(1, name=name)(hidden))
 
     adam = tf.keras.optimizers.Adam(learning_rate=dimensions['learning_rate'])

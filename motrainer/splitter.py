@@ -1,7 +1,8 @@
 import warnings
-import xarray as xr
-import numpy as np
+
 import dask.bag as db
+import numpy as np
+import xarray as xr
 
 MOT_DIMS = ["space", "time"]  # Expected xr.Dataset dimensions
 

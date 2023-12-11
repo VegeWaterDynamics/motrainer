@@ -1,8 +1,10 @@
 import unittest
-import pandas as pd
+
 import numpy as np
-from motrainer.jackknife import JackknifeGPI
+import pandas as pd
+
 from motrainer.dnn import NNTrain
+from motrainer.jackknife import JackknifeGPI
 
 
 def init_gpi_linear():
@@ -15,8 +17,8 @@ def init_gpi_linear():
         'x': x,
         'y': y
     },
-                      index=pd.date_range(start='1/1/{}'.format(start_year),
-                                          end='1/1/{}'.format(end_year),
+                      index=pd.date_range(start=f'1/1/{start_year}',
+                                          end=f'1/1/{end_year}',
                                           periods=obs_per_year *
                                           (end_year - start_year)))
     return df

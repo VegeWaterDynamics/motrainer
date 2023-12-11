@@ -1,7 +1,8 @@
-import xarray as xr
 import numpy as np
 import pytest
-from motrainer import is_splitable, dataset_split, train_test_split
+import xarray as xr
+
+from motrainer import dataset_split, is_splitable, train_test_split
 from motrainer.splitter import _regulate_identifier, _validate_train_test_split
 
 

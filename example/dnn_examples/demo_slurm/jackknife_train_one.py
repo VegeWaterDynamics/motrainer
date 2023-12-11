@@ -1,5 +1,8 @@
 import pickle
 import sys
+
+import pandas as pd
+
 from motrainer.jackknife import JackknifeGPI
 
 if __name__ == "__main__":
@@ -35,7 +38,7 @@ if __name__ == "__main__":
                            val_split_year,
                            input_list,
                            output_list,
-                           outpath='{}/gpi{}'.format(out_path, gpi_id))
+                           outpath=f'{out_path}/gpi{gpi_id}')
 
         gpi.train(searching_space=searching_space,
                   optimize_space=optimize_space,
@@ -47,8 +50,7 @@ if __name__ == "__main__":
         gpi.export_best()
 
         # Export apriori performance
-        path_apriori_performance = '{}/apriori_performance_{}'.format(
-            gpi.outpath, gpi.best_year)
+        path_apriori_performance = f'{gpi.outpath}/apriori_performance_{gpi.best_year}'
         with open(path_apriori_performance, 'wb') as f:
             pickle.dump(gpi.apr_perf, f)
 
