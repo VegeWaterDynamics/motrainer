@@ -4,7 +4,7 @@ import random
 import numpy as np
 import sklearn.preprocessing
 import tensorflow as tf
-from scipy.stats.stats import pearsonr, spearmanr
+from scipy.stats import pearsonr, spearmanr
 
 # Force tensorflow debug logging off, keep only error logging
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
