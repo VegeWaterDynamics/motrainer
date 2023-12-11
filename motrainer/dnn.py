@@ -222,5 +222,9 @@ class NNTrain:
             with open(path_hyperparameters, 'wb') as f:
                 pickle.dump([
                     sorted(
-                        zip(self.gp_result.func_vals, self.gp_result.x_iters))
+                        zip(
+                            self.gp_result.func_vals,
+                            self.gp_result.x_iters,
+                            strict=True
+                            ))
                 ], f)
