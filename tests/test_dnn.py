@@ -4,7 +4,6 @@ import pytest
 from skopt.space import Real
 
 from motrainer.dnn import NNTrain
-from motrainer.jackknife import JackknifeGPI
 
 
 @pytest.fixture

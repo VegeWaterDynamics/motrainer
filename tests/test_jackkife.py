@@ -1,7 +1,8 @@
+import json
+
 import numpy as np
 import pandas as pd
 import pytest
-import json
 
 from motrainer.jackknife import JackknifeGPI
 
