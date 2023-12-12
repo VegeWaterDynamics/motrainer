@@ -221,7 +221,10 @@ class JackknifeGPI:
         metedata['input_list'] = self.input_list
         metedata['output_list'] = self.input_list
         metedata['best_year'] = int(self.best_year)
-        metedata['latitude'] = float(self.gpi_data['latitude'].iloc[0])
-        metedata['longitude'] = float(self.gpi_data['longitude'].iloc[0])
+
+        for key in ['lat', 'lon', 'latitude', 'longitude']:
+            if key in self.gpi_data.keys():
+                metedata[key] = float(self.gpi_data[key].iloc[0])
+
         with open(f_metadata, 'w') as f:
             json.dump(metedata, f)
