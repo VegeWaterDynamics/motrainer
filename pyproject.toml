@@ -18,7 +18,7 @@ dependencies = [
     "xarray",
     "zarr",
 ]
-description = "Machine Learning module to train a surrogate module using Land-surface model output"
+description = "Parallel Training Measurement Operators (MO) for Data Assimilation (DA) Applications"
 readme = "README.rst"
 license = {file = "LICENSE"}
 authors = [
