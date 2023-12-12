@@ -1,18 +1,18 @@
-import numpy as np
-import logging
 import json
+import logging
 from pathlib import Path
+
+import numpy as np
 from sklearn.model_selection import LeaveOneOut
+
 from motrainer.dnn import NNTrain
-from motrainer.util import performance, normalize
+from motrainer.util import normalize, performance
 
 logger = logging.getLogger(__name__)
 
 
-class JackknifeGPI(object):
-    """
-    GPI object oriented for neuron netowork training using Jackknife resampling
-    method.
+class JackknifeGPI:
+    """GPI object for neuron netowork training using Jackknife resampling method.
 
     Methods
     -------
@@ -30,8 +30,7 @@ class JackknifeGPI(object):
                  output_list,
                  export_all_years=True,
                  outpath='./jackknife_results'):
-        """
-        Initialize JackknifeGPI object.
+        """Initialize JackknifeGPI object.
 
         Parameters
         ----------
@@ -52,10 +51,9 @@ class JackknifeGPI(object):
             Results exporting path, by default './jackknife_results'
         """
         logger.info('Initializing Jackkinfe trainning:\n'
-                    'val_split_year: {}\n'
-                    'input_list: {}\n'
-                    'output_list: {}\n'.format(val_split_year, input_list,
-                                               output_list))
+                    f'val_split_year: {val_split_year}\n'
+                    f'input_list: {input_list}\n'
+                    f'output_list: {output_list}\n')
 
         assert not (
             gpi_data.isnull().values.any()), 'Nan value(s) in gpi_data!'
@@ -77,8 +75,8 @@ class JackknifeGPI(object):
               performance_method='rmse',
               training_method='dnn',
               verbose=0):
-        """
-        Train neuron network with Jackknife resampling method.
+        """Train neuron network with Jackknife resampling method.
+
         Procedures:
         1. Reserve in/output after self.val_split_year for later benchmarking.
         2. From the rest in/output data, leave out one year as validation data.
@@ -108,10 +106,8 @@ class JackknifeGPI(object):
             Control the verbosity.
             By default 0, which means no screen feedback.
         """
-
         # Data normalization
-        logger.debug('Normalizing input/output data. Method: {}.'.format(
-            normalize_method))
+        logger.debug(f'Normalizing input/output data. Method: {normalize_method}.')
         self.gpi_input[:], scaler_input = normalize(self.gpi_input,
                                                     normalize_method)
         self.gpi_output[:], scaler_output = normalize(self.gpi_output,
@@ -132,7 +128,7 @@ class JackknifeGPI(object):
         # Jackknife in time
         loo = LeaveOneOut()
         best_perf_sum = None
-        for train_index, test_index in loo.split(year_list):
+        for train_index, test_index in loo.split(year_list): # noqa: B007
             this_year = year_list[test_index[0]]
 
             input_years = jackknife_input.index.year
@@ -144,14 +140,18 @@ class JackknifeGPI(object):
 
             # check if train_input and train_output are empty, raise value error
             if train_input.empty or train_output.empty:
-                raise ValueError('Trainning data is empty. Please check the val_split_year.')
+                raise ValueError(
+                    'Trainning data is empty. Please check the val_split_year.'
+                    )
 
             test_input = jackknife_input[input_years == this_year]
             test_output = jackknife_output[output_years == this_year]
 
             # check if test_input and test_output are empty, raise value error
             if test_input.empty or test_output.empty:
-                raise ValueError('Testing data is empty. Please check the val_split_year.')
+                raise ValueError(
+                    'Testing data is empty. Please check the val_split_year.'
+                    )
 
             # Execute training
             training = NNTrain(train_input, train_output)
@@ -166,13 +166,11 @@ class JackknifeGPI(object):
 
             # TODO: Add warning if no model selected for the year
             if training.model is None:
-                logger.warning('No best model was found for year: {}.'.format(
-                    str(this_year)))
+                logger.warning(f'No best model was found for year: {str(this_year)}.')
                 continue
 
             if self.export_all_years:
-                path_model = '{}/all_years/optimized_model_{}'.format(
-                    self.outpath, this_year)
+                path_model = f'{self.outpath}/all_years/optimized_model_{this_year}'
                 path_hyperparas = '{}/all_years/hyperparameters_{}'.format(
                     self.outpath, this_year)
                 training.export(path_model=path_model,
@@ -192,30 +190,24 @@ class JackknifeGPI(object):
                                              performance_method, scaler_output)
                 self.best_train = training
                 self.best_year = this_year
-        logger.info('Found best year: {}'
-                    'A-priori performance: {}'
-                    'Post-priori performance: {}'.format(
-                        str(self.best_year), self.apr_perf, self.post_perf))
+        logger.info(f'Found best year: {str(self.best_year)}'
+                    f'A-priori performance: {self.apr_perf}'
+                    f'Post-priori performance: {self.post_perf}')
 
     def export_best(self, model_name='best_optimized_model',
                     hyper_name='best_hyperparameters'):
-        """
-        export the best results in Jackknife process.
-        """
+        """Export the best results in Jackknife process."""
         logger.info(
             'Exporting model and hyperparameters of year {} to {}'.format(
                 self.best_year, self.outpath))
 
         if model_name is not None:
-            path_model = '{}/{}_{}'.format(
-                self.outpath, model_name, self.best_year)
+            path_model = f'{self.outpath}/{model_name}_{self.best_year}'
         else:
-            path_model = '{}/best_optimized_model_{}'.format(
-                self.outpath, self.best_year)
+            path_model = f'{self.outpath}/best_optimized_model_{self.best_year}'
 
         if hyper_name is not None:
-            path_hyperparameters = '{}/{}_{}'.format(
-                self.outpath, hyper_name, self.best_year)
+            path_hyperparameters = f'{self.outpath}/{hyper_name}_{self.best_year}'
         else:
             path_hyperparameters = '{}/best_hyperparameters_{}'.format(
                 self.outpath, self.best_year)
@@ -224,7 +216,7 @@ class JackknifeGPI(object):
                                path_hyperparameters=path_hyperparameters)
 
         # write metadata
-        f_metadata = '{}/metadata.json'.format(self.outpath)
+        f_metadata = f'{self.outpath}/metadata.json'
         metedata = dict()
         metedata['input_list'] = self.input_list
         metedata['output_list'] = self.input_list

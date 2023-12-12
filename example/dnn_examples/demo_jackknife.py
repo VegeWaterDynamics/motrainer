@@ -1,8 +1,9 @@
-import pickle
-import pandas as pd
 import logging
+import pickle
 import sys
-from motrainer.dnn import NNTrain
+
+import pandas as pd
+
 from motrainer.jackknife import JackknifeGPI
 
 logging.basicConfig(
@@ -53,7 +54,7 @@ if __name__ == "__main__":
                                val_split_year,
                                input_list,
                                output_list,
-                               outpath='{}/gpi{}'.format(out_path, gpi_num))
+                               outpath=f'{out_path}/gpi{gpi_num}')
 
             gpi.train(searching_space=searching_space,
                       optimize_space=optimize_space,
