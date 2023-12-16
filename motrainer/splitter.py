@@ -94,9 +94,11 @@ def dataset_split(ds: xr.Dataset, identifier: dict | str) -> db:
         # Use space time cls coordinates as multi index
         # Must stack on MOT_DIMS to reduce dims of data variable
         multi_idx = ds.stack(samples=list_id).samples.values
+        for dim in MOT_DIMS:
+            if dim in ds.indexes:
+                ds=ds.reset_index(dim)
         ds = (
-            ds.reset_index(MOT_DIMS)
-            .stack(
+            ds.stack(
                 samples=MOT_DIMS, create_index=False
             )  # No index creation since this will be added next.
             .assign_coords(samples=multi_idx)

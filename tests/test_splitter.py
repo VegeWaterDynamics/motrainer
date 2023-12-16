@@ -78,6 +78,20 @@ class TestModelSplit:
         assert set(samples_lens).issubset(
             [4, 16, 6, 24]
         )  # Check sample lenth regardless of order
+    
+    def test_split_2d_one_dim_not_index(self, ds_valid):
+        identifier = {
+            "space": np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 0]),  # 4 and 6
+            "time": np.array([1, 0, 0, 0, 0]),  # 1 and 4
+        }
+        ds = ds_valid.reset_index("space")
+        db = dataset_split(ds, identifier)
+        list_ds = db.compute()
+        samples_lens = [len(list_ds[i].samples) for i in range(4)]
+        assert len(list_ds) == 4  # In total 4 ds
+        assert set(samples_lens).issubset(
+            [4, 16, 6, 24]
+        )  # Check sample lenth regardless of order
 
     def test_split_by_dim(self, ds_valid):
         db_space = dataset_split(ds_valid, "space")
