@@ -1,8 +1,9 @@
-import numpy as np
-import tensorflow as tf
 import os
-import sklearn.preprocessing
 import random
+
+import numpy as np
+import sklearn.preprocessing
+import tensorflow as tf
 from scipy.stats import pearsonr, spearmanr
 
 # Force tensorflow debug logging off, keep only error logging
@@ -10,8 +11,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
 def performance(data_input, data_label, model, method, scaler_output=None):
-    """
-    Compute performance of trained neuron netowrk.
+    """Compute performance of trained neuron netowrk.
 
     Parameters
     ----------
@@ -37,7 +37,7 @@ def performance(data_input, data_label, model, method, scaler_output=None):
     """
     # Temporally SL the model because of TF graph execution issue
     # TODO: fix the model prediction issue
-    tmp_path = '/tmp/tmp_model{}'.format(random.getrandbits(64))
+    tmp_path = f'/tmp/tmp_model{random.getrandbits(64)}'
     model.save(tmp_path)
     model = tf.keras.models.load_model(tmp_path)
     predicted = model.predict(data_input)
@@ -76,8 +76,7 @@ def performance(data_input, data_label, model, method, scaler_output=None):
 
 
 def normalize(data, method):
-    """
-    Pre-normalization for input/output
+    """Pre-normalization for input/output.
 
     Parameters
     ----------
@@ -93,7 +92,6 @@ def normalize(data, method):
         normalization.
 
     """
-
     if method == 'standard':
         scaler = sklearn.preprocessing.StandardScaler()
     elif method == 'min_max':
