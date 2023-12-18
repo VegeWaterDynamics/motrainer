@@ -6,7 +6,10 @@ nav:
   - Getting started: 
     - About MOTrainer: index.md
     - Installation: setup.md
-  - Usage: usage.md
+  - Usage:
+    - usage_split.md
+    - usage_daskml.md
+    - usage_dnn.md
   - Examples: 
     - Covert a nested DataFrame to a Dataset: notebooks/example_read_from_one_df.ipynb
     - Align multiple DataFrames to a Dataset: notebooks/example_read_from_multiple_df.ipynb

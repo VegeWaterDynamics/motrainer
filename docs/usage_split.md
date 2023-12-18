@@ -1,8 +1,4 @@
-# Usage Examples
-
-MOTrainer is specifically designed for the aplications where one needs to split large spatio-temporal data into independent partitions, and then train separate ML models for each partition. In this page there are some example usage of MOTrainer. 
-
-## Data Preparation
+# Data Split
 
 We assume the users starts from an [xarray.Dataset](https://docs.xarray.dev/en/stable/generated/xarray.Dataset.html) object which contains spatio-temporal data needed for training multiple independent Machine Learning (ML) models.
 
@@ -150,100 +146,9 @@ mask = ds_valid["time"] < np.datetime64("2017-01-01")
 train, test = train_test_split(ds_valid, mask=mask, reverse=True)
 ```
 
-## Prepare data for training
 
 
-## Parallel ML Model Optimization with Dask-ml
 
-### Extract training data
-```python
-def to_dataframe(ds):
-    return ds.to_dask_dataframe()
 
-def chunk(ds, chunks):
-    return ds.chunk(chunks)
-```
-
-```python
-train_bags = train_test_bags.pluck(0).map(chunk, {"space": 500}).map(to_dataframe)
-```
-
-### Setup searching grid
-```python
-import dask_ml.model_selection as dcv
-from sklearn import svm, datasets
-
-parameters = {'kernel': ['linear', 'rbf'], 'C': [1, 10]}
-svc = svm.SVC()
-search = dcv.GridSearchCV(svc, parameters)
-```
-
-### Grid search in parallel
-```python
-def optimize(df, grid_search, input_list, output_list):
-    """Customized Optimization Function
-    """
-    df = df.dropna()
-    grid_result = grid_search.fit(df[input_list], df[output_list])
-    return grid_result
-```
-
-```python
-input_list = ["STATE1", "STATE2", "STATE3", "STATE4", "STATE5"]
-output_list = ["slop"]
-optimazed_estimators = train_bags.map(
-    optimize, search, input_list, output_list
-)
-```
-
-## Parallel DNN Training with JackknifeGPI
-
-### Train one grid point
-```python
-df = train_bags.take(1)
-gpi_data = df.compute()
-gpi_data.dropna(inplace=True)
-```
-
-```python
-from motrainer.jackknife import JackknifeGPI
-
-# Intiate a Jackknife GPI with initial settings
-gpi = JackknifeGPI(gpi_data, outpath='./results')
-
-# Perform training and export
-results = gpi.train()
-gpi.export_best()
-```
-
-## Train multiple grid point
-```python
-def training_func(gpi_num, df):
-    # remove NA data
-    gpi_data = df.compute()
-    gpi_data.dropna(inplace=True)
-
-    gpi = JackknifeGPI(gpi_data,
-                       outpath=f"results/gpi{gpi_num}")
-
-    gpi.train()
-    gpi.export_best()
-```
-
-```python
-from dask.distributed import Client, wait
-
-# Use client to parallelize the loop across workers
-client = Client()
-futures = [
-    client.submit(training_func, gpi_num, df) for gpi_num, df in enumerate(train_bags)
-]
-
-# Wait for all computations to finish
-wait(futures)
-
-# Get the results
-results = client.gather(futures)
-```
 
 
