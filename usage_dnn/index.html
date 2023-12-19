@@ -573,18 +573,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#train-one-grid-point" class="md-nav__link">
+  <a href="#training-a-single-grid-point" class="md-nav__link">
     <span class="md-ellipsis">
-      Train one grid point
+      Training a Single Grid Point
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#train-multiple-grid-point" class="md-nav__link">
+  <a href="#training-multiple-grid-points" class="md-nav__link">
     <span class="md-ellipsis">
-      Train multiple grid point
+      Training Multiple Grid Points
     </span>
   </a>
   
@@ -804,18 +804,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#train-one-grid-point" class="md-nav__link">
+  <a href="#training-a-single-grid-point" class="md-nav__link">
     <span class="md-ellipsis">
-      Train one grid point
+      Training a Single Grid Point
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#train-multiple-grid-point" class="md-nav__link">
+  <a href="#training-multiple-grid-points" class="md-nav__link">
     <span class="md-ellipsis">
-      Train multiple grid point
+      Training Multiple Grid Points
     </span>
   </a>
   
@@ -843,45 +843,48 @@
 
 
 <h1 id="parallel-dnn-training-with-jackknifegpi">Parallel DNN Training with JackknifeGPI</h1>
-<h2 id="train-one-grid-point">Train one grid point</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">df</span> <span class="o">=</span> <span class="n">train_bags</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">gpi_data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">gpi_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<p>The <a href="https://vegewaterdynamics.github.io/motrainer/usage_split/">data split section</a> explains how to partition a dataset. After partitioning, the dataset is divided into two data bags: <code>train_bags</code> and <code>test_bags</code>.</p>
+<p>This section demonstrates how to perform distributed DNN training using Tensorflow, with <a href="https://en.wikipedia.org/wiki/Jackknife_resampling">Jackknife resampling</a> as the cross-validation method. In this approach, each year is iteratively left out as the cross-validation data. The best model is selected based on the lowest Root Mean Square Error (RMSE).</p>
+<p>A more comprehensive example can be found in this <a href="https://vegewaterdynamics.github.io/motrainer/notebooks/example_dnn/">Example Notebook</a>.</p>
+<h2 id="training-a-single-grid-point">Training a Single Grid Point</h2>
+<p>To train a DNN for a single grid cell, you can use the <code>JackknifeGPI</code> object:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">motrainer.jackknife</span> <span class="kn">import</span> <span class="n">JackknifeGPI</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Intiate a Jackknife GPI from one gridcell</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">df</span> <span class="o">=</span> <span class="n">train_bags</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">gpi_data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">gpi</span> <span class="o">=</span> <span class="n">JackknifeGPI</span><span class="p">(</span><span class="n">gpi_data</span><span class="p">,</span> <span class="n">outpath</span><span class="o">=</span><span class="s1">&#39;./results&#39;</span><span class="p">)</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># Perform training and export</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">results</span> <span class="o">=</span> <span class="n">gpi</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="n">gpi</span><span class="o">.</span><span class="n">export_best</span><span class="p">()</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">motrainer.jackknife</span> <span class="kn">import</span> <span class="n">JackknifeGPI</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># Intiate a Jackknife GPI with initial settings</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">gpi</span> <span class="o">=</span> <span class="n">JackknifeGPI</span><span class="p">(</span><span class="n">gpi_data</span><span class="p">,</span> <span class="n">outpath</span><span class="o">=</span><span class="s1">&#39;./results&#39;</span><span class="p">)</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># Perform training and export</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">results</span> <span class="o">=</span> <span class="n">gpi</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">gpi</span><span class="o">.</span><span class="n">export_best</span><span class="p">()</span>
+<p>The training results will be exported to the <code>./results</code>path.</p>
+<h2 id="training-multiple-grid-points">Training Multiple Grid Points</h2>
+<p>To train multiple grid points in parallel, you can define a training function as follows:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">def</span> <span class="nf">training_func</span><span class="p">(</span><span class="n">gpi_num</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">gpi_data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">gpi</span> <span class="o">=</span> <span class="n">JackknifeGPI</span><span class="p">(</span><span class="n">gpi_data</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>                       <span class="n">outpath</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;results/gpi</span><span class="si">{</span><span class="n">gpi_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">gpi</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">gpi</span><span class="o">.</span><span class="n">export_best</span><span class="p">()</span>
 </code></pre></div>
-<h2 id="train-multiple-grid-point">Train multiple grid point</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span> <span class="nf">training_func</span><span class="p">(</span><span class="n">gpi_num</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="c1"># remove NA data</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">gpi_data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">gpi_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="n">gpi</span> <span class="o">=</span> <span class="n">JackknifeGPI</span><span class="p">(</span><span class="n">gpi_data</span><span class="p">,</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>                       <span class="n">outpath</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;results/gpi</span><span class="si">{</span><span class="n">gpi_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<p>Then, map the training function to each grid cell:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">wait</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Use client to parallelize the loop across workers</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">futures</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">training_func</span><span class="p">,</span> <span class="n">gpi_num</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span> <span class="k">for</span> <span class="n">gpi_num</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_bags</span><span class="p">)</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">]</span>
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">gpi</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="n">gpi</span><span class="o">.</span><span class="n">export_best</span><span class="p">()</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">wait</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Use client to parallelize the loop across workers</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">futures</span> <span class="o">=</span> <span class="p">[</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">training_func</span><span class="p">,</span> <span class="n">gpi_num</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span> <span class="k">for</span> <span class="n">gpi_num</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_bags</span><span class="p">)</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="p">]</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="c1"># Wait for all computations to finish</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">wait</span><span class="p">(</span><span class="n">futures</span><span class="p">)</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="c1"># Get the results</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="n">results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">futures</span><span class="p">)</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># Wait for all computations to finish</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">wait</span><span class="p">(</span><span class="n">futures</span><span class="p">)</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># Get the results</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="n">results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">futures</span><span class="p">)</span>
 </code></pre></div>
 
 

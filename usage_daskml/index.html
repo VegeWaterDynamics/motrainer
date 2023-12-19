@@ -561,18 +561,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#setup-searching-grid" class="md-nav__link">
+  <a href="#configuring-the-search-grid" class="md-nav__link">
     <span class="md-ellipsis">
-      Setup searching grid
+      Configuring the Search Grid
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#grid-search-in-parallel" class="md-nav__link">
+  <a href="#executing-grid-search-in-parallel" class="md-nav__link">
     <span class="md-ellipsis">
-      Grid search in parallel
+      Executing Grid Search in Parallel
     </span>
   </a>
   
@@ -822,18 +822,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#setup-searching-grid" class="md-nav__link">
+  <a href="#configuring-the-search-grid" class="md-nav__link">
     <span class="md-ellipsis">
-      Setup searching grid
+      Configuring the Search Grid
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#grid-search-in-parallel" class="md-nav__link">
+  <a href="#executing-grid-search-in-parallel" class="md-nav__link">
     <span class="md-ellipsis">
-      Grid search in parallel
+      Executing Grid Search in Parallel
     </span>
   </a>
   
@@ -861,37 +861,52 @@
 
 
 <h1 id="parallel-ml-model-optimization-with-dask-ml">Parallel ML Model Optimization with Dask-ml</h1>
+<p>In the <a href="https://vegewaterdynamics.github.io/motrainer/usage_split/">data split section</a>, we discussed how to partition a dataset. After the partitioning process, the dataset is divided into two data bags: <code>train_bags</code> and <code>test_bags</code>.</p>
+<p>Following dataset partitioning, you can execute parallel machine learning training using <a href="https://ml.dask.org/"><code>dask-ml</code></a>. Dask-ml leverages Dask alongside popular machine learning libraries like Scikit-Learn to facilitate distributed machine learning tasks. This document provides a brief overview of its usage. For a more comprehensive example, refer to this <a href="https://vegewaterdynamics.github.io/motrainer/notebooks/example_daskml/">Jupyter Notebook</a>.</p>
 <h2 id="extract-training-data">Extract training data</h2>
+<p>With <code>dask-ml</code>, the input and output data need be converted to a DataFrame. You can map this conversion to each partition as follows:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span> <span class="nf">to_dataframe</span><span class="p">(</span><span class="n">ds</span><span class="p">):</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="k">return</span> <span class="n">ds</span><span class="o">.</span><span class="n">to_dask_dataframe</span><span class="p">()</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="k">def</span> <span class="nf">chunk</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">chunks</span><span class="p">):</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="k">return</span> <span class="n">ds</span><span class="o">.</span><span class="n">chunk</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">train_bags</span> <span class="o">=</span> <span class="n">train_test_bags</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="mi">500</span><span class="p">})</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">to_dataframe</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">train_bags</span> <span class="o">=</span> <span class="n">train_test_bags</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="mi">500</span><span class="p">})</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">to_dataframe</span><span class="p">)</span>
+<h2 id="configuring-the-search-grid">Configuring the Search Grid</h2>
+<p>You can set up distributed machine learning training jobs using <a href="https://ml.dask.org/modules/api.html#module-dask_ml.model_selection"><code>dask-ml.model_selection</code></a>. For instance, you can perform an exhaustive search over specified parameter values for an estimator using <code>GridSearchCV</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span> <span class="nn">dask_ml.model_selection</span> <span class="k">as</span> <span class="nn">dcv</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">svm</span><span class="p">,</span> <span class="n">datasets</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;rbf&#39;</span><span class="p">],</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">]}</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">svc</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">()</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">search</span> <span class="o">=</span> <span class="n">dcv</span><span class="o">.</span><span class="n">GridSearchCV</span><span class="p">(</span><span class="n">svc</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="setup-searching-grid">Setup searching grid</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span> <span class="nn">dask_ml.model_selection</span> <span class="k">as</span> <span class="nn">dcv</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">svm</span><span class="p">,</span> <span class="n">datasets</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;rbf&#39;</span><span class="p">],</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">]}</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">svc</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">()</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">search</span> <span class="o">=</span> <span class="n">dcv</span><span class="o">.</span><span class="n">GridSearchCV</span><span class="p">(</span><span class="n">svc</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<h2 id="executing-grid-search-in-parallel">Executing Grid Search in Parallel</h2>
+<p>After setting up the search object, you can map the <code>fit</code> function to each partition as follows:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">grid_search</span><span class="p">,</span> <span class="n">input_list</span><span class="p">,</span> <span class="n">output_list</span><span class="p">):</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Customized Optimization Function</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">grid_result</span> <span class="o">=</span> <span class="n">grid_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">input_list</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="n">output_list</span><span class="p">])</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="k">return</span> <span class="n">grid_result</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">input_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;STATE1&quot;</span><span class="p">,</span> <span class="s2">&quot;STATE2&quot;</span><span class="p">,</span> <span class="s2">&quot;STATE3&quot;</span><span class="p">,</span> <span class="s2">&quot;STATE4&quot;</span><span class="p">,</span> <span class="s2">&quot;STATE5&quot;</span><span class="p">]</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="n">output_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;slop&quot;</span><span class="p">]</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># When memory allows, peresist data in the workers</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="c1"># When train_bags can is lazilly loading from file system, this can avoid redundant data loading</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="n">train_bags</span> <span class="o">=</span> <span class="n">train_bags</span><span class="o">.</span><span class="n">persist</span><span class="p">()</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="n">optimazed_estimators</span> <span class="o">=</span> <span class="n">train_bags</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    <span class="n">optimize</span><span class="p">,</span> <span class="n">search</span><span class="p">,</span> <span class="n">input_list</span><span class="p">,</span> <span class="n">output_list</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="p">)</span>
 </code></pre></div>
-<h2 id="grid-search-in-parallel">Grid search in parallel</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">grid_search</span><span class="p">,</span> <span class="n">input_list</span><span class="p">,</span> <span class="n">output_list</span><span class="p">):</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Customized Optimization Function</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">grid_result</span> <span class="o">=</span> <span class="n">grid_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">input_list</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="n">output_list</span><span class="p">])</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="k">return</span> <span class="n">grid_result</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">input_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;STATE1&quot;</span><span class="p">,</span> <span class="s2">&quot;STATE2&quot;</span><span class="p">,</span> <span class="s2">&quot;STATE3&quot;</span><span class="p">,</span> <span class="s2">&quot;STATE4&quot;</span><span class="p">,</span> <span class="s2">&quot;STATE5&quot;</span><span class="p">]</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">output_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;slop&quot;</span><span class="p">]</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">optimazed_estimators</span> <span class="o">=</span> <span class="n">train_bags</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">optimize</span><span class="p">,</span> <span class="n">search</span><span class="p">,</span> <span class="n">input_list</span><span class="p">,</span> <span class="n">output_list</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">)</span>
-</code></pre></div>
+<p>In this way, the machine learning training task is parallelized on two levels:</p>
+<ol>
+<li>The training jobs of all partitions of the dataset are parallelized;</li>
+<li>The parameter searching within each partition is parallelized.</li>
+</ol>
+<p>By default, Dask uses a local threaded scheduler to parallelize the tasks. Alternatively, other types of clusters can be set up if the training job is running on other infrastructures. The usage of different clusters will not influence the syntax of data split and training jobs. For more information on different Dask clusters, please check the <a href="https://docs.dask.org/en/stable/deploying.html">Dask Documentation</a>.</p>
 
 
 

@@ -73,6 +73,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#motrainer-contributing-guidelines" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -685,6 +690,19 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Conributing guide
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -695,6 +713,52 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#you-have-a-question" class="md-nav__link">
+    <span class="md-ellipsis">
+      You have a question
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#you-think-you-may-have-found-a-bug" class="md-nav__link">
+    <span class="md-ellipsis">
+      You think you may have found a bug
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#you-want-to-make-some-kind-of-change-to-the-code-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      You want to make some kind of change to the code base
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -737,6 +801,43 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#you-have-a-question" class="md-nav__link">
+    <span class="md-ellipsis">
+      You have a question
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#you-think-you-may-have-found-a-bug" class="md-nav__link">
+    <span class="md-ellipsis">
+      You think you may have found a bug
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#you-want-to-make-some-kind-of-change-to-the-code-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      You want to make some kind of change to the code base
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -757,9 +858,48 @@
   
 
 
-  <h1>Conributing guide</h1>
-
-
+<h1 id="motrainer-contributing-guidelines">MOTrainer Contributing Guidelines</h1>
+<p>We welcome any kind of contribution to our software, from simple comment 
+or question to a full fledged <a href="https://help.github.com/articles/about-pull-requests/">pull request</a>. 
+Please read and follow our <a href="../CODE_OF_CONDUCT/">Code of Conduct</a>.</p>
+<p>A contribution can be one of the following cases:</p>
+<ul>
+<li>you have a question;</li>
+<li>you think you may have found a bug (including unexpected behavior);</li>
+<li>you want to make some kind of change to the code base (e.g. to fix a bug, to add a new feature, to update documentation).</li>
+</ul>
+<p>The sections below outline the steps in each case.</p>
+<h2 id="you-have-a-question">You have a question</h2>
+<ul>
+<li>use the search functionality <a href="https://github.com/VegeWaterDynamics/motrainer/issues">here</a>
+to see if someone already filed the same issue;</li>
+<li>if your issue search did not yield any relevant results, make a new issue;</li>
+<li>apply the "question" label; apply other labels when relevant.</li>
+</ul>
+<h2 id="you-think-you-may-have-found-a-bug">You think you may have found a bug</h2>
+<ul>
+<li>use the search functionality <a href="https://github.com/VegeWaterDynamics/motrainer/issues">here</a> to see if someone already filed the same issue;</li>
+<li>if your issue search did not yield any relevant results, make a new issue, making sure to provide enough information to the rest of the community to understand the cause and context of the problem. Depending on the issue, you may want to include:<ul>
+<li>the <a href="https://help.github.com/articles/autolinked-references-and-urls/#commit-shas&gt;">SHA hashcode</a> of the commit that is causing your problem;</li>
+<li>some identifying information (name and version number) for dependencies you're using;</li>
+<li>information about the operating system;</li>
+</ul>
+</li>
+<li>apply relevant labels to the newly created issue.</li>
+</ul>
+<h2 id="you-want-to-make-some-kind-of-change-to-the-code-base">You want to make some kind of change to the code base</h2>
+<ul>
+<li>(<strong>important</strong>) announce your plan to the rest of the community <em>before you start working</em>. This announcement should be in the form of a (new) issue;</li>
+<li>(<strong>important</strong>) wait until some kind of consensus is reached about your idea being a good idea;</li>
+<li>if needed, fork the repository to your own Github profile and create your own feature branch off of the latest master commit. While working on your feature branch, make sure to stay up to date with the master branch by pulling in changes, possibly from the 'upstream' repository (follow the instructions <a href="https://help.github.com/articles/configuring-a-remote-for-a-fork/">here</a> and <a href="https://help.github.com/articles/syncing-a-fork/">here</a>);</li>
+<li>make sure the existing tests still work. First, install the development dependencies as <code>pip install .[dev]</code>, and then run <code>pytest tests</code>;</li>
+<li>add your own tests (if necessary);</li>
+<li>update or expand the documentation. Make sure the documentation is built successfully: first, install documentation dependencies as <code>pip install .[docs]</code> and then run <code>mkdocs build</code>.</li>
+<li>make sure the linting tests pass by running <code>ruff</code> in the project root directory: <code>ruff check .</code>;</li>
+<li><a href="http://rogerdudler.github.io/git-guide/">push</a> your feature branch to (your fork of) the MOTrainer repository on GitHub;</li>
+<li>create the pull request, e.g. following the instructions <a href="https://help.github.com/articles/creating-a-pull-request/">here</a>.</li>
+</ul>
+<p>In case you feel like you've made a valuable contribution, but you don't know how to write or run tests for it, or how to generate the documentation: don't let this discourage you from making the pull request; we can help you! Just go ahead and submit the pull request, but keep in mind that you might be asked to append additional commits to your pull request.</p>
 
 
 

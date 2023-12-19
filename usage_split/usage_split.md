@@ -1,8 +1,10 @@
 # Data Split
 
-In this part we will demonstrate the usage of motrainer to split data for parallel ML model traning.
+This section demonstrates how to use motrainer to partition data for parallel ML model training.
 
-We assume the a start from an [xarray.Dataset](https://docs.xarray.dev/en/stable/generated/xarray.Dataset.html) object which contains spatio-temporal data needed for training multiple independent Machine Learning (ML) models. The examples of reading spatio-temporal data in to `xarray.Dataset` can be found in Example 1 and Example 2
+We start with an [xarray.Dataset](https://docs.xarray.dev/en/stable/generated/xarray.Dataset.html) object, which contains spatio-temporal data for training multiple independent Machine Learning (ML) models. Examples of reading spatio-temporal data into `xarray.Dataset` can be found in [Example 1](https://vegewaterdynamics.github.io/motrainer/notebooks/example_read_from_one_df/) and [Example 2](https://vegewaterdynamics.github.io/motrainer/notebooks/example_read_from_multiple_df/).
+
+The example Dataset object `ds` contains input and output data from 5 grid cells. It has two dimensions: `space` and `time`. It has six data variables, where `STATE1` to `STATE5` are physical model states (input data) and observations (output data).
 
 ```python
 print(ds)
@@ -28,6 +30,8 @@ Attributes:
     source:   data source
 ```
 
+Before splitting, you can verify if a dataset is splittable using the `is_splitable` function:
+
 ```python
 motrainer.is_splitable(ds)
 ```
@@ -36,10 +40,15 @@ motrainer.is_splitable(ds)
 True
 ```
 
-## Split Spatio-Temporal Dataset for Independent Training Processes
+The is_splitable function will return True if the dataset has exactly two dimensions: "space" and "time", and there are no duplicated keys in any of the coordinates of the dataset.
 
-### Split by dimension names
-One can use the `dataset_split` to split data into different partions:
+## Splitting Spatio-Temporal Dataset for Independent Training Processes
+
+The dataset_split function can be used to partition data. The split can be performed by specifying a dimension name or using an identifier.
+
+### Splitting by Dimension Names
+
+One can specify adimension name to split, e.g. "space":
 
 ```python
 import motrainer
@@ -50,7 +59,10 @@ print(bags)
 dask.bag<from_sequence, npartitions=5>
 ```
 
-The split results can be checked by:
+This will split `ds` per grid cell in to a [`Dask.bag`](https://docs.dask.org/en/stable/bag.html) object. Each partition is an independent gridcell. 
+
+We can check one grid cell by:
+
 ```python
 print(bags.take(1))
 ```
@@ -76,8 +88,15 @@ print(bags.take(1))
 ```
 
 ### 1-D split by indetifier
+
+One can also create an identifier dictionary to split. The keys of the dictionary should be a subset of {"space", "time"}, mapping "space" and/or "time" dimension with corresponding separation identifier.
+
+For example, `ds` can be splitted into two parts (first+fourth grid, and the rest) in space:
+
 ```python
-identifier = {"space": np.array([0, 0, 1, 1, 1])}
+import numpy as np
+
+identifier = {"space": np.array([0, 1, 1, 0, 1])}
 bags = motrainer.dataset_split(ds, identifier)
 
 ds_splitted = bags.compute()
@@ -91,6 +110,9 @@ print(ds_splitted[1].dims['space'])
 ```
 
 ### 2-D split by indetifier
+
+One can perform a 2-D split by providing identifiers in both space and time dimensions:
+
 ```python
 id_time = np.zeros(8506)
 id_time[2000:]=1
@@ -116,41 +138,57 @@ Frozen({'samples': 19518})
 
 ## Train-Test Split
 
-### Split by coordinates
+Before training, one can further split the datasets into training and testing datasets to reserve some data for testing. If the split needs to be based on the space and time coordinates, one can use `motrainer.train_test_split` to perform this split. Otherwise we recommend `sklearn.model_selection.train_test_split`(https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html) for simplicity.
+
+### Splitting by Coordinates
+
+When specifying a space or time coordinate, the dataset will be split into two parts: the part smaller ("<") than the coordinates and the rest (">="). By default, the former will be the training data and the latter will be testing.
+
+If the dataset has already be splitted into `Dask.bags`, we recommend to use the [`map`](https://docs.dask.org/en/stable/generated/dask.bag.map.html#dask.bag.map) function to apply train-test split to each splitted element.
+
+The following will select data before 2017-01-01 as training data:
+
 ```python
 train_test_bags = bags.map(
     motrainer.train_test_split, split={"time": np.datetime64("2017-01-01")}
 )
 ```
 
+Then extract train and test data using `pluck`:
+
 ```python
 train_bags = train_test_bags.pluck(0)
 test_bags = train_test_bags.pluck(1)
 ```
 
+When `reverse=True` is present, the latter part (">=" coordinate) will be training data, the rest will be testing. The following code will select data after (and include) 2017-01-01 as training data:
+
+```python
+train_test_bags = bags.map(
+    motrainer.train_test_split, split={"time": np.datetime64("2017-01-01"), reverse=True}
+)
+train_bags = train_test_bags.pluck(0)
+test_bags = train_test_bags.pluck(1)
+```
+
+
+One can also apply `motrainer.train_test_split` directly to an `xarray.Dataset` object:
 ```python
 motrainer.train_test_split(ds, split={"time": np.datetime64("2017-01-01")})
 ```
 
-```python
-motrainer.train_test_split(ds, split={"time": np.datetime64("2017-01-01")}, reverse=True)
-```
+### Splitting by Mask
 
-### Split by mask
+Alternatively, you can also initiate a `mask` to perform training data. By default, training data will be where `mask` is `True`. For example, if you would like to have data before 2017-01-01 as training data:
 
 ```python
 mask = ds_valid["time"] < np.datetime64("2017-01-01")
 train, test = train_test_split(ds_valid, mask=mask)
 ```
 
+If `reverse` is specified, training data will be where mask is `False`. The following will select data after (and include) 2017-01-01 as training data:
+
 ```python
 mask = ds_valid["time"] < np.datetime64("2017-01-01")
 train, test = train_test_split(ds_valid, mask=mask, reverse=True)
 ```
-
-
-
-
-
-
-

@@ -531,19 +531,19 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#split-spatio-temporal-dataset-for-independent-training-processes" class="md-nav__link">
+  <a href="#splitting-spatio-temporal-dataset-for-independent-training-processes" class="md-nav__link">
     <span class="md-ellipsis">
-      Split Spatio-Temporal Dataset for Independent Training Processes
+      Splitting Spatio-Temporal Dataset for Independent Training Processes
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Split Spatio-Temporal Dataset for Independent Training Processes">
+    <nav class="md-nav" aria-label="Splitting Spatio-Temporal Dataset for Independent Training Processes">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#split-by-dimension-names" class="md-nav__link">
+  <a href="#splitting-by-dimension-names" class="md-nav__link">
     <span class="md-ellipsis">
-      Split by dimension names
+      Splitting by Dimension Names
     </span>
   </a>
   
@@ -583,18 +583,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#split-by-coordinates" class="md-nav__link">
+  <a href="#splitting-by-coordinates" class="md-nav__link">
     <span class="md-ellipsis">
-      Split by coordinates
+      Splitting by Coordinates
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#split-by-mask" class="md-nav__link">
+  <a href="#splitting-by-mask" class="md-nav__link">
     <span class="md-ellipsis">
-      Split by mask
+      Splitting by Mask
     </span>
   </a>
   
@@ -861,19 +861,19 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#split-spatio-temporal-dataset-for-independent-training-processes" class="md-nav__link">
+  <a href="#splitting-spatio-temporal-dataset-for-independent-training-processes" class="md-nav__link">
     <span class="md-ellipsis">
-      Split Spatio-Temporal Dataset for Independent Training Processes
+      Splitting Spatio-Temporal Dataset for Independent Training Processes
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Split Spatio-Temporal Dataset for Independent Training Processes">
+    <nav class="md-nav" aria-label="Splitting Spatio-Temporal Dataset for Independent Training Processes">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#split-by-dimension-names" class="md-nav__link">
+  <a href="#splitting-by-dimension-names" class="md-nav__link">
     <span class="md-ellipsis">
-      Split by dimension names
+      Splitting by Dimension Names
     </span>
   </a>
   
@@ -913,18 +913,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#split-by-coordinates" class="md-nav__link">
+  <a href="#splitting-by-coordinates" class="md-nav__link">
     <span class="md-ellipsis">
-      Split by coordinates
+      Splitting by Coordinates
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#split-by-mask" class="md-nav__link">
+  <a href="#splitting-by-mask" class="md-nav__link">
     <span class="md-ellipsis">
-      Split by mask
+      Splitting by Mask
     </span>
   </a>
   
@@ -957,8 +957,9 @@
 
 
 <h1 id="data-split">Data Split</h1>
-<p>In this part we will demonstrate the usage of motrainer to split data for parallel ML model traning.</p>
-<p>We assume the a start from an <a href="https://docs.xarray.dev/en/stable/generated/xarray.Dataset.html">xarray.Dataset</a> object which contains spatio-temporal data needed for training multiple independent Machine Learning (ML) models. The examples of reading spatio-temporal data in to <code>xarray.Dataset</code> can be found in Example 1 and Example 2</p>
+<p>This section demonstrates how to use motrainer to partition data for parallel ML model training.</p>
+<p>We start with an <a href="https://docs.xarray.dev/en/stable/generated/xarray.Dataset.html">xarray.Dataset</a> object, which contains spatio-temporal data for training multiple independent Machine Learning (ML) models. Examples of reading spatio-temporal data into <code>xarray.Dataset</code> can be found in <a href="https://vegewaterdynamics.github.io/motrainer/notebooks/example_read_from_one_df/">Example 1</a> and <a href="https://vegewaterdynamics.github.io/motrainer/notebooks/example_read_from_multiple_df/">Example 2</a>.</p>
+<p>The example Dataset object <code>ds</code> contains input and output data from 5 grid cells. It has two dimensions: <code>space</code> and <code>time</code>. It has six data variables, where <code>STATE1</code> to <code>STATE5</code> are physical model states (input data) and observations (output data).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="go">&lt;xarray.Dataset&gt;</span>
@@ -979,21 +980,25 @@
 <a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="go">    license:  data license</span>
 <a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="go">    source:   data source</span>
 </code></pre></div>
+<p>Before splitting, you can verify if a dataset is splittable using the <code>is_splitable</code> function:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">motrainer</span><span class="o">.</span><span class="n">is_splitable</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="go">True</span>
 </code></pre></div>
-<h2 id="split-spatio-temporal-dataset-for-independent-training-processes">Split Spatio-Temporal Dataset for Independent Training Processes</h2>
-<h3 id="split-by-dimension-names">Split by dimension names</h3>
-<p>One can use the <code>dataset_split</code> to split data into different partions:</p>
+<p>The is_splitable function will return True if the dataset has exactly two dimensions: "space" and "time", and there are no duplicated keys in any of the coordinates of the dataset.</p>
+<h2 id="splitting-spatio-temporal-dataset-for-independent-training-processes">Splitting Spatio-Temporal Dataset for Independent Training Processes</h2>
+<p>The dataset_split function can be used to partition data. The split can be performed by specifying a dimension name or using an identifier.</p>
+<h3 id="splitting-by-dimension-names">Splitting by Dimension Names</h3>
+<p>One can specify adimension name to split, e.g. "space":</p>
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span> <span class="nn">motrainer</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">bags</span> <span class="o">=</span> <span class="n">motrainer</span><span class="o">.</span><span class="n">dataset_split</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">&quot;space&quot;</span><span class="p">)</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">bags</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="go">dask.bag&lt;from_sequence, npartitions=5&gt;</span>
 </code></pre></div></p>
-<p>The split results can be checked by:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">print</span><span class="p">(</span><span class="n">bags</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<p>This will split <code>ds</code> per grid cell in to a <a href="https://docs.dask.org/en/stable/bag.html"><code>Dask.bag</code></a> object. Each partition is an independent gridcell. </p>
+<p>We can check one grid cell by:</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">print</span><span class="p">(</span><span class="n">bags</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="go">(&lt;xarray.Dataset&gt;</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="go"> Dimensions:    (space: 1, time: 8506)</span>
@@ -1015,17 +1020,22 @@
 <a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="go">     source:   data source,)</span>
 </code></pre></div></p>
 <h3 id="1-d-split-by-indetifier">1-D split by indetifier</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">identifier</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])}</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">bags</span> <span class="o">=</span> <span class="n">motrainer</span><span class="o">.</span><span class="n">dataset_split</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">identifier</span><span class="p">)</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">ds_splitted</span> <span class="o">=</span> <span class="n">bags</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">ds_splitted</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="s1">&#39;space&#39;</span><span class="p">])</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">ds_splitted</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="s1">&#39;space&#39;</span><span class="p">])</span>
+<p>One can also create an identifier dictionary to split. The keys of the dictionary should be a subset of {"space", "time"}, mapping "space" and/or "time" dimension with corresponding separation identifier.</p>
+<p>For example, <code>ds</code> can be splitted into two parts (first+fourth grid, and the rest) in space:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">identifier</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])}</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">bags</span> <span class="o">=</span> <span class="n">motrainer</span><span class="o">.</span><span class="n">dataset_split</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">identifier</span><span class="p">)</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="n">ds_splitted</span> <span class="o">=</span> <span class="n">bags</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">ds_splitted</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="s1">&#39;space&#39;</span><span class="p">])</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">ds_splitted</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="s1">&#39;space&#39;</span><span class="p">])</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="go">2</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="go">3</span>
 </code></pre></div>
 <h3 id="2-d-split-by-indetifier">2-D split by indetifier</h3>
+<p>One can perform a 2-D split by providing identifiers in both space and time dimensions:</p>
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">id_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">8506</span><span class="p">)</span>
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">id_time</span><span class="p">[</span><span class="mi">2000</span><span class="p">:]</span><span class="o">=</span><span class="mi">1</span>
 <a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="n">identifier</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;space&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">id_time</span><span class="p">}</span>
@@ -1044,22 +1054,35 @@
 <a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="go">Frozen({&#39;samples&#39;: 19518})</span>
 </code></pre></div></p>
 <h2 id="train-test-split">Train-Test Split</h2>
-<h3 id="split-by-coordinates">Split by coordinates</h3>
+<p>Before training, one can further split the datasets into training and testing datasets to reserve some data for testing. If the split needs to be based on the space and time coordinates, one can use <code>motrainer.train_test_split</code> to perform this split. Otherwise we recommend <code>sklearn.model_selection.train_test_split</code>(https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html) for simplicity.</p>
+<h3 id="splitting-by-coordinates">Splitting by Coordinates</h3>
+<p>When specifying a space or time coordinate, the dataset will be split into two parts: the part smaller ("&lt;") than the coordinates and the rest ("&gt;="). By default, the former will be the training data and the latter will be testing.</p>
+<p>If the dataset has already be splitted into <code>Dask.bags</code>, we recommend to use the <a href="https://docs.dask.org/en/stable/generated/dask.bag.map.html#dask.bag.map"><code>map</code></a> function to apply train-test split to each splitted element.</p>
+<p>The following will select data before 2017-01-01 as training data:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">train_test_bags</span> <span class="o">=</span> <span class="n">bags</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>    <span class="n">motrainer</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s2">&quot;2017-01-01&quot;</span><span class="p">)}</span>
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="p">)</span>
 </code></pre></div>
+<p>Then extract train and test data using <code>pluck</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">train_bags</span> <span class="o">=</span> <span class="n">train_test_bags</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">test_bags</span> <span class="o">=</span> <span class="n">train_test_bags</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">motrainer</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s2">&quot;2017-01-01&quot;</span><span class="p">)})</span>
+<p>When <code>reverse=True</code> is present, the latter part ("&gt;=" coordinate) will be training data, the rest will be testing. The following code will select data after (and include) 2017-01-01 as training data:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">train_test_bags</span> <span class="o">=</span> <span class="n">bags</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>    <span class="n">motrainer</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s2">&quot;2017-01-01&quot;</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">}</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="p">)</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">train_bags</span> <span class="o">=</span> <span class="n">train_test_bags</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">test_bags</span> <span class="o">=</span> <span class="n">train_test_bags</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">motrainer</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s2">&quot;2017-01-01&quot;</span><span class="p">)},</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</code></pre></div>
-<h3 id="split-by-mask">Split by mask</h3>
+<p>One can also apply <code>motrainer.train_test_split</code> directly to an <code>xarray.Dataset</code> object:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">motrainer</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s2">&quot;2017-01-01&quot;</span><span class="p">)})</span>
+</code></pre></div></p>
+<h3 id="splitting-by-mask">Splitting by Mask</h3>
+<p>Alternatively, you can also initiate a <code>mask</code> to perform training data. By default, training data will be where <code>mask</code> is <code>True</code>. For example, if you would like to have data before 2017-01-01 as training data:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">mask</span> <span class="o">=</span> <span class="n">ds_valid</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s2">&quot;2017-01-01&quot;</span><span class="p">)</span>
 <a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">ds_valid</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
 </code></pre></div>
+<p>If <code>reverse</code> is specified, training data will be where mask is <code>False</code>. The following will select data after (and include) 2017-01-01 as training data:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="n">mask</span> <span class="o">=</span> <span class="n">ds_valid</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s2">&quot;2017-01-01&quot;</span><span class="p">)</span>
 <a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">ds_valid</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
