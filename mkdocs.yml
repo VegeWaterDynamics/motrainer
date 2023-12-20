@@ -1,0 +1,67 @@
+site_name: MOTrainer Documentation
+repo_url: https://github.com/VegeWaterDynamics/motrainer
+repo_name: MOTrainer
+
+nav:
+  - Getting started: 
+    - About MOTrainer: index.md
+    - Installation: setup.md
+  - Usage:
+    - usage_split.md
+    - usage_daskml.md
+    - usage_dnn.md
+  - Examples: 
+    - Covert a nested DataFrame to a Dataset: notebooks/example_read_from_one_df.ipynb
+    - Align multiple DataFrames to a Dataset: notebooks/example_read_from_multiple_df.ipynb
+    - Prallely training sklearn models with dask-ml: notebooks/example_daskml.ipynb
+    - Prallely training DNN with Tensorflow: notebooks/example_dnn.ipynb
+  - Conributing guide: CONTRIBUTING.md
+  - Change Log: CHANGELOG.md
+
+
+theme:
+  name: material
+  custom_dir: docs/notebooks/download_button
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+      primary: green
+      accent: white
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+      primary: black
+      accent: pink
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - content.code.copy
+  
+plugins:
+- mkdocs-jupyter:
+      include_source: True
+- search
+- mkdocstrings:
+    handlers:
+      python:
+        options:
+          docstring_style: google
+          docstring_options:
+            ignore_init_summary: no
+          merge_init_into_class: yes
+          show_submodules: no
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+
+extra:
+  generator: false
