@@ -58,3 +58,7 @@ wait(futures)
 # Get the results
 results = client.gather(futures)
 ```
+
+The above examples uses a local threaded Dask scheduler to parallelize the tasks. When executing training on an HPC system, we recommend using [Dask SLURM cluster](https://jobqueue.dask.org/en/latest/generated/dask_jobqueue.SLURMCluster.html) for the distributed training. For more information on different Dask clusters, please check the [Dask Documentation](https://docs.dask.org/en/stable/deploying.html).
+
+You can also directly submit training jobs as SLURM jobs, instead of using Dask SLURM cluster. You can find the example of using SLURM [here](../example/slurm_examples/readme.md).
