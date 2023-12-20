@@ -11,6 +11,7 @@ Added
 -----
 
 The first version of the MOTrainer package. The following functionalities are implemented:
+
 - Spatio temporal Dataset split;
 - Jackknife GPI implementation;
 - Documentation and examples for distributed training;
