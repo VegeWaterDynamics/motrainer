@@ -1,8 +1,0 @@
-numpy==1.22
-scipy
-tensorflow
-scikit-learn
-pandas
-scikit-optimize
-ipykernel
-matplotlib

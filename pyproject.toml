@@ -1,0 +1,150 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "motrainer"
+version = "0.1.0"
+requires-python = ">=3.10, <3.12"
+dependencies = [
+    "dask[complete]",
+    "ipykernel",
+    "numpy<1.24.0",
+    "pandas==2.0.3",
+    "scikit-learn",
+    "scikit-optimize",
+    "scipy",
+    "tensorflow",
+    "xarray",
+    "zarr",
+]
+description = "Parallel Training Measurement Operators (MO) for Data Assimilation (DA) Applications"
+readme = "README.rst"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Ou Ku", email = "o.ku@esciencecenter.nl"},
+    {name = "Fakhereh Sarah Alidoost"},
+    {name = "Pranav Chandramouli"},
+    {name = "Francesco Nattino"},
+    {name = "Meiert Willem Grootes"},
+    {name = "Xu Shan"},
+    {name = "Sonja Georgievska"},
+    {name = "Susan Steele-Dunne"},
+]
+keywords = ["machine learning", "earth observation", "data assimilations", "training", "sensor"]
+classifiers=[
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: Apache Software License',
+    'Natural Language :: English',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+]
+
+[project.urls]
+repository = "https://github.com/VegeWaterDynamics/motrainer"
+doi = "https://zenodo.org/doi/10.5281/zenodo.7540442"
+documentation = "https://VegeWaterDynamics.github.io/motrainer/"
+changelog = "https://VegeWaterDynamics.github.io/motrainer/CHANGELOG/"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pycodestyle",
+    "ruff",
+]
+docs = [
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocs-jupyter",
+    "mkdocstrings[python]",
+    "mkdocs-gen-files",
+]
+demo = [
+    "jupyterlab",
+    "matplotlib",
+    "dask-ml",
+    "dask-labextension",
+]
+
+[tool.setuptools]
+packages = ["motrainer"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--cov --cov-report term"
+testpaths = [
+    "tests",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["motrainer"]
+
+[tool.ruff]
+select = [
+  "E",  # pycodestyle
+  "F",  # pyflakes
+  "B",  # flake8-bugbear
+  "D",  # pydocstyle
+  "I",  # isort
+  "N",  # PEP8-naming
+  "UP",  # pyupgrade (upgrade syntax to current syntax)
+  "PLE",  # Pylint error https://github.com/charliermarsh/ruff#error-ple
+]
+ignore = [
+"D100", "D101", "D104", "D105", "D106", "D107", "D203", "D213"
+] # docstring style
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "docs",
+]
+
+line-length = 88
+indent-width = 4
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+target-version = "py310"
+
+[tool.ruff.per-file-ignores]
+"tests/**" = ["D"]
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"

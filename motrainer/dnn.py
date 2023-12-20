@@ -1,17 +1,24 @@
 import logging
-import tensorflow as tf
-import skopt
 import pickle
 from pathlib import Path
-from skopt.space import Real, Categorical, Integer
+
+# disable WARNING:absl:Found untraced functions such as _update_step_xla while saving
+# see https://github.com/tensorflow/tensorflow/issues/47554
+import absl.logging
+import skopt
+import tensorflow as tf
+from skopt.space import Categorical, Integer, Real
+
 from motrainer.model import keras_dnn, keras_dnn_lossweight
+
+absl.logging.set_verbosity(absl.logging.ERROR)
+
 
 logger = logging.getLogger(__name__)
 
 
-class NNTrain(object):
-    """
-    Neuron Network trainning object
+class NNTrain:
+    """Neuron Network trainning object.
 
     Methods
     -------
@@ -23,9 +30,9 @@ class NNTrain(object):
         Optimize the neuron network within the searching space by given
         optimization settings
     """
+
     def __init__(self, train_input, train_output):
-        """
-        Initialize NNTrain object
+        """Initialize NNTrain object.
 
         Parameters
         ----------
@@ -56,13 +63,11 @@ class NNTrain(object):
         self.model = None
 
     def update_space(self, **kwrags):
-        """
-        Update searching space of optimization.
-        """
+        """Update searching space of optimization."""
         for key, value in kwrags.items():
-            logger.debug('Update seaching sapce: {}={}'.format(key, value))
+            logger.debug(f'Update seaching sapce: {key}={value}')
             # skopt.space instances
-            if isinstance(value, (Real, Categorical, Integer)):
+            if isinstance(value, Real | Categorical | Integer):
                 self.dimensions[key] = value
                 self.dimensions[key].name = key
 
@@ -71,11 +76,10 @@ class NNTrain(object):
                 assert len(value) == 2
                 if any([isinstance(obj, int) for obj in value]):
                     logger.warning(
-                        'Mixed fload/int type found in {}:{}. '
+                        f'Mixed fload/int type found in {key}:{value}. '
                         'The search space will be interpreted as float. '
                         'If this behavior is not desired, try to specify'
-                        'all elements in {} with the same type.'.format(
-                            key, value, key))
+                        f'all elements in {key} with the same type.')
                 self.dimensions[key] = Real(low=value[0],
                                             high=value[1],
                                             prior='log-uniform',
@@ -94,8 +98,7 @@ class NNTrain(object):
 
             else:
                 logger.error(
-                    'Do not understand searching space: {}:{}.'.format(
-                        key, value))
+                    f'Do not understand searching space: {key}:{value}.')
                 raise NotImplementedError
 
     def optimize(self,
@@ -106,13 +109,11 @@ class NNTrain(object):
                  n_jobs=-1,
                  kappa=5,
                  validation_split=0.2,
-                 x0=[1e-3, 1, 4, 13, 'relu', 64],
+                 x0=None,
                  training_method='dnn',
                  loss_weights=None,
                  verbose=0):
-        """
-        Optimize the neuron network within the searching space by given
-        optimization settings
+        """Optimize the neuron network within the searching space..
 
         Parameters
         ----------
@@ -148,14 +149,13 @@ class NNTrain(object):
             Control the verbosity.
             By default 0, which means no screen feedback.
         """
-
         self.best_loss = best_loss
         self.keras_verbose = verbose
         self.loss_weights = loss_weights
 
         @skopt.utils.use_named_args(dimensions=list(self.dimensions.values()))
         def func(**dimensions):
-            logger.info('optimizing with dimensions: {}'.format(dimensions))
+            logger.info(f'optimizing with dimensions: {dimensions}')
 
             # setup model
             earlystop = tf.keras.callbacks.EarlyStopping(
@@ -172,8 +172,7 @@ class NNTrain(object):
                 if self.loss_weights is None:
                     self.loss_weights = [1] * self.train_output.shape[1]
                     logger.warning('loss_weights is None.'
-                                   'Using default weights {}'.format(
-                                       self.loss_weights))
+                                   f'Using default weights {self.loss_weights}')
                 model = keras_dnn_lossweight(dimensions,
                                              self.train_input.shape[1],
                                              self.train_output.shape[1],
@@ -202,6 +201,9 @@ class NNTrain(object):
             tf.keras.backend.clear_session()
             return loss
 
+        if x0 is None:
+            x0 = [1e-3, 1, 4, 13, 'relu', 64]
+
         self.gp_result = skopt.gp_minimize(func=func,
                                            dimensions=list(
                                                self.dimensions.values()),
@@ -212,10 +214,7 @@ class NNTrain(object):
                                            x0=x0)
 
     def export(self, path_model=None, path_hyperparameters=None):
-        """
-        Export model and hyperparameters from tranning.
-        """
-
+        """Export model and hyperparameters from tranning."""
         if path_model is not None:
             Path(path_model).parent.mkdir(parents=True, exist_ok=True)
             self.model.save(path_model)
@@ -226,5 +225,9 @@ class NNTrain(object):
             with open(path_hyperparameters, 'wb') as f:
                 pickle.dump([
                     sorted(
-                        zip(self.gp_result.func_vals, self.gp_result.x_iters))
+                        zip(
+                            self.gp_result.func_vals,
+                            self.gp_result.x_iters,
+                            strict=True
+                            ))
                 ], f)

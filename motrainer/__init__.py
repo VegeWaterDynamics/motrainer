@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
+from motrainer.splitter import dataset_split, is_splitable, train_test_split
 
-import logging
-
-logging.getLogger(__name__).addHandler(logging.NullHandler())
-
+__all__ = ("is_splitable", "dataset_split", "train_test_split")
