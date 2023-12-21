@@ -886,6 +886,8 @@
 <a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># Get the results</span>
 <a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="n">results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">futures</span><span class="p">)</span>
 </code></pre></div>
+<p>The above examples uses a local threaded Dask scheduler to parallelize the tasks. When executing training on an HPC system, we recommend using <a href="https://jobqueue.dask.org/en/latest/generated/dask_jobqueue.SLURMCluster.html">Dask SLURM cluster</a> for the distributed training. For more information on different Dask clusters, please check the <a href="https://docs.dask.org/en/stable/deploying.html">Dask Documentation</a>.</p>
+<p>You can also directly submit training jobs as SLURM jobs, instead of using Dask SLURM cluster. You can find the example of using SLURM <a href="../example/slurm_examples/readme.md">here</a>.</p>
 
 
 
