@@ -1,30 +1,51 @@
-# YAML 1.2
----
-abstract: "motrainer (Measurement Operator Trainer) is a Machine Learning package written in Python. It trains surrogate model to connect soil and vegetation states/parameters to microwave observations."
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: MOTrainer
+message: >-
+  Distributed Measurement Operator Trainer for Data
+  Assimilation Applications
+type: software
 authors:
-  -
-    affiliation: "Netherlands eScience Center"
+  - given-names: Ou
     family-names: Ku
-    given-names: Ou
-  -
-    affiliation: "Delft University of Technology"
+    email: o.ku@esciencecenter.nl
+    affiliation: Netherlands eScience Center
+    orcid: 'https://orcid.org/0000-0002-5373-5209'
+  - given-names: Fakhereh (Sarah)
+    family-names: Alidoost
+    affiliation: Netherlands eScience Center
+  - given-names: Xu
     family-names: Shan
-    given-names: Xu
-  -
-    affiliation: "Netherlands eScience Center"
-    family-names: Georgievska
-    given-names: Sonja
-  - 
-    affiliation: "Delft University of Technology"
+    affiliation: Delft University of Technology
+  - given-names: Pranav
+    family-names: Chandramouli
+    affiliation: Netherlands eScience Center
+  - given-names: Georgievska
+    family-names: Sonja
+    affiliation: Netherlands eScience Center
+  - given-names: Meiert
+    affiliation: Netherlands eScience Center
+    family-names: Grootes
+  - given-names: Susan
     family-names: Steele-Dunne
-    given-names: Susan
-cff-version: "0.1.0"
-title: "motrainer"
-date-released: "2022-12-10"
-doi: <insert your DOI here>
-version: "0.1.0"
-repository-code: "https://github.com/VegeWaterDynamics/motrainer"
+    affiliation: Delft University of Technology
 identifiers:
+  - type: doi
+    value: 10.5281/zenodo.7540442
+repository-code: 'https://github.com/VegeWaterDynamics/motrainer'
+url: 'https://vegewaterdynamics.github.io/motrainer/'
+abstract: >-
+  Measurement Operator Trainer is a Python package training
+  measurement operators (MO) for data assimilations
+  purposes. It is specifically designed for the applications
+  where one needs to split large spatio-temporal data into
+  independent partitions, and then train separate ML models
+  for each partition.
 keywords:
-message: "If you use this software, please cite it using these metadata."
-license: "Apache-2.0"
+  - Measurement Operator
+  - Data Assimilation
+  - Machine Learning
+  - Kalman Filter
+license: Apache-2.0

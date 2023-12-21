@@ -1,0 +1,44 @@
+{
+  "creators": [
+    {
+      "affiliation": "Netherlands eScience Center",
+      "name": "Ku, Ou",
+      "orcid": "0000-0002-5373-5209"
+    },
+    {
+      "affiliation": "Netherlands eScience Center",
+      "name": "Alidoost, Fakhereh (Sarah)"
+    },
+    {
+      "affiliation": "Delft University of Technology",
+      "name": "Shan, Xu"
+    },
+    {
+      "affiliation": "Netherlands eScience Center",
+      "name": "Chandramouli, Pranav"
+    },
+    {
+      "affiliation": "Netherlands eScience Center",
+      "name": "Sonja, Georgievska"
+    },
+    {
+      "affiliation": "Netherlands eScience Center",
+      "name": "Grootes, Meiert"
+    },
+    {
+      "affiliation": "Delft University of Technology",
+      "name": "Steele-Dunne, Susan"
+    }
+  ],
+  "description": "Measurement Operator Trainer is a Python package training measurement operators (MO) for data assimilations purposes. It is specifically designed for the applications where one needs to split large spatio-temporal data into independent partitions, and then train separate ML models for each partition.",
+  "keywords": [
+    "Measurement Operator",
+    "Data Assimilation",
+    "Machine Learning",
+    "Kalman Filter"
+  ],
+  "license": {
+    "id": "Apache-2.0"
+  },
+  "title": "MOTrainer"
+}

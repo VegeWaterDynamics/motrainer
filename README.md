@@ -1,13 +1,14 @@
 # MOTrainer: Measurement Operator Trainer
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7540443.svg)](https://doi.org/10.5281/zenodo.7540443)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7540442.svg)](https://doi.org/10.5281/zenodo.7540442)
+[![Build](https://github.com/VegeWaterDynamics/motrainer/actions/workflows/build.yml/badge.svg)](https://github.com/VegeWaterDynamics/motrainer/actions/workflows/build.yml)
+[![Ruff](https://github.com/VegeWaterDynamics/motrainer/actions/workflows/lint.yml/badge.svg)](https://github.com/VegeWaterDynamics/motrainer/actions/workflows/lint.yml)
 
-Measurement Operator Trainer is a Python package training measurement operators 
-(MO) for data assimilations purposes. It is specifically designed for the aplications where one needs to split large spatio-temporal data into independent partitions, and then train separate ML models for each partition.
+Measurement Operator Trainer is a Python package training measurement operators (MO) for data assimilations purposes. It is specifically designed for the applications where one needs to split large spatio-temporal data into independent partitions, and then train separate ML models for each partition.
 
-Please refer to the MOtrainer documentation for more details.
+Please refer to the [MOtrainer documentation](https://vegewaterdynamics.github.io/motrainer/) for more details.
 
-Copyright (c) 2021, 
+## License
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
