@@ -19,7 +19,7 @@ dependencies = [
     "zarr",
 ]
 description = "Parallel Training Measurement Operators (MO) for Data Assimilation (DA) Applications"
-readme = "README.rst"
+readme = "README.md"
 license = {file = "LICENSE"}
 authors = [
     {name = "Ou Ku", email = "o.ku@esciencecenter.nl"},
