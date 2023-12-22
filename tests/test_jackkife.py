@@ -3,6 +3,7 @@ import json
 import numpy as np
 import pandas as pd
 import pytest
+import h5py
 
 from motrainer.jackknife import JackknifeGPI
 
@@ -67,7 +68,10 @@ class TestJacknife:
         assert gpi.best_train is not None
         assert gpi.best_year in [2017, 2018]
 
-        with open("/tmp/metadata.json") as j:
-            metadata = json.loads(j.read())
+        # test meta_data saved in hdf5 file
+        with h5py.File("/tmp/best_optimized_model_2017.h5", 'r') as f:
+            best_year = f.attrs['best_year']
+            input_list = f.attrs['input_list']
 
-        assert {"input_list", "output_list", "best_year"}.issubset(set(metadata.keys()))
+        assert best_year == 2017
+        assert input_list == gpi.input_list

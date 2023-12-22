@@ -171,10 +171,7 @@ class JackknifeGPI:
 
             if self.export_all_years:
                 path_model = f'{self.outpath}/all_years/optimized_model_{this_year}'
-                path_hyperparas = '{}/all_years/hyperparameters_{}'.format(
-                    self.outpath, this_year)
-                training.export(path_model=path_model,
-                                path_hyperparameters=path_hyperparas)
+                training.export(path_model=path_model)
 
             # find minimum rmse
             # TODO: mae, pearson, spearman
@@ -194,30 +191,19 @@ class JackknifeGPI:
                     f'A-priori performance: {self.apr_perf}'
                     f'Post-priori performance: {self.post_perf}')
 
-    def export_best(self, model_name='best_optimized_model',
-                    hyper_name='best_hyperparameters'):
+    def export_best(self, model_name='best_optimized_model'):
         """Export the best results in Jackknife process."""
         logger.info(
-            'Exporting model and hyperparameters of year {} to {}'.format(
-                self.best_year, self.outpath))
+            f'Exporting model and hyperparameters of year {self.best_year} to {self.outpath}'
+            )
 
         if model_name is not None:
             path_model = f'{self.outpath}/{model_name}_{self.best_year}'
         else:
             path_model = f'{self.outpath}/best_optimized_model_{self.best_year}'
 
-        if hyper_name is not None:
-            path_hyperparameters = f'{self.outpath}/{hyper_name}_{self.best_year}'
-        else:
-            path_hyperparameters = '{}/best_hyperparameters_{}'.format(
-                self.outpath, self.best_year)
-
-        self.best_train.export(path_model=path_model,
-                               path_hyperparameters=path_hyperparameters)
-
         # write metadata
-        f_metadata = f'{self.outpath}/metadata.json'
-        metedata = dict()
+        metedata = {}
         metedata['input_list'] = self.input_list
         metedata['output_list'] = self.input_list
         metedata['best_year'] = int(self.best_year)
@@ -226,5 +212,4 @@ class JackknifeGPI:
             if key in self.gpi_data.keys():
                 metedata[key] = float(self.gpi_data[key].iloc[0])
 
-        with open(f_metadata, 'w') as f:
-            json.dump(metedata, f)
+        self.best_train.export(path_model=path_model, meta_data=metedata)
