@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import pytest
+import h5py
 from skopt.space import Real
 
 from motrainer.dnn import NNTrain
@@ -85,8 +86,22 @@ class TestOptimize:
             num_dense_nodes=[5, 6],
         )
         test_train.optimize(best_loss=10, epochs=1, x0=[0.01, 2, 5, 5, "relu", 64])
-        test_train.export("/tmp/model", "/tmp/params")
+        expected_hyperparameters = sorted(
+            zip(
+                test_train.gp_result.func_vals,
+                test_train.gp_result.x_iters,
+                strict=True
+                )
+        )
+        test_train.export("/tmp/model")
         assert test_train.model is not None
+
+        # load hyperparameters from "/tmp/model.h5" and assert they are the same
+        with h5py.File("/tmp/model.h5", 'r') as f:
+            param = f.attrs['hyperparameters']
+        # convert hyperparameters to a list of tuples
+        hyperparameters = eval(param)
+        assert hyperparameters[0][0] == expected_hyperparameters[0][0]
 
     @pytest.mark.filterwarnings("ignore::DeprecationWarning", "ignore::UserWarning")
     def test_dnn_results_exist_lossweight(self):
@@ -108,4 +123,5 @@ class TestOptimize:
             loss_weights=[1, 0.5],
             x0=[0.01, 2, 5, 5, "relu", 64],
         )
+
         assert test_train.model is not None
