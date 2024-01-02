@@ -73,7 +73,8 @@ class TestUpdateSpace:
 
 class TestOptimize:
     @pytest.mark.filterwarnings("ignore::DeprecationWarning")
-    def test_dnn_results_exist(self):
+    @pytest.fixture
+    def test_dnn_results_exist(self, tmp_path):
         datain = pd.DataFrame(
             data={"x1": np.linspace(0, 1, 10), "x2": np.linspace(0, 1, 10)}
         )
@@ -93,11 +94,11 @@ class TestOptimize:
                 strict=True
                 )
         )
-        test_train.export("/tmp/model")
+        test_train.export(f"{tmp_path}/model")
         assert test_train.model is not None
 
-        # load hyperparameters from "/tmp/model.h5" and assert they are the same
-        with h5py.File("/tmp/model.h5", 'r') as f:
+        # load hyperparameters from "model.h5" and assert they are the same
+        with h5py.File(f"{tmp_path}/model.h5", 'r') as f:
             param = f.attrs['hyperparameters']
         # convert hyperparameters to a list of tuples
         hyperparameters = eval(param)
