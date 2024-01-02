@@ -1,9 +1,8 @@
-import json
 
+import h5py
 import numpy as np
 import pandas as pd
 import pytest
-import h5py
 
 from motrainer.jackknife import JackknifeGPI
 

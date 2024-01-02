@@ -1,11 +1,9 @@
 import logging
-import pickle
-import h5py
-from pathlib import Path
 
 # disable WARNING:absl:Found untraced functions such as _update_step_xla while saving
 # see https://github.com/tensorflow/tensorflow/issues/47554
 import absl.logging
+import h5py
 import skopt
 import tensorflow as tf
 from skopt.space import Categorical, Integer, Real

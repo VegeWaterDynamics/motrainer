@@ -1,4 +1,3 @@
-import json
 import logging
 from pathlib import Path
 
@@ -194,7 +193,8 @@ class JackknifeGPI:
     def export_best(self, model_name='best_optimized_model'):
         """Export the best results in Jackknife process."""
         logger.info(
-            f'Exporting model and hyperparameters of year {self.best_year} to {self.outpath}'
+            'Exporting model and hyperparameters of '
+            f'year {self.best_year} to {self.outpath}'
             )
 
         if model_name is not None:
