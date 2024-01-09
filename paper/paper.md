@@ -45,6 +45,20 @@ A surrogate MO, as a ML model, should be trained over a coherent spatio-temporal
 
 To address this challenge, we developed the open Python package `MOTrainer`. It caters to researchers requiring training independent MOs across extensive spatio-temporal coverage in a distributed manner. `MOTrainer` leverages Xarray's support for multi-dimensional datasets to accommodate spatio-temporal features of input/output data of the training tasks. It provides user-friendly functionalities implemented with the Dask library, facilitating the partitioning of large spatio-temporal data for independent model training tasks. Additionally, it streamlines the train-test data split based on customized spatio-temporal coordinates. The Jackknife method [@mccuen1998hydrologic] is implemented as an external Cross-Validation (CV) method for Deep Neural Network (DNN) training, with support for Dask parallelization. This feature enables the scaling of training tasks across various computational infrastructures.
 
-The package includes comprehensive examples for both training tasks on simpler ML models using sklearn and daskml, as well as more intricate Deep Neural Networks (DNN) using TensorFlow.
-
 `MOTrainer` has been employed in a study of vegetation water dynamics [@SHAN2022113116], where it facilitated the mapping of Land-Scape Model (LSM) states to satellite radar observations.
+
+## Tutorial
+
+The `MOTrainer` package includes comprehensive [usage examples](https://vegewaterdynamics.github.io/motrainer/usage_split/), as well as tutorials for:
+
+1. Converting input data to Xarray Dataset format: [Example 1](https://vegewaterdynamics.github.io/motrainer/notebooks/example_read_from_one_df/) and [Example 2](https://vegewaterdynamics.github.io/motrainer/notebooks/example_read_from_one_df/);
+
+2. Training tasks on simpler ML models using `sklearn` and `daskml`: [Example Notebook](https://vegewaterdynamics.github.io/motrainer/notebooks/example_daskml/);
+
+3. Training tasks on Deep Neural Networks (DNN) using TensorFlow: [Example Notebook](https://vegewaterdynamics.github.io/motrainer/notebooks/example_dnn/).
+
+## Acknowledgements
+
+The authors express sincere gratitude to the Dutch Research Council (Nederlandse Organisatie voor Wetenschappelijk Onderzoek, NWO) and the Netherlands Space Office for their generous funding of the MOTrainer development through the User Support Programme Space Research (GO) call, grant ALWGO.2018.036. Special thanks to SURF for providing valuable computational resources for MOTrainer testing via the grant EINF-339.
+
+We would also like to thanks Dr. Yifat Dzigan, Dr. Paco López-Dekker, and Tina Nikaein for the insightful discussions, which are important contributions to this work.
