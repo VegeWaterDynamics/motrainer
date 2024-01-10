@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
     
     
       
@@ -1405,10 +1405,12 @@ import xarray as xr</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_zarr</span><span class="p">(</span><span class="s2">"./example1_data.zarr/"</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">data_path</span> <span class="o">=</span> <span class="s2">"./example1_data.zarr"</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_zarr</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
 <span class="n">ds</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-2">ds = xr.open_zarr("./example1_data.zarr/")
+<div class="clipboard-copy-txt" id="cell-2">data_path = "./example1_data.zarr"
+ds = xr.open_zarr(data_path)
 ds</div>
 </div>
 </div>
@@ -1805,7 +1807,7 @@ Data variables:
     slop       (space, time) float64 dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;
 Attributes:
     license:  data license
-    source:   data source</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.Dataset</div></div><ul class="xr-sections"><li class="xr-section-item"><input class="xr-section-summary-in" disabled="" id="section-81d2c73a-d8b5-4e2f-aae9-0d742e033c56" type="checkbox"/><label class="xr-section-summary" for="section-81d2c73a-d8b5-4e2f-aae9-0d742e033c56" title="Expand/collapse section">Dimensions:</label><div class="xr-section-inline-details"><ul class="xr-dim-list"><li><span>space</span>: 5</li><li><span class="xr-has-index">time</span>: 8506</li></ul></div><div class="xr-section-details"></div></li><li class="xr-section-item"><input checked="" class="xr-section-summary-in" id="section-b123ed34-67ed-4834-8706-76cee2e653c5" type="checkbox"/><label class="xr-section-summary" for="section-b123ed34-67ed-4834-8706-76cee2e653c5">Coordinates: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>latitude</span></div><div class="xr-var-dims">(space)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(5,), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-4ffd6985-515a-4152-8eac-bcd38459ebe8" type="checkbox"/><label for="attrs-4ffd6985-515a-4152-8eac-bcd38459ebe8" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-9bc48519-00e0-4e84-ae6d-b8f72a16bb62" type="checkbox"/><label for="data-9bc48519-00e0-4e84-ae6d-b8f72a16bb62" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
+    source:   data source</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.Dataset</div></div><ul class="xr-sections"><li class="xr-section-item"><input class="xr-section-summary-in" disabled="" id="section-956d9497-e125-480c-982a-db69cb29217f" type="checkbox"/><label class="xr-section-summary" for="section-956d9497-e125-480c-982a-db69cb29217f" title="Expand/collapse section">Dimensions:</label><div class="xr-section-inline-details"><ul class="xr-dim-list"><li><span>space</span>: 5</li><li><span class="xr-has-index">time</span>: 8506</li></ul></div><div class="xr-section-details"></div></li><li class="xr-section-item"><input checked="" class="xr-section-summary-in" id="section-742a90b4-99ec-480d-b6ad-22536da8c3c0" type="checkbox"/><label class="xr-section-summary" for="section-742a90b4-99ec-480d-b6ad-22536da8c3c0">Coordinates: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>latitude</span></div><div class="xr-var-dims">(space)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(5,), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-5c41ec42-8de6-4096-accd-bbeff926e66c" type="checkbox"/><label for="attrs-5c41ec42-8de6-4096-accd-bbeff926e66c" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-880850f0-71c3-461e-9175-8c664da16ad7" type="checkbox"/><label for="data-880850f0-71c3-461e-9175-8c664da16ad7" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
 <tr>
 <td>
 <table style="border-collapse: collapse;">
@@ -1854,7 +1856,7 @@ Attributes:
 </svg>
 </td>
 </tr>
-</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>longitude</span></div><div class="xr-var-dims">(space)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(5,), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-a102aab7-8164-41ae-ba0e-1a9e6f6704d6" type="checkbox"/><label for="attrs-a102aab7-8164-41ae-ba0e-1a9e6f6704d6" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-d124889e-d0ed-4dae-8a51-bb1fb73d9a15" type="checkbox"/><label for="data-d124889e-d0ed-4dae-8a51-bb1fb73d9a15" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
+</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>longitude</span></div><div class="xr-var-dims">(space)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(5,), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-282ee024-bffb-4d99-986f-17582894e180" type="checkbox"/><label for="attrs-282ee024-bffb-4d99-986f-17582894e180" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-7bcb32e5-2677-46fd-aafa-c112c6c0870c" type="checkbox"/><label for="data-7bcb32e5-2677-46fd-aafa-c112c6c0870c" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
 <tr>
 <td>
 <table style="border-collapse: collapse;">
@@ -1903,10 +1905,10 @@ Attributes:
 </svg>
 </td>
 </tr>
-</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">time</span></div><div class="xr-var-dims">(time)</div><div class="xr-var-dtype">datetime64[ns]</div><div class="xr-var-preview xr-preview">2007-01-02 ... 2020-01-01T01:00:00</div><input class="xr-var-attrs-in" disabled="" id="attrs-b713df1b-7e46-42a1-8c9b-4c5b64cd55b9" type="checkbox"/><label for="attrs-b713df1b-7e46-42a1-8c9b-4c5b64cd55b9" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-063e52c5-7b8a-4aa4-9386-a21e3b7ec705" type="checkbox"/><label for="data-063e52c5-7b8a-4aa4-9386-a21e3b7ec705" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['2007-01-02T00:00:00.000000000', '2007-01-03T00:00:00.000000000',
+</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">time</span></div><div class="xr-var-dims">(time)</div><div class="xr-var-dtype">datetime64[ns]</div><div class="xr-var-preview xr-preview">2007-01-02 ... 2020-01-01T01:00:00</div><input class="xr-var-attrs-in" disabled="" id="attrs-a5255cba-d046-4dfd-8a4a-ac5a1480f1b9" type="checkbox"/><label for="attrs-a5255cba-d046-4dfd-8a4a-ac5a1480f1b9" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-b065a1a5-54aa-40fe-9dbf-bfd2b3efe0b6" type="checkbox"/><label for="data-b065a1a5-54aa-40fe-9dbf-bfd2b3efe0b6" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['2007-01-02T00:00:00.000000000', '2007-01-03T00:00:00.000000000',
        '2007-01-03T00:30:00.000000000', ..., '2020-01-01T00:00:00.000000000',
        '2020-01-01T00:30:00.000000000', '2020-01-01T01:00:00.000000000'],
-      dtype='datetime64[ns]')</pre></div></li></ul></div></li><li class="xr-section-item"><input checked="" class="xr-section-summary-in" id="section-4186d90f-b3bf-42f8-9cb0-a31d95be2420" type="checkbox"/><label class="xr-section-summary" for="section-4186d90f-b3bf-42f8-9cb0-a31d95be2420">Data variables: <span>(11)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>BIOMA1</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-6cbe2524-602b-4196-ab3d-f8ebbe552e72" type="checkbox"/><label for="attrs-6cbe2524-602b-4196-ab3d-f8ebbe552e72" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-d48a5315-3072-4370-a920-01b80e2bc307" type="checkbox"/><label for="data-d48a5315-3072-4370-a920-01b80e2bc307" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
+      dtype='datetime64[ns]')</pre></div></li></ul></div></li><li class="xr-section-item"><input checked="" class="xr-section-summary-in" id="section-f70d4af3-6ca2-46cb-b656-dd6fdee6f67a" type="checkbox"/><label class="xr-section-summary" for="section-f70d4af3-6ca2-46cb-b656-dd6fdee6f67a">Data variables: <span>(11)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>BIOMA1</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-521b228d-e401-4992-a424-710e380e2b11" type="checkbox"/><label for="attrs-521b228d-e401-4992-a424-710e380e2b11" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-6821d5f9-e371-4a86-a856-a73abb12ff21" type="checkbox"/><label for="data-6821d5f9-e371-4a86-a856-a73abb12ff21" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
 <tr>
 <td>
 <table style="border-collapse: collapse;">
@@ -1956,7 +1958,7 @@ Attributes:
 </svg>
 </td>
 </tr>
-</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>BIOMA2</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-0c1ec082-981d-424b-b793-bb6cc0ae1efa" type="checkbox"/><label for="attrs-0c1ec082-981d-424b-b793-bb6cc0ae1efa" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-2a09c72f-9c04-4d27-9162-da6a66f5fe69" type="checkbox"/><label for="data-2a09c72f-9c04-4d27-9162-da6a66f5fe69" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
+</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>BIOMA2</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-3b2cedb9-9c93-446c-8204-24f8091e3481" type="checkbox"/><label for="attrs-3b2cedb9-9c93-446c-8204-24f8091e3481" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-c06047a7-8232-4bd1-9817-7ff09e9540cd" type="checkbox"/><label for="data-c06047a7-8232-4bd1-9817-7ff09e9540cd" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
 <tr>
 <td>
 <table style="border-collapse: collapse;">
@@ -2006,7 +2008,7 @@ Attributes:
 </svg>
 </td>
 </tr>
-</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>TG1</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-0de2b834-9686-4c5d-9447-8ae27e66688c" type="checkbox"/><label for="attrs-0de2b834-9686-4c5d-9447-8ae27e66688c" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-5cc6ac6c-9f06-4080-ac42-74409da3fd4c" type="checkbox"/><label for="data-5cc6ac6c-9f06-4080-ac42-74409da3fd4c" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
+</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>TG1</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-4d6089a9-c5d5-4cd7-9b40-535007e7846c" type="checkbox"/><label for="attrs-4d6089a9-c5d5-4cd7-9b40-535007e7846c" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-34e857d0-b3a4-401f-a0da-a9653596fceb" type="checkbox"/><label for="data-34e857d0-b3a4-401f-a0da-a9653596fceb" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
 <tr>
 <td>
 <table style="border-collapse: collapse;">
@@ -2056,7 +2058,7 @@ Attributes:
 </svg>
 </td>
 </tr>
-</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>TG2</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-47dcb145-3667-4266-9ecc-b134252c89bb" type="checkbox"/><label for="attrs-47dcb145-3667-4266-9ecc-b134252c89bb" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-245889ac-69dc-4e65-9eeb-7e326a2c768a" type="checkbox"/><label for="data-245889ac-69dc-4e65-9eeb-7e326a2c768a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
+</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>TG2</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-78b696e6-b682-4000-9434-3eaad6fa404d" type="checkbox"/><label for="attrs-78b696e6-b682-4000-9434-3eaad6fa404d" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-151f3da7-3d7f-4ba5-ae70-ade7f219185b" type="checkbox"/><label for="data-151f3da7-3d7f-4ba5-ae70-ade7f219185b" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
 <tr>
 <td>
 <table style="border-collapse: collapse;">
@@ -2106,7 +2108,7 @@ Attributes:
 </svg>
 </td>
 </tr>
-</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>TG3</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-3c2fb309-27e9-4c73-bddc-f6644e9d6b4a" type="checkbox"/><label for="attrs-3c2fb309-27e9-4c73-bddc-f6644e9d6b4a" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-2aa06d74-e831-4778-8bb2-2974ac3f60b1" type="checkbox"/><label for="data-2aa06d74-e831-4778-8bb2-2974ac3f60b1" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
+</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>TG3</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-bcaa346e-40cb-43c9-99f8-a549ac93d97e" type="checkbox"/><label for="attrs-bcaa346e-40cb-43c9-99f8-a549ac93d97e" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-cfa22808-bf08-4656-a3ea-76742ac620f3" type="checkbox"/><label for="data-cfa22808-bf08-4656-a3ea-76742ac620f3" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
 <tr>
 <td>
 <table style="border-collapse: collapse;">
@@ -2156,7 +2158,7 @@ Attributes:
 </svg>
 </td>
 </tr>
-</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>WG1</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-c2269e31-bcd4-4dc4-8b1f-147be4b40d2b" type="checkbox"/><label for="attrs-c2269e31-bcd4-4dc4-8b1f-147be4b40d2b" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-d3e5d11a-f4e9-4068-9917-69394973d9e3" type="checkbox"/><label for="data-d3e5d11a-f4e9-4068-9917-69394973d9e3" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
+</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>WG1</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-57f56f52-314a-46ba-a6c9-47774e14b4f7" type="checkbox"/><label for="attrs-57f56f52-314a-46ba-a6c9-47774e14b4f7" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-466e93fd-86d9-4655-91af-2ac096a2704a" type="checkbox"/><label for="data-466e93fd-86d9-4655-91af-2ac096a2704a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
 <tr>
 <td>
 <table style="border-collapse: collapse;">
@@ -2206,7 +2208,7 @@ Attributes:
 </svg>
 </td>
 </tr>
-</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>WG2</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-db3004ed-fa8d-41ba-b2d3-e38e1ff91f09" type="checkbox"/><label for="attrs-db3004ed-fa8d-41ba-b2d3-e38e1ff91f09" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-0ddaf58a-e0ca-48ba-a782-da7a8533954b" type="checkbox"/><label for="data-0ddaf58a-e0ca-48ba-a782-da7a8533954b" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
+</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>WG2</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-28c461e4-50b2-44b9-978f-d9b2a812f7bc" type="checkbox"/><label for="attrs-28c461e4-50b2-44b9-978f-d9b2a812f7bc" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-6d362692-8139-4743-bc9f-3b161032897b" type="checkbox"/><label for="data-6d362692-8139-4743-bc9f-3b161032897b" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
 <tr>
 <td>
 <table style="border-collapse: collapse;">
@@ -2256,7 +2258,7 @@ Attributes:
 </svg>
 </td>
 </tr>
-</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>WG3</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-f7c8226d-374e-403b-96e3-04a8c0c9f902" type="checkbox"/><label for="attrs-f7c8226d-374e-403b-96e3-04a8c0c9f902" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-4d525ca8-40df-494b-bb15-4a57266f418c" type="checkbox"/><label for="data-4d525ca8-40df-494b-bb15-4a57266f418c" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
+</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>WG3</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-c61adbaf-effd-4eee-976d-abc029f31af9" type="checkbox"/><label for="attrs-c61adbaf-effd-4eee-976d-abc029f31af9" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-09ba9e3a-02b9-413e-9810-76c32980ff11" type="checkbox"/><label for="data-09ba9e3a-02b9-413e-9810-76c32980ff11" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
 <tr>
 <td>
 <table style="border-collapse: collapse;">
@@ -2306,7 +2308,7 @@ Attributes:
 </svg>
 </td>
 </tr>
-</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>curv</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-23b16142-2066-46f9-90d8-79d32b8df04a" type="checkbox"/><label for="attrs-23b16142-2066-46f9-90d8-79d32b8df04a" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-770be35f-9166-465c-acf3-384368567b76" type="checkbox"/><label for="data-770be35f-9166-465c-acf3-384368567b76" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
+</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>curv</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-be2193d1-e35b-43cf-bd7c-60729edc54a8" type="checkbox"/><label for="attrs-be2193d1-e35b-43cf-bd7c-60729edc54a8" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-5ebcf2d3-e2ae-4a21-9431-77122f769f5e" type="checkbox"/><label for="data-5ebcf2d3-e2ae-4a21-9431-77122f769f5e" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
 <tr>
 <td>
 <table style="border-collapse: collapse;">
@@ -2356,7 +2358,7 @@ Attributes:
 </svg>
 </td>
 </tr>
-</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>sig</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-13c29f6f-68ca-47ef-b8f9-bb6da6420466" type="checkbox"/><label for="attrs-13c29f6f-68ca-47ef-b8f9-bb6da6420466" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-adddba0b-eb8a-4528-89d2-0b81275898be" type="checkbox"/><label for="data-adddba0b-eb8a-4528-89d2-0b81275898be" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
+</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>sig</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-fba25e19-446a-4b27-a866-4fdfea11cb09" type="checkbox"/><label for="attrs-fba25e19-446a-4b27-a866-4fdfea11cb09" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-c64d1344-0e32-46e6-ba34-5ab1b95f5411" type="checkbox"/><label for="data-c64d1344-0e32-46e6-ba34-5ab1b95f5411" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
 <tr>
 <td>
 <table style="border-collapse: collapse;">
@@ -2406,7 +2408,7 @@ Attributes:
 </svg>
 </td>
 </tr>
-</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>slop</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-68718a9f-711b-4bc3-a704-2abf38e1b041" type="checkbox"/><label for="attrs-68718a9f-711b-4bc3-a704-2abf38e1b041" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-ad968a7f-a12f-48e5-ab3b-5fade34f5e0f" type="checkbox"/><label for="data-ad968a7f-a12f-48e5-ab3b-5fade34f5e0f" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
+</table></div></li><li class="xr-var-item"><div class="xr-var-name"><span>slop</span></div><div class="xr-var-dims">(space, time)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">dask.array&lt;chunksize=(3, 8506), meta=np.ndarray&gt;</div><input class="xr-var-attrs-in" disabled="" id="attrs-5f21210e-50e0-4430-8ad6-15dccf5a0f90" type="checkbox"/><label for="attrs-5f21210e-50e0-4430-8ad6-15dccf5a0f90" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use xlink:href="#icon-file-text2"></use></svg></label><input class="xr-var-data-in" id="data-77654d1f-f54d-479a-873c-cdc0ff718667" type="checkbox"/><label for="data-77654d1f-f54d-479a-873c-cdc0ff718667" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><table>
 <tr>
 <td>
 <table style="border-collapse: collapse;">
@@ -2456,7 +2458,7 @@ Attributes:
 </svg>
 </td>
 </tr>
-</table></div></li></ul></div></li><li class="xr-section-item"><input class="xr-section-summary-in" id="section-2751bb6e-9c0c-4670-985d-fc026becf34c" type="checkbox"/><label class="xr-section-summary" for="section-2751bb6e-9c0c-4670-985d-fc026becf34c">Indexes: <span>(1)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>time</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input class="xr-index-data-in" id="index-940f000d-5381-4855-bd2f-a5ebde46b68f" type="checkbox"><label for="index-940f000d-5381-4855-bd2f-a5ebde46b68f" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(DatetimeIndex(['2007-01-02 00:00:00', '2007-01-03 00:00:00',
+</table></div></li></ul></div></li><li class="xr-section-item"><input class="xr-section-summary-in" id="section-975f4258-90d4-4686-bcec-2425fb856cc6" type="checkbox"/><label class="xr-section-summary" for="section-975f4258-90d4-4686-bcec-2425fb856cc6">Indexes: <span>(1)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>time</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input class="xr-index-data-in" id="index-526984f2-316b-4dc3-acb0-dc75ec07c0f4" type="checkbox"><label for="index-526984f2-316b-4dc3-acb0-dc75ec07c0f4" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use xlink:href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(DatetimeIndex(['2007-01-02 00:00:00', '2007-01-03 00:00:00',
                '2007-01-03 00:30:00', '2007-01-05 00:00:00',
                '2007-01-06 00:00:00', '2007-01-08 00:00:00',
                '2007-01-08 00:30:00', '2007-01-09 00:00:00',
@@ -2467,7 +2469,7 @@ Attributes:
                '2019-12-30 01:30:00', '2019-12-31 00:00:00',
                '2019-12-31 00:30:00', '2020-01-01 00:00:00',
                '2020-01-01 00:30:00', '2020-01-01 01:00:00'],
-              dtype='datetime64[ns]', name='time', length=8506, freq=None))</pre></div></input></li></ul></div></li><li class="xr-section-item"><input checked="" class="xr-section-summary-in" id="section-10f85ce2-00c2-4d41-9015-7cdf4363fbd0" type="checkbox"/><label class="xr-section-summary" for="section-10f85ce2-00c2-4d41-9015-7cdf4363fbd0">Attributes: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>license :</span></dt><dd>data license</dd><dt><span>source :</span></dt><dd>data source</dd></dl></div></li></ul></div></div>
+              dtype='datetime64[ns]', name='time', length=8506, freq=None))</pre></div></input></li></ul></div></li><li class="xr-section-item"><input checked="" class="xr-section-summary-in" id="section-4126039c-0746-4971-8f72-370e47a5dd5a" type="checkbox"/><label class="xr-section-summary" for="section-4126039c-0746-4971-8f72-370e47a5dd5a">Attributes: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>license :</span></dt><dd>data license</dd><dt><span>source :</span></dt><dd>data source</dd></dl></div></li></ul></div></div>
 </div>
 </div>
 </div>
@@ -2796,11 +2798,19 @@ grid_search = GridSearchCV(
 </clipboard-copy>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Setup optimization function</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">sklearn.exceptions</span> <span class="kn">import</span> <span class="n">DataConversionWarning</span>
+
 <span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">grid_search</span><span class="p">,</span> <span class="n">input_list</span><span class="p">,</span> <span class="n">output_list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Customized Optimization Function</span>
 <span class="sd">    """</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-    <span class="n">grid_result</span> <span class="o">=</span> <span class="n">grid_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">input_list</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="n">output_list</span><span class="p">])</span>
+
+    <span class="c1"># Because a dask dataframe is a delayed object, fit function raises warning DataConversionWarning. </span>
+    <span class="c1"># Here the warning is supressed. </span>
+    <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">DataConversionWarning</span><span class="p">)</span>
+        <span class="n">grid_result</span> <span class="o">=</span> <span class="n">grid_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">input_list</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="n">output_list</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">grid_result</span>
 
 <span class="c1"># Map the optimization function to the train bags</span>
@@ -2811,11 +2821,19 @@ grid_search = GridSearchCV(
 <span class="p">)</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-9"># Setup optimization function
+import warnings
+from sklearn.exceptions import DataConversionWarning
+
 def optimize(df, grid_search, input_list, output_list):
     """Customized Optimization Function
     """
     df = df.dropna()
-    grid_result = grid_search.fit(df[input_list], df[output_list])
+
+    # Because a dask dataframe is a delayed object, fit function raises warning DataConversionWarning. 
+    # Here the warning is supressed. 
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=DataConversionWarning)
+        grid_result = grid_search.fit(df[input_list], df[output_list])
     return grid_result
 
 # Map the optimization function to the train bags
@@ -2835,7 +2853,7 @@ optimazed_estimators = train_bags.map(
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-10">
@@ -2875,7 +2893,7 @@ optimazed_estimators_realized = optimazed_estimators.compute()</div>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-11">
@@ -2888,21 +2906,57 @@ optimazed_estimators_realized = optimazed_estimators.compute()</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># To be replaced by "modelstore"</span>
-<span class="kn">import</span> <span class="nn">pickle</span>
-
-<span class="k">for</span> <span class="n">model</span><span class="p">,</span> <span class="nb">id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">optimazed_estimators_realized</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">optimazed_estimators_realized</span><span class="p">))):</span>
-    <span class="n">name_model</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"model</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">.pickle"</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">name_model</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span> <span class="nn">motrainer</span> <span class="kn">import</span> <span class="n">util</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-11"># To be replaced by "modelstore"
-import pickle
-
-for model, id in zip(optimazed_estimators_realized, range(len(optimazed_estimators_realized))):
-    name_model = f"model{id}.pickle"
-    with open(name_model, "wb") as f:
-        pickle.dump(model, f)</div>
+<div class="clipboard-copy-txt" id="cell-11">from motrainer import util</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy for="cell-12">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">optimazed_estimators_realized</span><span class="p">):</span>
+    <span class="n">util</span><span class="o">.</span><span class="n">sklearn_save</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"./results/</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">_model.h5"</span><span class="p">,</span> <span class="n">meta_data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"data_source"</span><span class="p">:</span> <span class="n">data_path</span><span class="p">})</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">_model.h5 is saved"</span><span class="p">)</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-12">for id, model in enumerate(optimazed_estimators_realized):
+    util.sklearn_save(model, f"./results/{id}_model.h5", meta_data = {"data_source": data_path})
+    print(f"{id}_model.h5 is saved")</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>0_model.h5 is saved
+1_model.h5 is saved
+2_model.h5 is saved
+3_model.h5 is saved
+4_model.h5 is saved
+</pre>
 </div>
 </div>
 </div>
@@ -2928,7 +2982,7 @@ for model, id in zip(optimazed_estimators_realized, range(len(optimazed_estimato
 <div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-12">
+<clipboard-copy for="cell-13">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2939,17 +2993,21 @@ for model, id in zip(optimazed_estimators_realized, range(len(optimazed_estimato
 </clipboard-copy>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Load the models back</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="n">list_model</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span> 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">"model</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">.pickle"</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">list_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"./results"</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*.h5"</span><span class="p">):</span>
+    <span class="n">model</span><span class="p">,</span> <span class="n">metadata</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">sklearn_load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">list_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 <span class="n">list_model</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-12"># Load the models back
+<div class="clipboard-copy-txt" id="cell-13"># Load the models back
+from pathlib import Path
 list_model = []
-for id in range(5): 
-    with open(f"model{id}.pickle", "rb") as f:
-        list_model.append(pickle.load(f))
+
+for file in Path("./results").glob("*.h5"):
+    model, metadata = util.sklearn_load(file)
+    list_model.append(model)
 list_model</div>
 </div>
 </div>
@@ -3006,7 +3064,7 @@ list_model</div>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-13">
+<clipboard-copy for="cell-14">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -3031,7 +3089,7 @@ list_model</div>
                <span class="s2">"R_2"</span><span class="p">:</span><span class="n">r2_score</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span><span class="n">Y_eval</span><span class="p">)}</span>
     <span class="n">list_metrics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-13">from sklearn.metrics import mean_squared_error , r2_score,  mean_absolute_error
+<div class="clipboard-copy-txt" id="cell-14">from sklearn.metrics import mean_squared_error , r2_score,  mean_absolute_error
 
 # This for need to be coverted to a user defined 
 list_metrics = []
@@ -3045,6 +3103,33 @@ for model, test_data in zip(list_model, test_bags.compute()):
                "MAE_SVR": mean_absolute_error(Y_test,Y_eval),
                "R_2":r2_score(Y_test,Y_eval)}
     list_metrics.append(metrics)</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy for="cell-15">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-15"></div>
 </div>
 </div>
 </div>
