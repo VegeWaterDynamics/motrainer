@@ -10,7 +10,7 @@ authors:
   - name: Ou Ku
     orcid: 0000-0002-5373-5209
     affiliation: 1 
-  - name: Fakhereh (Sarah) Alidoost
+  - name: Fakhereh Alidoost
     affiliation: 1
   - name: Xu Shan
     affiliation: 2
@@ -62,6 +62,6 @@ The `MOTrainer` package includes comprehensive [usage examples](https://vegewate
 
 The authors express sincere gratitude to the Dutch Research Council (Nederlandse Organisatie voor Wetenschappelijk Onderzoek, NWO) and the Netherlands Space Office for their generous funding of the MOTrainer development through the User Support Programme Space Research (GO) call, grant ALWGO.2018.036. Special thanks to SURF for providing valuable computational resources for MOTrainer testing via the grant EINF-339.
 
-We would also like to thanks Dr. Yifat Dzigan, Dr. Paco López-Dekker, and Tina Nikaein for the insightful discussions, which are important contributions to this work.
+We would also like to thanks Dr. Francesco Nattino, Dr. Yifat Dzigan, Dr. Paco López-Dekker, and Tina Nikaein for the insightful discussions, which are important contributions to this work.
 
 ## References
