@@ -1,5 +1,5 @@
-import json
 
+import h5py
 import numpy as np
 import pandas as pd
 import pytest
@@ -35,14 +35,15 @@ class TestJacknife:
         assert gpi.gpi_output["y"] is not None
 
     @pytest.mark.filterwarnings("ignore::DeprecationWarning")
-    def test_gpi_results_exist(self, train_data):
+    @pytest.fixture
+    def test_gpi_results_exist(self, train_data, tmp_path):
         gpi = JackknifeGPI(
             train_data,
             val_split_year=2019,
             input_list=["x"],
             output_list=["y"],
             export_all_years=False,
-            outpath="/tmp/",
+            outpath=tmp_path,
         )
         gpi.train(
             searching_space={
@@ -67,7 +68,10 @@ class TestJacknife:
         assert gpi.best_train is not None
         assert gpi.best_year in [2017, 2018]
 
-        with open("/tmp/metadata.json") as j:
-            metadata = json.loads(j.read())
+        # test meta_data saved in hdf5 file
+        with h5py.File(tmp_path / "best_optimized_model_2017.h5", 'r') as f:
+            best_year = f.attrs['best_year']
+            input_list = f.attrs['input_list']
 
-        assert {"input_list", "output_list", "best_year"}.issubset(set(metadata.keys()))
+        assert best_year == 2017
+        assert input_list == gpi.input_list

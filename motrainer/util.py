@@ -1,13 +1,16 @@
+import base64
 import os
+import pickle
 import random
 
+import h5py
 import numpy as np
 import sklearn.preprocessing
-import tensorflow as tf
 from scipy.stats import pearsonr, spearmanr
 
 # Force tensorflow debug logging off, keep only error logging
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+import tensorflow as tf  # noqa: E402
 
 
 def performance(data_input, data_label, model, method, scaler_output=None):
@@ -101,3 +104,64 @@ def normalize(data, method):
 
     data_norm = scaler.fit_transform(data)
     return data_norm, scaler
+
+
+def sklearn_save(model, path_model, meta_data=None):
+    """Save sklearn model to hdf5 file.
+
+    Parameters
+    ----------
+    model : sklearn.model
+        Sklearn model to save.
+    path_model : str
+        Path to save the model.
+    meta_data : Dict, optional
+        optional. A dict of meta data to save.
+
+    """
+    model_bytes = pickle.dumps(model)
+
+    # Encode the bytes as base64
+    model_base64 = base64.b64encode(model_bytes)
+
+    with h5py.File(path_model, 'w') as f:
+        f.attrs['model'] = model_base64
+
+        if meta_data is not None:
+            for key, value in meta_data.items():
+                f.attrs[key] = value
+
+
+def sklearn_load(path_model):
+    """Load sklearn model from hdf5 file.
+
+    Parameters
+    ----------
+    path_model : str
+        Path to the model.
+
+    Returns
+    -------
+    sklearn.model
+        Sklearn model.
+
+    """
+    with h5py.File(path_model, 'r') as f:
+        if 'model' not in f.attrs:
+            raise ValueError("No model found in the hdf5 file.")
+
+        model_base64 = f.attrs['model']
+
+        # Decode the bytes
+        model_bytes = base64.b64decode(model_base64)
+
+        # Load the model
+        model = pickle.loads(model_bytes)
+
+        meta_data = {}
+        for key in f.attrs.keys():
+            if key != 'model':
+                meta_data[key] = f.attrs[key]
+
+
+    return model, meta_data

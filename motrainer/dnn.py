@@ -1,10 +1,9 @@
 import logging
-import pickle
-from pathlib import Path
 
 # disable WARNING:absl:Found untraced functions such as _update_step_xla while saving
 # see https://github.com/tensorflow/tensorflow/issues/47554
 import absl.logging
+import h5py
 import skopt
 import tensorflow as tf
 from skopt.space import Categorical, Integer, Real
@@ -213,21 +212,24 @@ class NNTrain:
                                            kappa=kappa,
                                            x0=x0)
 
-    def export(self, path_model=None, path_hyperparameters=None):
-        """Export model and hyperparameters from tranning."""
-        if path_model is not None:
-            Path(path_model).parent.mkdir(parents=True, exist_ok=True)
-            self.model.save(path_model)
+    def export(self, path_model=None, meta_data=None):
+        """Export model, hyperparameters and training metadata."""
+        self.model.save(f"{path_model}.h5", save_format='h5')
 
-        if path_hyperparameters is not None:
-            Path(path_hyperparameters).parent.mkdir(parents=True,
-                                                    exist_ok=True)
-            with open(path_hyperparameters, 'wb') as f:
-                pickle.dump([
-                    sorted(
-                        zip(
-                            self.gp_result.func_vals,
-                            self.gp_result.x_iters,
-                            strict=True
-                            ))
-                ], f)
+        hyperparameters = sorted(
+            zip(
+                self.gp_result.func_vals,
+                self.gp_result.x_iters,
+                strict=True
+                )
+        )
+
+        # open the hdf file and write the hyperparameters as attributes
+        with h5py.File(f"{path_model}.h5", 'a') as f:
+            # list of tuples are not supported by hdf5, so convert to string
+            f.attrs['hyperparameters'] = str(hyperparameters)
+
+            # add meta data to the hdf file
+            if meta_data is not None:
+                for key, value in meta_data.items():
+                    f.attrs[key] = value

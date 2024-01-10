@@ -1,7 +1,10 @@
 import unittest
 
 import numpy as np
+import pandas as pd
+import pytest
 import tensorflow as tf
+from sklearn.linear_model import LinearRegression
 
 from motrainer import util
 
@@ -48,3 +51,30 @@ class TestUtil(unittest.TestCase):
         data_norm, scaler = util.normalize(datain, 'min_max')
         self.assertAlmostEqual(data_norm.min(), 0.0, 10)
         self.assertIsNotNone(scaler)
+
+
+@pytest.fixture
+def sklearn_model():
+    # create a simple sklearn model
+    df = pd.DataFrame({
+        'feature': [1, 2, 3, 4, 5],
+        'target': [10, 20, 30, 40, 50]
+        })
+    model = LinearRegression()
+    model.fit(df[['feature']], df['target'])
+    return model
+
+
+class TestUtilSklearnIO:
+
+    def test_sklearn_io(self, sklearn_model, tmp_path):
+        model_path = tmp_path / 'test.h5'
+        util.sklearn_save(sklearn_model, model_path, meta_data={'test': 1})
+
+        # load the model
+        model, metadata = util.sklearn_load(model_path)
+
+        # check the model
+        assert isinstance(model, LinearRegression)
+        # check the metadata
+        assert metadata['test'] == 1
