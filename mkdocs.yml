@@ -17,6 +17,7 @@ nav:
     - Prallely training DNN with Tensorflow: notebooks/example_dnn.ipynb
   - Conributing guide: CONTRIBUTING.md
   - Change Log: CHANGELOG.md
+  - API Reference: api_reference.md
 
 
 theme:
@@ -52,7 +53,7 @@ plugins:
     handlers:
       python:
         options:
-          docstring_style: google
+          docstring_style: numpy
           docstring_options:
             ignore_init_summary: no
           merge_init_into_class: yes
