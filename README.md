@@ -1,6 +1,7 @@
 # MOTrainer: Measurement Operator Trainer
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7540442.svg)](https://doi.org/10.5281/zenodo.7540442)
+[![PyPI](https://img.shields.io/pypi/v/motrainer.svg?colorB=blue)](https://pypi.python.org/project/motrainer/)
 [![Build](https://github.com/VegeWaterDynamics/motrainer/actions/workflows/build.yml/badge.svg)](https://github.com/VegeWaterDynamics/motrainer/actions/workflows/build.yml)
 [![Ruff](https://github.com/VegeWaterDynamics/motrainer/actions/workflows/lint.yml/badge.svg)](https://github.com/VegeWaterDynamics/motrainer/actions/workflows/lint.yml)
 
