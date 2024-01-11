@@ -40,7 +40,6 @@ In the DA process, observation data is integrated into the physical model throug
 
 ## Statement of Need
 
-ML models should undergo training within a coherent spatio-temporal scope, where physical model states can be consistently mapped to observations using the same model. Dealing with a large spatio-temporal scale may involve multiple mapping processes, necessitating the consideration of training separate models for distinct spatial and/or temporal partitions of the dataset. As the number of partitions increases, a challenge emerges in effectively distributing these training tasks among the partitions.
 
 A surrogate MO, as a ML model, should be trained over a coherent spatio-temporal scope, where one can assume that the same MO applies when mapping physical model states to observations. When dealing with a large spatio-temporal scale, multiple mapping processes may exist, prompting consideration for training separate MOs for distinct spatial and/or temporal partitions of the dataset. As the number of partitions increases, a challenge arises in distributing these training tasks effectively among the partitions.
 
