@@ -34,13 +34,13 @@ bibliography: paper.bib
 
 ## Summary
 
-Data assimilation is an essential tool in Earth and environmental sciences, enabling physical model states to be constrained using observational data.
+Data assimilation (DA) is an essential procedure in Earth and environmental sciences, enabling physical model states to be constrained using observational data.
 
 In the DA process, observations are integrated into the physical model through the application of a Measurement Operator (MO) – a connection model mapping physical model states to observations. Researchers have observed that employing a Machine-Learning (ML) model as a surrogate MO can bypass the limitations associated with using an overly simplified MO [@Forman:2014; @XUE:2015; @Forman:2017].
 
 ## Statement of Need
 
-A surrogate MO, as a ML model, should be trained with the assumption that a single MO applies when mapping physical model states to observations. When dealing with a large spatio-temporal scale, multiple mapping processes may exist, prompting consideration for training separate MOs for distinct spatial and/or temporal partitions of the dataset. As the number of partitions increases, a challenge arises in distributing these training tasks effectively among the partitions.
+A surrogate MO, as a ML model is trained with the assumption that a single MO applies when mapping physical model states to observations. When dealing with a large spatio-temporal scale, multiple mapping processes may exist, prompting consideration for training separate MOs for distinct spatial and/or temporal partitions of the dataset. As the number of partitions increases, a challenge arises in distributing these training tasks effectively among the partitions.
 
 To address this challenge, we developed a novel approach for distributed training of MOs. We present the open Python library `MOTrainer`, which to the best of our knowledge, is the first Python library catering to researchers requiring training independent MOs across extensive spatio-temporal coverage in a distributed manner. `MOTrainer` leverages Xarray's [@Hoyer_xarray_N-D_labeled_2017] support for multi-dimensional datasets to accommodate spatio-temporal features of input/output data of the training tasks. It provides user-friendly functionalities implemented with the Dask [@Rocklin2015DaskPC] library, facilitating the partitioning of large spatio-temporal data for independent model training tasks. Additionally, it streamlines the train-test data split based on customized spatio-temporal coordinates. The Jackknife method [@mccuen1998hydrologic] is implemented as an external Cross-Validation (CV) method for Deep Neural Network (DNN) training, with support for Dask parallelization. This feature enables the scaling of training tasks across various computational infrastructures.
 
