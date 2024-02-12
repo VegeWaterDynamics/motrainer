@@ -83,7 +83,7 @@ branch = true
 source = ["motrainer"]
 
 [tool.ruff]
-select = [
+lint.select = [
   "E",  # pycodestyle
   "F",  # pyflakes
   "B",  # flake8-bugbear
@@ -93,13 +93,13 @@ select = [
   "UP",  # pyupgrade (upgrade syntax to current syntax)
   "PLE",  # Pylint error https://github.com/charliermarsh/ruff#error-ple
 ]
-ignore = [
+lint.ignore = [
 "D100", "D101", "D104", "D105", "D106", "D107", "D203", "D213"
 ] # docstring style
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
-fixable = ["ALL"]
-unfixable = []
+lint.fixable = ["ALL"]
+lint.unfixable = []
 
 exclude = [
     ".bzr",
