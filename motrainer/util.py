@@ -40,7 +40,7 @@ def performance(data_input, data_label, model, method, scaler_output=None):
     """
     # Temporally SL the model because of TF graph execution issue
     # TODO: fix the model prediction issue
-    tmp_path = f'/tmp/tmp_model{random.getrandbits(64)}'
+    tmp_path = f'/tmp/tmp_model{random.getrandbits(64)}.keras'
     model.save(tmp_path)
     model = tf.keras.models.load_model(tmp_path)
     predicted = model.predict(data_input)

@@ -19,7 +19,7 @@ def init_trainning():
     model.add(tf.keras.layers.Dense(units=5))
     model.add(tf.keras.layers.Dense(units=2))
     model.compile(optimizer='adam',
-                  loss=tf.keras.losses.mean_squared_error,
+                  loss=tf.keras.losses.MeanSquaredError(),
                   metrics=['mae'])
     model.fit(x=datain, y=dataout, epochs=20, verbose=0, validation_split=0.2)
     return model
