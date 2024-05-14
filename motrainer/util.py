@@ -1,7 +1,6 @@
 import base64
 import os
 import pickle
-import random
 
 import h5py
 import numpy as np
@@ -10,7 +9,6 @@ from scipy.stats import pearsonr, spearmanr
 
 # Force tensorflow debug logging off, keep only error logging
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-import tensorflow as tf  # noqa: E402
 
 
 def performance(data_input, data_label, model, method, scaler_output=None):
@@ -38,11 +36,6 @@ def performance(data_input, data_label, model, method, scaler_output=None):
         Performance value. If the model gives multiple output, the performance
         will be a list.
     """
-    # Temporally SL the model because of TF graph execution issue
-    # TODO: fix the model prediction issue
-    tmp_path = f'/tmp/tmp_model{random.getrandbits(64)}.keras'
-    model.save(tmp_path)
-    model = tf.keras.models.load_model(tmp_path)
     predicted = model.predict(data_input)
 
     # In case multiple outputs, re-arrange to one df
