@@ -9,6 +9,18 @@ Measurement Operator Trainer is a Python package training measurement operators 
 
 Please refer to the [MOtrainer documentation](https://vegewaterdynamics.github.io/motrainer/) for more details.
 
+## Installation
+
+MOTrainer requires Python version `>=3.10`. It can be installed from PyPI: 
+
+```bash
+pip install motrainer
+```
+
+We suggest using [`mamba`](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html#fresh-install-recommended) to create an isolated environment for the installation to avoid conflicts.
+
+For more details and trouble shooting of the installation process, please refer to the [installation guide](https://vegewaterdynamics.github.io/motrainer/setup/) for more details.
+
 ## License
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
