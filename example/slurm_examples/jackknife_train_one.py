@@ -55,8 +55,9 @@ if __name__ == "__main__":
             pickle.dump(gpi.apr_perf, f)
 
         # Export postpriori performance
-        path_postpriori_performance = '{}/postpriori_performance_{}'.format(
-            gpi.outpath, gpi.best_year)
+        path_postpriori_performance = (
+            f"{gpi.outpath}/postpriori_performance_{gpi.best_year}"
+        )
         with open(path_postpriori_performance, 'wb') as f:
             pickle.dump(gpi.post_perf, f)
 

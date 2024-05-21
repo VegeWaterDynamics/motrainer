@@ -116,8 +116,8 @@ class JackknifeGPI:
         input_years = self.gpi_input.index.year
         output_years = self.gpi_output.index.year
         logger.debug(
-            'Spliting Trainning and validation data. Split year: {}.'.format(
-                self.val_split_year))
+            f'Spliting Trainning and validation data. \
+              Split year: {self.val_split_year}.')
         jackknife_input = self.gpi_input[input_years < self.val_split_year]
         jackknife_output = self.gpi_output[output_years < self.val_split_year]
         vali_input = self.gpi_input[input_years >= self.val_split_year]

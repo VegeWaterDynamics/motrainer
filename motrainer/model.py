@@ -37,7 +37,7 @@ def keras_dnn(dimensions, input_shape, output_shape):
     model.add(tf.keras.layers.Dense(units=output_shape))
     adam = tf.keras.optimizers.Adam(learning_rate=dimensions['learning_rate'])
     model.compile(optimizer=adam,
-                  loss=tf.keras.losses.mean_squared_error,
+                  loss=tf.keras.losses.MeanSquaredError(),
                   metrics=['mae', 'acc'])
 
     return model
@@ -72,7 +72,7 @@ def keras_dnn_lossweight(dimensions, input_shape, output_shape, loss_weights):
 
     model = tf.keras.models.Model(inputs=inputs, outputs=outputs)
     model.compile(optimizer=adam,
-                  loss=tf.keras.losses.mean_squared_error,
+                  loss=tf.keras.losses.MeanSquaredError(),
                   metrics=['mae', 'acc'],
                   loss_weights=loss_weights)
 
