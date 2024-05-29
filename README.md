@@ -23,6 +23,10 @@ We suggest using [`mamba`](https://mamba.readthedocs.io/en/latest/installation/m
 
 For more details and trouble shooting of the installation process, please refer to the [installation guide](https://vegewaterdynamics.github.io/motrainer/setup/) for more details.
 
+## Contributing to MOTrainer
+
+We welcome any kind of contribution to our software. Please refer to the [Contributing Guidelines](https://vegewaterdynamics.github.io/motrainer/CONTRIBUTING/) or [Contributing.md](./docs/CONTRIBUTING.md).
+
 ## License
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
