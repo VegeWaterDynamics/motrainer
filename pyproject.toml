@@ -11,7 +11,7 @@ dependencies = [
     "ipykernel",
     "numpy",
     "pandas",
-    "scikit-learn",
+    "scikit-learn<=1.4.2",
     "scikit-optimize",
     "scipy",
     "tensorflow",
