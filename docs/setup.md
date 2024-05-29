@@ -24,14 +24,22 @@ We strongly recommend installing separately from your default Python envrionment
 
 ### Error: Could not build wheels for h5py
 
-The following error may occur when installing `h5py` on Ubuntu system:
+`MOTrainer` requires `h5py` for installation. Usually your Python dependency manager should hamdle the installation of `h5py` automatically. However, the following error may occur when installing `h5py`:
 
 ```output
 ERROR: Could not build wheels for h5py, which is required to install pyproject.toml-based project
 ```
 
-This can be resolved by installing the `libhdf5-dev` package:
+On Ubuntu system, this can be resolved by installing the `libhdf5-dev` package:
 
 ```bash
 sudo apt-get install libhdf5-dev
+```
+
+On MacOS, h5py can be installed via `Homebrew`, `Macports`, or `Fink`. See the [installation guide of h5py](https://docs.h5py.org/en/stable/build.html#os-specific-package-managers)
+
+According to the [installation guide of h5py](https://docs.h5py.org/en/stable/build.html#os-specific-package-managers) there is no Windows-specific package managers include `h5py`. Therefore, it is recommended to install `h5py` on Windows via Python Distributions such as`conda`.
+
+```bash
+conda install h5py
 ```

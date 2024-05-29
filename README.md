@@ -11,9 +11,11 @@ Please refer to the [MOtrainer documentation](https://vegewaterdynamics.github.i
 
 ## Installation
 
-MOTrainer requires Python version `>=3.10`. It can be installed from PyPI: 
+Python version `>=3.10` is required to install MOTrainer.
 
-```bash
+MOTrainer can be installed from PyPI:
+
+```sh
 pip install motrainer
 ```
 
