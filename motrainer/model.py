@@ -9,7 +9,8 @@ import os
 import tensorflow as tf
 
 # Force tensorflow debug logging off, keep only error logging
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+if "TF_CPP_MIN_LOG_LEVEL" not in os.environ:
+    os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
 
 def keras_dnn(dimensions, input_shape, output_shape):
