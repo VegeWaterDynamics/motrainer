@@ -182,13 +182,13 @@ motrainer.train_test_split(ds, split={"time": np.datetime64("2017-01-01")})
 Alternatively, you can also initiate a `mask` to perform training data. By default, training data will be where `mask` is `True`. For example, if you would like to have data before 2017-01-01 as training data:
 
 ```python
-mask = ds_valid["time"] < np.datetime64("2017-01-01")
-train, test = train_test_split(ds_valid, mask=mask)
+mask = ds["time"] < np.datetime64("2017-01-01")
+train, test = train_test_split(ds, mask=mask)
 ```
 
 If `reverse` is specified, training data will be where mask is `False`. The following will select data after (and include) 2017-01-01 as training data:
 
 ```python
-mask = ds_valid["time"] < np.datetime64("2017-01-01")
-train, test = train_test_split(ds_valid, mask=mask, reverse=True)
+mask = ds["time"] < np.datetime64("2017-01-01")
+train, test = train_test_split(ds, mask=mask, reverse=True)
 ```
