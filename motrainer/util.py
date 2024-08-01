@@ -8,7 +8,8 @@ import sklearn.preprocessing
 from scipy.stats import pearsonr, spearmanr
 
 # Force tensorflow debug logging off, keep only error logging
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+if "TF_CPP_MIN_LOG_LEVEL" not in os.environ:
+    os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
 
 def performance(data_input, data_label, model, method, scaler_output=None):
