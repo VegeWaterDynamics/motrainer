@@ -11,16 +11,22 @@ authors:
     orcid: 0000-0002-5373-5209
     affiliation: 1 
   - name: Fakhereh Alidoost
+    orcid: 0000-0001-8407-6472
     affiliation: 1
   - name: Xu Shan
+    orcid: 0000-0002-0569-4326
     affiliation: 2
   - name: Pranav Chandramouli
+    orcid: 0000-0002-7896-2969
     affiliation: 1
   - name: Sonja Georgievska
+    orcid: 0000-0002-8094-4532
     affiliation: 1
   - name: Meiert W. Grootes
+    orcid: 0000-0002-5733-4795
     affiliation: 1 
   - name: Susan Steele-Dunne
+    orcid: 0000-0002-8644-3077
     corresponding: true
     affiliation: 2
 affiliations:

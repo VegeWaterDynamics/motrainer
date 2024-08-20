@@ -15,21 +15,27 @@ authors:
     orcid: 'https://orcid.org/0000-0002-5373-5209'
   - given-names: Fakhereh (Sarah)
     family-names: Alidoost
+    orcid: 'https://orcid.org/0000-0001-8407-6472'
     affiliation: Netherlands eScience Center
   - given-names: Xu
     family-names: Shan
+    orcid: 'https://orcid.org/0000-0002-0569-4326'
     affiliation: Delft University of Technology
   - given-names: Pranav
     family-names: Chandramouli
+    orcid: 'https://orcid.org/0000-0002-7896-2969'
     affiliation: Netherlands eScience Center
   - given-names: Georgievska
     family-names: Sonja
+    orcid: 'https://orcid.org/0000-0002-8094-4532'
     affiliation: Netherlands eScience Center
   - given-names: Meiert
-    affiliation: Netherlands eScience Center
     family-names: Grootes
+    orcid: 'https://orcid.org/0000-0002-5733-4795'
+    affiliation: Netherlands eScience Center
   - given-names: Susan
     family-names: Steele-Dunne
+    orcid: 'https://orcid.org/0000-0002-8644-3077'
     affiliation: Delft University of Technology
 identifiers:
   - type: doi
