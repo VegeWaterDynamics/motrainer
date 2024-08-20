@@ -124,6 +124,8 @@ exclude = [
     "node_modules",
     "venv",
     "docs",
+    "exploration",
+    "site",
 ]
 
 line-length = 88
