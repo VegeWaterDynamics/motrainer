@@ -40,5 +40,5 @@
   "license": {
     "id": "Apache-2.0"
   },
-  "title": "MOTrainer"
+  "title": "MOTrainer: Distributed Measurement Operator Trainer for Data Assimilation Applications"
 }
