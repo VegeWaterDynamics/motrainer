@@ -4,6 +4,7 @@
 [![PyPI](https://img.shields.io/pypi/v/motrainer.svg?colorB=blue)](https://pypi.python.org/project/motrainer/)
 [![Build](https://github.com/VegeWaterDynamics/motrainer/actions/workflows/build.yml/badge.svg)](https://github.com/VegeWaterDynamics/motrainer/actions/workflows/build.yml)
 [![Ruff](https://github.com/VegeWaterDynamics/motrainer/actions/workflows/lint.yml/badge.svg)](https://github.com/VegeWaterDynamics/motrainer/actions/workflows/lint.yml)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.06591/status.svg)](https://doi.org/10.21105/joss.06591)
 
 Measurement Operator Trainer is a Python package training measurement operators (MO) for data assimilations purposes. It is specifically designed for the applications where one needs to split large spatio-temporal data into independent partitions, and then train separate ML models for each partition.
 
